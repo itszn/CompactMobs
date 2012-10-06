@@ -23,7 +23,7 @@ public class ContainerCompactor extends Container{
         {
             for (int var4 = 0; var4 < 9; ++var4)
             {
-                this.addSlotToContainer(new Slot(te, var4 + var3 * 9 + 9, 8 + var4 * 18, 85 + var3 * 18));
+                this.addSlotToContainer(new Slot(te, var4 + var3 * 9+1, 8 + var4 * 18, 85 + var3 * 18));
             }
         }
         

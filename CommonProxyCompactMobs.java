@@ -43,4 +43,8 @@ public class CommonProxyCompactMobs implements IGuiHandler
 
 		return null;
 	}
+	
+	public boolean isRenderWorld(World world) {
+		return world.isRemote;
+	}
 }

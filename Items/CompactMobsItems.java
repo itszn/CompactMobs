@@ -6,7 +6,8 @@ import net.minecraft.src.Item;
 public class CompactMobsItems 
 {
 	//Item variables
-	//public Item veriniteChunk;
+	public static Item mobHolder;
+	public static Item fullMobHolder;
 
 	
 	private CompactMobsItems()
@@ -27,12 +28,15 @@ public class CompactMobsItems
 	
 	public void instantiateItems()
 	{
-		//veriniteChunk = new VeriniteChunk(550).setIconIndex(0).setItemName("VeriniteChunk");
+		mobHolder = new MobHolder(3352).setIconIndex(0).setItemName("MobHolder");
+		fullMobHolder = new FullMobHolder(3353).setIconIndex(1).setItemName("FullMobHolder");
 	}
 	
 	public void nameItems()
 	{
-		//LanguageRegistry.addName(veriniteChunk, "Verinite Chunk");
+		LanguageRegistry.addName(mobHolder, "Empty Mob Holder");
+		LanguageRegistry.addName(fullMobHolder, "Full Mob Holder");
+
 	}
 	
 	

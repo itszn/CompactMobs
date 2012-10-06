@@ -1,5 +1,7 @@
 package compactMobs;
 
+import java.util.logging.Logger;
+
 import compactMobs.Items.CompactMobsItems;
 import compactMobs.Blocks.BlockCompactor;
 import compactMobs.TileEntity.TileEntityCompactor;
@@ -8,11 +10,14 @@ import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.DungeonHooks;
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -40,15 +45,24 @@ public class CompactMobsCore {
 	public static Block blocks;
 	public static Block blockCompactor;
 	
+	public static Logger cmLog = Logger.getLogger("CompactMobs");
+	
 	
 	@SidedProxy(clientSide = "compactMobs.ClientProxyCompactMobs", serverSide = "compactMobs.CommonProxyCompactMobs")
 	public static CommonProxyCompactMobs proxy;
 	
 	
+	@PreInit
+	public void loadConfiguration(FMLPreInitializationEvent evt) {
+		cmLog.setParent(FMLLog.getLogger());
+		cmLog.info("Starting CompactMobs v1.0.0");
+		
+	}
+	
 	@Init
 	public void load(FMLInitializationEvent event)
 	{
-		proxy.registerRenderThings();
+		
 		CompactMobsItems.createInstance();
 		
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
@@ -61,7 +75,6 @@ public class CompactMobsCore {
 		
 		CompactMobsItems.getInstance().instantiateItems();
 		CompactMobsItems.getInstance().nameItems();
-	
 		
 		
 	}

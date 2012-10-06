@@ -4,6 +4,7 @@ import java.util.Random;
 
 import compactMobs.CompactMobsCore;
 import compactMobs.DefaultProps;
+import compactMobs.Utils;
 import compactMobs.TileEntity.TileEntityCompactor;
 
 import cpw.mods.fml.common.Side;
@@ -32,6 +33,12 @@ public class BlockCompactor extends BlockContainer{
     {
         return true;
     }
+	
+	@Override
+	public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
+		Utils.preDestroyBlock(world, x, y, z);
+		super.breakBlock(world, x, y, z, par5, par6);
+	}
 	
 	@Override
 	public boolean isOpaqueCube()
@@ -80,6 +87,10 @@ public class BlockCompactor extends BlockContainer{
         if (par1World.isRemote)
         {
             return true;
+        }
+        else if(par5EntityPlayer.isSneaking())
+        {
+        	return true;
         }
         else
         {
