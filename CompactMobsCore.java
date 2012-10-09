@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import compactMobs.Items.CompactMobsItems;
 import compactMobs.Blocks.BlockCompactor;
+import compactMobs.Blocks.BlockDecompactor;
 import compactMobs.TileEntity.TileEntityCompactor;
 
 import net.minecraft.src.Block;
@@ -44,6 +45,7 @@ public class CompactMobsCore {
 	
 	public static Block blocks;
 	public static Block blockCompactor;
+	public static Block blockDecompactor;
 	
 	public static Logger cmLog = Logger.getLogger("CompactMobs");
 	
@@ -67,15 +69,17 @@ public class CompactMobsCore {
 		
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 		
-		blockCompactor = new BlockCompactor(BlockID, Material.iron).setStepSound(Block.soundStoneFootstep).setHardness(3F).setResistance(1.0F).setBlockName("orbBlock");;
+		blockCompactor = new BlockCompactor(BlockID, Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockCompactor");
 		GameRegistry.registerBlock(blockCompactor);
 		LanguageRegistry.addName(blockCompactor, "Compactor"); 
+		blockDecompactor = new BlockDecompactor(BlockID+1, Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockDecompactor");
+		GameRegistry.registerBlock(blockDecompactor);
+		LanguageRegistry.addName(blockDecompactor, "Decompactor");
 		
 		GameRegistry.registerTileEntity(TileEntityCompactor.class,"tileEntityCompactor");
 		
 		CompactMobsItems.getInstance().instantiateItems();
 		CompactMobsItems.getInstance().nameItems();
-		
 		
 	}
 	

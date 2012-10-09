@@ -33,7 +33,7 @@ import net.minecraft.src.NBTTagList;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 
-public class TileEntityCompactor extends TileEntity implements IInventory, IPowerReceptor
+public class TileEntityDecompactor extends TileEntity implements IInventory, IPowerReceptor
 {
 	
 	public ItemStack[] ItemStacks;
@@ -41,7 +41,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 	IPowerProvider provider;
 
 	
-	public TileEntityCompactor() {
+	public TileEntityDecompactor() {
 		ItemStacks = new ItemStack[28];
 		if (PowerFramework.currentFramework != null)
 			provider = PowerFramework.currentFramework.createPowerProvider();
@@ -258,22 +258,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 					ItemStack holder = new ItemStack(CompactMobsItems.fullMobHolder, 1);
 					//FullMobHolder holder = new FullMobHolder(CompactMobsItems.fullMobHolder.shiftedIndex);
 					NBTTagCompound nbttag = holder.stackTagCompound;
-					if (nbttag == null)
-					{
-						nbttag = new NBTTagCompound();
-					}
-					nbttag.setInteger("entityId", id);
-					nbttag.setInteger("entityHealth", entity.getHealth());
-					
-					if (entity instanceof EntityAgeable)
-					{
-						EntityAgeable entityAge = (EntityAgeable)entity;
-						nbttag.setInteger("entityGrowingAge", entityAge.getGrowingAge());
-					}
-					
-					holder.setTagCompound(nbttag);
-					ItemStacks[var3] = holder;
-					world.removeEntity(entity);
+					//TODO Add the decompacting code
 					
 					
 					/*if (true)//holder.hasTagCompound())

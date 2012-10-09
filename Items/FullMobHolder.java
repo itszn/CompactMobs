@@ -10,6 +10,7 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTBase;
+import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.World;
 
 public class FullMobHolder extends Item 
@@ -32,8 +33,16 @@ public class FullMobHolder extends Item
 	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player)
 	{
 		///NBTBase nbtbace = itemStack.getTagCompound().getTag("tag");
-		int id = itemStack.getTagCompound().getInteger("entityId");
-		CompactMobsCore.instance.cmLog.info(String.valueOf(id));
+		NBTTagCompound nbttag = itemStack.stackTagCompound;
+		if (nbttag != null)
+		{
+			int id = nbttag.getInteger("entityId");
+			CompactMobsCore.instance.cmLog.info(String.valueOf(id));
+		} else 
+		{
+			CompactMobsCore.instance.cmLog.info("No Id");
+			
+		}
 		return itemStack;
 	}
 	
