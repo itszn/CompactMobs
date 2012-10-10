@@ -1,8 +1,11 @@
 package compactMobs;
 
 import compactMobs.Containers.ContainerCompactor;
+import compactMobs.Containers.ContainerDecompactor;
 import compactMobs.GUI.GuiCompactor;
+import compactMobs.GUI.GuiDecompactor;
 import compactMobs.TileEntity.TileEntityCompactor;
+import compactMobs.TileEntity.TileEntityDecompactor;
 
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
@@ -26,7 +29,12 @@ public class CommonProxyCompactMobs implements IGuiHandler
 
 		if (tileEntity != null)
         {
-			return new ContainerCompactor(player.inventory, (TileEntityCompactor) tileEntity);
+			switch (ID){
+			case 0:		
+				return new ContainerCompactor(player.inventory, (TileEntityCompactor) tileEntity);
+			case 1:
+				return new ContainerDecompactor(player.inventory, (TileEntityDecompactor) tileEntity);
+        	}
         }
 		return null;
 	}
@@ -38,7 +46,12 @@ public class CommonProxyCompactMobs implements IGuiHandler
 
 		if (tileEntity != null)
         {
-			return new GuiCompactor(player.inventory, ((TileEntityCompactor)tileEntity));
+			switch (ID){
+			case 0:
+				return new GuiCompactor(player.inventory, ((TileEntityCompactor)tileEntity));
+			case 1:
+				return new GuiDecompactor(player.inventory, ((TileEntityDecompactor)tileEntity));
+			}
         }
 
 		return null;

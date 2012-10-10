@@ -24,6 +24,8 @@ import net.minecraft.src.EntityAgeable;
 import net.minecraft.src.EntityCreature;
 import net.minecraft.src.EntityList;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.EntitySheep;
+import net.minecraft.src.EntityVillager;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
@@ -236,7 +238,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 		{
 			int id = EntityList.getEntityID(entity);
 			
-			CompactMobsCore.instance.cmLog.info("1: " + String.valueOf(id));
+			//CompactMobsCore.instance.cmLog.info("1: " + String.valueOf(id));
 			
 			//var5.getHealth();
 			//world.spawnEntityInWorld(newMob);
@@ -269,6 +271,19 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 					{
 						EntityAgeable entityAge = (EntityAgeable)entity;
 						nbttag.setInteger("entityGrowingAge", entityAge.getGrowingAge());
+					}
+					
+					if (entity instanceof EntitySheep)
+					{
+						EntitySheep entitySheep = (EntitySheep)entity;
+						nbttag.setBoolean("entitySheared", entitySheep.getSheared());
+						nbttag.setInteger("entityColor", entitySheep.getFleeceColor());
+					}
+					
+					if (entity instanceof EntityVillager)
+					{
+						EntityVillager entityVillager = (EntityVillager)entity;
+						nbttag.setInteger("entityProfession", entityVillager.getProfession());
 					}
 					
 					holder.setTagCompound(nbttag);

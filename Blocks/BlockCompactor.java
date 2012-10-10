@@ -20,12 +20,14 @@ import net.minecraft.src.World;
 
 public class BlockCompactor extends BlockContainer{
 
+
 	public BlockCompactor(int par1, Material par2Material) 
 	{
 		super(par1, par2Material);
 		super.blockIndexInTexture = 2;
         this.setLightOpacity(10);
         this.setCreativeTab(CreativeTabs.tabRedstone);
+
 	}
 	
 	@Override
@@ -53,24 +55,19 @@ public class BlockCompactor extends BlockContainer{
     }
 	
 	@Override
-	public int getBlockTextureFromSideAndMetadata(int par1, int par2)
+	public int getBlockTextureFromSide(int i)
 	{
-		switch(par1)
-		{
-			case 0:
-				return 1;
-			case 1:
-				return 3;
-			case 2:
-				return 2;
-			case 3:
-				return 2;
-			case 4:
-				return 2;
-			case 5:
-				return 2;
+		switch (i) {
+		case 0:
+			//bottom
+			return 1;
+		case 1:
+			//top
+			return 2;
+		default:
+			//side
+			return 0;
 		}
-		return 0;
 	}
 	
 	@Override
@@ -90,7 +87,7 @@ public class BlockCompactor extends BlockContainer{
         }
         else if(par5EntityPlayer.isSneaking())
         {
-        	return true;
+        	return false;
         }
         else
         {

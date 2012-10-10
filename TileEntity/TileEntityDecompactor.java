@@ -24,6 +24,8 @@ import net.minecraft.src.EntityAgeable;
 import net.minecraft.src.EntityCreature;
 import net.minecraft.src.EntityList;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.EntitySheep;
+import net.minecraft.src.EntityVillager;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
@@ -42,7 +44,7 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
 
 	
 	public TileEntityDecompactor() {
-		ItemStacks = new ItemStack[28];
+		ItemStacks = new ItemStack[30];
 		if (PowerFramework.currentFramework != null)
 			provider = PowerFramework.currentFramework.createPowerProvider();
 		provider.configure(50, 25, 25, 25, 1000);
@@ -210,14 +212,14 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
 		if (provider.useEnergy(25, 25, true) < 25)
 			return;
 		World world = worldObj;
-		double radius = 3.0D;
-		List list1 = world.getEntitiesWithinAABB(EntityCreature.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double)this.xCoord-radius, (double)this.yCoord-1.0D, (double)this.zCoord-radius, (double)this.xCoord+radius, (double)this.yCoord+1.0D, (double)this.zCoord+radius));
+		//double radius = 3.0D;
+		//List list1 = world.getEntitiesWithinAABB(EntityCreature.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double)this.xCoord-radius, (double)this.yCoord-1.0D, (double)this.zCoord-radius, (double)this.xCoord+radius, (double)this.yCoord+1.0D, (double)this.zCoord+radius));
 		
-		EntityCreature entity = null;
-        double var6 = Double.MAX_VALUE;
-        Iterator entitys = list1.iterator();
+		//EntityCreature entity = null;
+        //double var6 = Double.MAX_VALUE;
+        //Iterator entitys = list1.iterator();
 
-        while (entitys.hasNext())
+        /*while (entitys.hasNext())
         {
             EntityCreature var9 = (EntityCreature)entitys.next();
 
@@ -230,79 +232,116 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
                 var6 = var10;
             }
             
-        }
-        
-		if (ItemStacks[0] != null && entity != null)
+        }*/
+		ItemStack stack = null;
+		int stackNum;
+		for (stackNum = 0; stackNum<27; stackNum++)
 		{
-			int id = EntityList.getEntityID(entity);
+			if (ItemStacks[stackNum] != null)
+			{
+				if (ItemStacks[stackNum].getItem() == CompactMobsItems.fullMobHolder)
+				{
+					stack = ItemStacks[stackNum];
+					break;
+				}
+			}
+		}
+        
+		if (stack != null)
+		{
+			NBTTagCompound ntbtag = stack.getTagCompound();
+			if (ntbtag != null)
+			{
+				EntityCreature entity = null;
+				if (ntbtag.hasKey("entityId"))
+				{
+					int id = ntbtag.getInteger("entityId");
+					entity = (EntityCreature)EntityList.createEntityByID(id, world);
+				} else { return; }
+				int dir = world.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+				CompactMobsCore.instance.cmLog.info("dir: "+String.valueOf(dir));
+				if (dir == 2)
+				{
+					entity.setPosition(this.xCoord+.5D, this.yCoord, this.zCoord-.5D);
+				}
+				else if (dir == 3)
+				{
+					entity.setPosition(this.xCoord+.5D, this.yCoord, this.zCoord+1.5D);
+				}
+				else if (dir == 4)
+				{
+					entity.setPosition(this.xCoord-.5D, this.yCoord, this.zCoord+.5D);
+				}
+				else if (dir == 5)
+				{
+					entity.setPosition(this.xCoord+1.5D, this.yCoord, this.zCoord+.5D);
+				}
+				else
+				{
+					entity.setPosition(this.xCoord+.5D, this.yCoord+1D, this.zCoord+.5D);
+				}
+				
+				if (ntbtag.hasKey("entityHealth"))
+				{
+					int health = ntbtag.getInteger("entityHealth");
+					entity.setEntityHealth(health);
+				}
+				
+				if (entity instanceof EntityAgeable)
+				{
+					EntityAgeable entityAgeable = (EntityAgeable)entity;
+					if (ntbtag.hasKey("entityGrowingAge"))
+					{
+						int age = ntbtag.getInteger("entityGrowingAge");
+						entityAgeable.setGrowingAge(age);
+					}
+					if (entityAgeable instanceof EntitySheep)
+					{
+						EntitySheep entitySheep = (EntitySheep)entityAgeable;
+						if (ntbtag.hasKey("entitySheared"))
+						{
+							boolean sheared = ntbtag.getBoolean("entitySheared");
+							entitySheep.setSheared(sheared);
+						}
+						if (ntbtag.hasKey("entityColor"))
+						{
+							int color = ntbtag.getInteger("entityColor");
+							entitySheep.setFleeceColor(color);
+						}
+						world.spawnEntityInWorld(entitySheep);
+						
+					} else if (entityAgeable instanceof EntityVillager)
+					{
+						EntityVillager entityVillager =  (EntityVillager)entityAgeable;
+						if (ntbtag.hasKey("entityProfession"))
+						{
+							int profession = ntbtag.getInteger("entityProfession");
+							entityVillager.setProfession(profession);
+						}
+						world.spawnEntityInWorld(entityVillager);
+					} else
+					{
+						world.spawnEntityInWorld(entityAgeable);
+					}
+				} else
+				{
+					world.spawnEntityInWorld(entity);
+				}
+			}
+			//int id = EntityList.getEntityID(entity);
 			
-			CompactMobsCore.instance.cmLog.info("1: " + String.valueOf(id));
+			//CompactMobsCore.instance.cmLog.info("1: " + String.valueOf(id));
 			
 			//var5.getHealth();
 			//world.spawnEntityInWorld(newMob);
-			if (ItemStacks[0].getItem() == CompactMobsItems.mobHolder);
+			if (ItemStacks[stackNum].stackSize > 1)
 			{
-				int empty = 0;
-				int var3;
-				for (var3 = 1; var3 < 29; ++var3)
-				{
-					if(ItemStacks[var3] == null)
-					{
-						empty++;
-						break;
-					}
-				}
-				if (empty > 0)
-				{
-					
-					ItemStack holder = new ItemStack(CompactMobsItems.fullMobHolder, 1);
-					//FullMobHolder holder = new FullMobHolder(CompactMobsItems.fullMobHolder.shiftedIndex);
-					NBTTagCompound nbttag = holder.stackTagCompound;
-					//TODO Add the decompacting code
-					
-					
-					/*if (true)//holder.hasTagCompound())
-					{
-						NBTTagCompound nbttag = new NBTTagCompound();
-						nbttag.setInteger("entityId", id);
-						holder.writeToNBT(nbttag);//func_77983_a("tag",nbttag);
-						//CompactMobsCore.instance.cmLog.info("2: " + String.valueOf(holder.hasTagCompound()));
-						//nbttag = holder.getTagCompound();
-						
-						NBTBase test = holder.getTagCompound().getTag("entityId");
-						
-						
-						//setId(EntityList.getEntityID(var5));
-						ItemStacks[var3] = holder;
-						CompactMobsCore.instance.cmLog.info("2: " + String.valueOf(test));
-					}*/
-				}
-				
-				/*for (int var3 = 1; var3 < 29; ++var3)
-		        {
-					if (ItemStacks[var3] != null)
-					{
-						if (ItemStacks[var3].getItem() == Item.paper){
-							if(ItemStacks[var3].stackSize < 64){
-								ItemStacks[var3] = new ItemStack(Item.paper, ItemStacks[var3].stackSize+1);
-								break;
-							}
-						}
-					} else
-					{
-						ItemStacks[var3] = new ItemStack(Item.paper, 1);
-						break;
-					}
-		        }*/
-				
-				if (ItemStacks[0].stackSize > 1)
-				{
-					ItemStacks[0] = new ItemStack(ItemStacks[0].getItem(), ItemStacks[0].stackSize-1);
-				} else 
-				{
-					ItemStacks[0] = null;
-				}
+				ItemStacks[stackNum] = new ItemStack(ItemStacks[stackNum].getItem(), ItemStacks[stackNum].stackSize-1);
+			} else 
+			{
+				ItemStacks[stackNum] = null;
 			}
+			
 		}
 		
 	}

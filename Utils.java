@@ -2,6 +2,8 @@ package compactMobs;
 
 
 
+import buildcraft.api.core.Orientations;
+import buildcraft.api.core.Position;
 import net.minecraft.src.EntityItem;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
@@ -41,6 +43,21 @@ public class Utils {
 			if (items != null && items.stackSize > 0)
 				dropItems(world, inventory.getStackInSlot(l).copy(), i, j, k);
 		}
+	}
+	
+	public static Orientations get2dOrientation(Position pos1, Position pos2) {
+		double Dx = pos1.x - pos2.x;
+		double Dz = pos1.z - pos2.z;
+		double angle = Math.atan2(Dz, Dx) / Math.PI * 180 + 180;
+
+		if (angle < 45 || angle > 315)
+			return Orientations.XPos;
+		else if (angle < 135)
+			return Orientations.ZPos;
+		else if (angle < 225)
+			return Orientations.XNeg;
+		else
+			return Orientations.ZNeg;
 	}
 
 }

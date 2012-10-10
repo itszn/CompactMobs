@@ -6,6 +6,7 @@ import compactMobs.Items.CompactMobsItems;
 import compactMobs.Blocks.BlockCompactor;
 import compactMobs.Blocks.BlockDecompactor;
 import compactMobs.TileEntity.TileEntityCompactor;
+import compactMobs.TileEntity.TileEntityDecompactor;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
@@ -77,6 +78,7 @@ public class CompactMobsCore {
 		LanguageRegistry.addName(blockDecompactor, "Decompactor");
 		
 		GameRegistry.registerTileEntity(TileEntityCompactor.class,"tileEntityCompactor");
+		GameRegistry.registerTileEntity(TileEntityDecompactor.class, "tileEntityDecompactor");
 		
 		CompactMobsItems.getInstance().instantiateItems();
 		CompactMobsItems.getInstance().nameItems();

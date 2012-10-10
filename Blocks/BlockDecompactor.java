@@ -2,6 +2,9 @@ package compactMobs.Blocks;
 
 import java.util.Random;
 
+import buildcraft.api.core.Orientations;
+import buildcraft.api.core.Position;
+
 import compactMobs.CompactMobsCore;
 import compactMobs.DefaultProps;
 import compactMobs.Utils;
@@ -13,6 +16,7 @@ import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockContainer;
 import net.minecraft.src.CreativeTabs;
+import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
@@ -20,13 +24,19 @@ import net.minecraft.src.TileEntityEnchantmentTable;
 import net.minecraft.src.World;
 
 public class BlockDecompactor extends BlockContainer{
-
+	
+	int textureFront, textureSides, textureBack, textureTop;
+	
 	public BlockDecompactor(int par1, Material par2Material) 
 	{
 		super(par1, par2Material);
 		super.blockIndexInTexture = 4;
         this.setLightOpacity(10);
         this.setCreativeTab(CreativeTabs.tabRedstone);
+        textureFront = 3; //3
+		textureSides = 5; //5
+		textureBack = 6; //6
+		textureTop = 4; //4
 	}
 	
 	@Override
@@ -54,24 +64,32 @@ public class BlockDecompactor extends BlockContainer{
     }
 	
 	@Override
-	public int getBlockTextureFromSideAndMetadata(int par1, int par2)
+	public int getBlockTextureFromSideAndMetadata(int i, int j)
 	{
-		switch(par1)
-		{
-			case 0:
-				return 1;
-			case 1:
-				return 3;
-			case 2:
-				return 2;
-			case 3:
-				return 2;
-			case 4:
-				return 2;
-			case 5:
-				return 2;
+		if (j == 0 && i == 3) {
+			return textureFront;
 		}
-		return 0;
+
+		if (i == 1) {
+			return textureTop;
+		} else if (i == 0) {
+			return textureBack;
+		} else if (i == j) {
+			return textureFront;
+		} else if (j >= 0 && j < 6 && Orientations.values()[j].reverse().ordinal() == i) {
+			return textureBack;
+		} else {
+			return textureSides;
+		}
+	}
+	
+	@Override
+	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving) {
+		Orientations orientation = Utils.get2dOrientation(new Position(entityliving.posX, entityliving.posY, entityliving.posZ),
+				new Position(i, j, k));
+
+		world.setBlockMetadataWithNotify(i, j, k, orientation.reverse().ordinal());
+		CompactMobsCore.instance.cmLog.info(String.valueOf(world.getBlockMetadata(i,j,k)));
 	}
 	
 	@Override
@@ -83,19 +101,20 @@ public class BlockDecompactor extends BlockContainer{
 	/**
      * Called upon block activation (right click on the block.)
      */
-    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
+    public boolean onBlockActivated(World world, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
     {
-        if (par1World.isRemote)
+    	
+        if (world.isRemote)
         {
             return true;
         }
         else if(par5EntityPlayer.isSneaking())
         {
-        	return true;
+        	return false;
         }
         else
         {
-        	par5EntityPlayer.openGui(CompactMobsCore.instance, 0, par1World, par2, par3, par4);
+        	par5EntityPlayer.openGui(CompactMobsCore.instance, 1, world, par2, par3, par4);
     		return true;
         }
     }

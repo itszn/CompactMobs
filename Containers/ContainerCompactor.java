@@ -12,8 +12,10 @@ import net.minecraft.src.TileEntity;
 
 public class ContainerCompactor extends Container{
 
+	int inventorySize;
 	public ContainerCompactor(InventoryPlayer par1InventoryPlayer, TileEntityCompactor te)
     {
+		inventorySize = te.getSizeInventory();
 		this.addSlotToContainer(new Slot(te, 0, 49, 34));
         //this.addSlotToContainer(new Slot(te, 1, 44, 51));
         //this.addSlotToContainer(new Slot(te, 2, 116, 51));
@@ -48,37 +50,22 @@ public class ContainerCompactor extends Container{
 	}
 	
 	@Override
-    public ItemStack transferStackInSlot(int slot) {
-            ItemStack stack = null;
-            Slot slotObject = (Slot) inventorySlots.get(slot);
-
-            //null checks and checks if the item can be stacked (maxStackSize > 1)
-            if (slotObject != null && slotObject.getHasStack()) {
-                    ItemStack stackInSlot = slotObject.getStack();
-                    stack = stackInSlot.copy();
-
-                    //merges the item into player inventory since its in the tileEntity
-                    if (slot == 0) 
-                    {
-                            if (!mergeItemStack(stackInSlot, 3, inventorySlots.size(), true)) {
-                                    return null;
-                            }
-                    //places it into the tileEntity is possible since its in the player inventory
-                    } 
-                    else if (!mergeItemStack(stackInSlot, 0, 1, false)) 
-                    {
-                            return null;
-                    }
-
-                    if (stackInSlot.stackSize == 0) 
-                    {
-                            slotObject.putStack(null);
-                    } else 
-                    {
-                            slotObject.onSlotChanged();
-                    }
-            }
-
-            return stack;
-    }
+	public ItemStack transferStackInSlot(int i) {
+		ItemStack itemstack = null;
+		Slot slot = (Slot) inventorySlots.get(i);
+		if (slot != null && slot.getHasStack()) {
+			ItemStack itemstack1 = slot.getStack();
+			itemstack = itemstack1.copy();
+			if (i < inventorySize) {
+				if (!mergeItemStack(itemstack1, inventorySize, inventorySlots.size(), true))
+					return null;
+			} else if (!mergeItemStack(itemstack1, 0, inventorySize, false))
+				return null;
+			if (itemstack1.stackSize == 0)
+				slot.putStack(null);
+			else
+				slot.onSlotChanged();
+		}
+		return itemstack;
+	}
 }
