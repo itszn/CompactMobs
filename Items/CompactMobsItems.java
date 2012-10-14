@@ -32,10 +32,11 @@ public class CompactMobsItems
 		fullMobHolder = new FullMobHolder(3353).setIconIndex(1).setItemName("FullMobHolder");
 	}
 	
+	
 	public void nameItems()
 	{
-		LanguageRegistry.addName(mobHolder, "Empty Mob Holder");
-		LanguageRegistry.addName(fullMobHolder, "Full Mob Holder");
+		//LanguageRegistry.addName(mobHolder, "Empty Mob Holder");
+		//LanguageRegistry.addName(fullMobHolder, "Full Mob Holder");
 
 	}
 	

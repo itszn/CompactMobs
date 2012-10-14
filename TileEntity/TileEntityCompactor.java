@@ -7,9 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import compactMobs.CompactMobsCore;
+import compactMobs.Utils;
+import compactMobs.Vect;
 import compactMobs.Items.CompactMobsItems;
 import compactMobs.Items.FullMobHolder;
 
+import buildcraft.api.core.Orientations;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
@@ -22,9 +25,12 @@ import net.minecraft.src.Block;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityAgeable;
 import net.minecraft.src.EntityCreature;
+import net.minecraft.src.EntityDragonBase;
 import net.minecraft.src.EntityList;
+import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EntitySheep;
+import net.minecraft.src.EntitySlime;
 import net.minecraft.src.EntityVillager;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.Item;
@@ -52,6 +58,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 	
 	@Override
 	public void updateEntity() {
+		
 		if (this instanceof IPowerReceptor) {
 			IPowerReceptor receptor = ((IPowerReceptor) this);
 
@@ -213,27 +220,28 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 			return;
 		World world = worldObj;
 		double radius = 3.0D;
-		List list1 = world.getEntitiesWithinAABB(EntityCreature.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double)this.xCoord-radius, (double)this.yCoord-1.0D, (double)this.zCoord-radius, (double)this.xCoord+radius, (double)this.yCoord+1.0D, (double)this.zCoord+radius));
+		List list1 = world.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double)this.xCoord-radius, (double)this.yCoord-1.0D, (double)this.zCoord-radius, (double)this.xCoord+radius, (double)this.yCoord+1.0D, (double)this.zCoord+radius));
 		
-		EntityCreature entity = null;
+		EntityLiving entity = null;
         double var6 = Double.MAX_VALUE;
         Iterator entitys = list1.iterator();
 
         while (entitys.hasNext())
         {
-            EntityCreature var9 = (EntityCreature)entitys.next();
+        	
+            EntityLiving var9 = (EntityLiving)entitys.next();
 
-            
-            double var10 = this.getDistanceSqToEntity(var9);
-
-            if (var10 <= var6)
+            if (!(var9 instanceof EntityPlayer) && !(var9 instanceof EntityDragonBase))
             {
-                entity = var9;
-                var6 = var10;
+	            double var10 = this.getDistanceSqToEntity(var9);
+	
+	            if (var10 <= var6)
+	            {
+	                entity = var9;
+	                var6 = var10;
+	            }
             }
-            
         }
-        
 		if (ItemStacks[0] != null && entity != null)
 		{
 			int id = EntityList.getEntityID(entity);
@@ -267,6 +275,11 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 					nbttag.setInteger("entityId", id);
 					nbttag.setInteger("entityHealth", entity.getHealth());
 					
+					if (entity instanceof EntitySlime)
+					{
+						EntitySlime entitySlime = (EntitySlime)entity;
+						nbttag.setInteger("entitySize", entitySlime.getSlimeSize());
+					}
 					if (entity instanceof EntityAgeable)
 					{
 						EntityAgeable entityAge = (EntityAgeable)entity;
@@ -286,9 +299,13 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 						nbttag.setInteger("entityProfession", entityVillager.getProfession());
 					}
 					
+					String name = entity.getEntityName();
+					nbttag.setString("name", name);
+					
 					holder.setTagCompound(nbttag);
 					ItemStacks[var3] = holder;
 					world.removeEntity(entity);
+					
 					
 					
 					/*if (true)//holder.hasTagCompound())
@@ -334,6 +351,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 				}
 			}
 		}
+		dumpItems();
 		
 	}
 
@@ -342,6 +360,61 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 		// TODO Auto-generated method stub
 		return 25;
 	}
+	
+	public void dumpItems()
+	{
+		
+		Orientations[] pipes = Utils.getPipeDirections(this.worldObj, new Vect(this.xCoord, this.yCoord, this.zCoord), Orientations.XNeg);
+	    if (pipes.length > 0) {
+	      dumpToPipe(pipes);
+	    } else {
+	      IInventory[] inventories = Utils.getAdjacentInventories(this.worldObj, new Vect(this.xCoord, this.yCoord, this.zCoord));
+	      dumpToInventory(inventories);
+	    }
+	}
+	
+	private void dumpToPipe(Orientations[] pipes)
+	{
+		Orientations[] filtered;
+		filtered = Utils.filterPipeDirections(pipes, new Orientations[] { Orientations.YNeg, Orientations.YPos});
+		
+		for (int i = 1; i < 28; i++) {
+			if (ItemStacks[i]!=null)
+			{
+				while ((ItemStacks[i].stackSize>0) && (filtered.length > 0)) {
+					Utils.putFromStackIntoPipe(this, filtered, ItemStacks[i]);
+					
+				}
+				if (this.ItemStacks[i].stackSize <= 0)
+					this.ItemStacks[i] = null;
+			}
+		}
+	}
+	 
+	public void dumpToInventory(IInventory[] inventories)
+	{
+	for (int i = 1; i < 28; i++) {
+		if (ItemStacks[i]!=null && ItemStacks[i].stackSize>0)
+		{
+			
+		 
+			for (int j = 0; j < inventories.length; j++)
+			{
+				if (inventories[j] != null)
+				{
+					IInventory inventory = Utils.getChest(inventories[j]);
+				
+				
+					Utils.stowInInventory(ItemStacks[i], inventory, true);
+					if (this.ItemStacks[i].stackSize <= 0)
+						this.ItemStacks[i] = null;
+					}
+				}
+			}
+		}
+	}
+
+
 	
 	public double getDistanceSqToEntity(Entity par1Entity)
     {

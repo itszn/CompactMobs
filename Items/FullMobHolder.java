@@ -23,9 +23,27 @@ public class FullMobHolder extends Item
 		this.setTabToDisplayOn(CreativeTabs.tabRedstone);
 	}
 	
+	@Override
+	public String getItemNameIS(ItemStack stack)
+	{
+		NBTTagCompound nbttag = stack.getTagCompound();
+		if (nbttag != null)
+		{
+			if (nbttag.hasKey("name"))
+			{
+				String name = nbttag.getString("name");
+				return "Compact "+name;
+			} else
+			{
+				return "Full Mob Holder (BAD ID)";
+			}
+		}
+		return "Full Mob Holder (BAD ID)";
+	}
+	
 	public String getTextureFile()
     {
-		return DefaultProps.ITEM_TEXTURES+"/items.png";
+		return DefaultProps.ITEM_TEXTURES+"/Holder.png";
     }
 	
 		

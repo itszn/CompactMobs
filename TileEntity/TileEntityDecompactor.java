@@ -7,9 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import compactMobs.CompactMobsCore;
+import compactMobs.Utils;
+import compactMobs.Vect;
 import compactMobs.Items.CompactMobsItems;
 import compactMobs.Items.FullMobHolder;
 
+import buildcraft.api.core.Orientations;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
@@ -23,8 +26,10 @@ import net.minecraft.src.Entity;
 import net.minecraft.src.EntityAgeable;
 import net.minecraft.src.EntityCreature;
 import net.minecraft.src.EntityList;
+import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EntitySheep;
+import net.minecraft.src.EntitySlime;
 import net.minecraft.src.EntityVillager;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.Item;
@@ -246,17 +251,40 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
 				}
 			}
 		}
-        
-		if (stack != null)
+		
+		int outStackNum;
+		boolean out = false;
+		for (outStackNum = 27; outStackNum<30; outStackNum++)
 		{
-			NBTTagCompound ntbtag = stack.getTagCompound();
-			if (ntbtag != null)
+			if(ItemStacks[outStackNum] != null)
 			{
-				EntityCreature entity = null;
-				if (ntbtag.hasKey("entityId"))
+				if(ItemStacks[outStackNum].getItem() == CompactMobsItems.mobHolder)
 				{
-					int id = ntbtag.getInteger("entityId");
-					entity = (EntityCreature)EntityList.createEntityByID(id, world);
+					if(ItemStacks[outStackNum].stackSize<64)
+					{
+						out = true;
+						break;
+					}
+				}
+			}
+			if(ItemStacks[outStackNum] == null)
+			{
+				out = true;
+				break;
+			}
+		}
+		
+        
+		if (stack != null && out)
+		{
+			NBTTagCompound nbttag = stack.getTagCompound();
+			if (nbttag != null)
+			{
+				EntityLiving entity = null;
+				if (nbttag.hasKey("entityId"))
+				{
+					int id = nbttag.getInteger("entityId");
+					entity = (EntityLiving)EntityList.createEntityByID(id, world);
 				} else { return; }
 				int dir = world.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
 				CompactMobsCore.instance.cmLog.info("dir: "+String.valueOf(dir));
@@ -281,31 +309,43 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
 					entity.setPosition(this.xCoord+.5D, this.yCoord+1D, this.zCoord+.5D);
 				}
 				
-				if (ntbtag.hasKey("entityHealth"))
+				if (nbttag.hasKey("entityHealth"))
 				{
-					int health = ntbtag.getInteger("entityHealth");
+					int health = nbttag.getInteger("entityHealth");
 					entity.setEntityHealth(health);
+				}
+				
+				if (entity instanceof EntitySlime)
+				{
+					EntitySlime entitySlime = (EntitySlime)entity;
+					if (nbttag.hasKey("entitySize"))
+					{
+						int size = nbttag.getInteger("entitySize");
+						entitySlime.setSlimeSize(size);
+					}
+					world.spawnEntityInWorld(entitySlime);
+					return;
 				}
 				
 				if (entity instanceof EntityAgeable)
 				{
 					EntityAgeable entityAgeable = (EntityAgeable)entity;
-					if (ntbtag.hasKey("entityGrowingAge"))
+					if (nbttag.hasKey("entityGrowingAge"))
 					{
-						int age = ntbtag.getInteger("entityGrowingAge");
+						int age = nbttag.getInteger("entityGrowingAge");
 						entityAgeable.setGrowingAge(age);
 					}
 					if (entityAgeable instanceof EntitySheep)
 					{
 						EntitySheep entitySheep = (EntitySheep)entityAgeable;
-						if (ntbtag.hasKey("entitySheared"))
+						if (nbttag.hasKey("entitySheared"))
 						{
-							boolean sheared = ntbtag.getBoolean("entitySheared");
+							boolean sheared = nbttag.getBoolean("entitySheared");
 							entitySheep.setSheared(sheared);
 						}
-						if (ntbtag.hasKey("entityColor"))
+						if (nbttag.hasKey("entityColor"))
 						{
-							int color = ntbtag.getInteger("entityColor");
+							int color = nbttag.getInteger("entityColor");
 							entitySheep.setFleeceColor(color);
 						}
 						world.spawnEntityInWorld(entitySheep);
@@ -313,9 +353,9 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
 					} else if (entityAgeable instanceof EntityVillager)
 					{
 						EntityVillager entityVillager =  (EntityVillager)entityAgeable;
-						if (ntbtag.hasKey("entityProfession"))
+						if (nbttag.hasKey("entityProfession"))
 						{
-							int profession = ntbtag.getInteger("entityProfession");
+							int profession = nbttag.getInteger("entityProfession");
 							entityVillager.setProfession(profession);
 						}
 						world.spawnEntityInWorld(entityVillager);
@@ -342,8 +382,73 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
 				ItemStacks[stackNum] = null;
 			}
 			
+			if (worldObj.rand.nextInt(15) != 0)
+			{
+				if (ItemStacks[outStackNum] != null)
+				{
+					ItemStacks[outStackNum] = new ItemStack(ItemStacks[outStackNum].getItem(), ItemStacks[outStackNum].stackSize+1);
+				} else 
+				{
+					ItemStacks[outStackNum] = new ItemStack(CompactMobsItems.mobHolder, 1);
+				}
+			}
+			
 		}
+		dumpItems();
 		
+	}
+	
+	public void dumpItems()
+	{
+		
+		Orientations[] pipes = Utils.getPipeDirections(this.worldObj, new Vect(this.xCoord, this.yCoord, this.zCoord), Orientations.XNeg);
+	    if (pipes.length > 0) {
+	      dumpToPipe(pipes);
+	    } else {
+	      IInventory[] inventories = Utils.getAdjacentInventories(this.worldObj, new Vect(this.xCoord, this.yCoord, this.zCoord));
+	      dumpToInventory(inventories);
+	    }
+	}
+	
+	private void dumpToPipe(Orientations[] pipes)
+	{
+		Orientations[] filtered;
+		filtered = Utils.filterPipeDirections(pipes, new Orientations[] { Orientations.XNeg, Orientations.XPos, Orientations.ZNeg, Orientations.ZPos});
+		
+		for (int i = 27; i < 30; i++) {
+			if (ItemStacks[i]!=null)
+			{
+				while ((ItemStacks[i].stackSize>0) && (filtered.length > 0)) {
+					Utils.putFromStackIntoPipe(this, filtered, ItemStacks[i]);
+					
+				}
+				if (this.ItemStacks[i].stackSize <= 0)
+					this.ItemStacks[i] = null;
+			}
+		}
+	}
+	 
+	public void dumpToInventory(IInventory[] inventories)
+	{
+	for (int i = 27; i < 30; i++) {
+		if (ItemStacks[i]!=null && ItemStacks[i].stackSize>0)
+		{
+			
+		 
+			for (int j = 0; j < inventories.length; j++)
+			{
+				if (inventories[j] != null)
+				{
+					IInventory inventory = Utils.getChest(inventories[j]);
+				
+				
+					Utils.stowInInventory(ItemStacks[i], inventory, true);
+					if (this.ItemStacks[i].stackSize <= 0)
+						this.ItemStacks[i] = null;
+					}
+				}
+			}
+		}
 	}
 
 	@Override

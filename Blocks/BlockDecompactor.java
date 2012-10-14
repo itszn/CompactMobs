@@ -89,7 +89,7 @@ public class BlockDecompactor extends BlockContainer{
 				new Position(i, j, k));
 
 		world.setBlockMetadataWithNotify(i, j, k, orientation.reverse().ordinal());
-		CompactMobsCore.instance.cmLog.info(String.valueOf(world.getBlockMetadata(i,j,k)));
+		//CompactMobsCore.instance.cmLog.info(String.valueOf(world.getBlockMetadata(i,j,k)));
 	}
 	
 	@Override

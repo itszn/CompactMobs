@@ -2,6 +2,9 @@ package compactMobs.Blocks;
 
 import java.util.Random;
 
+import buildcraft.api.core.Orientations;
+import buildcraft.api.core.Position;
+
 import compactMobs.CompactMobsCore;
 import compactMobs.DefaultProps;
 import compactMobs.Utils;
@@ -12,6 +15,7 @@ import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockContainer;
 import net.minecraft.src.CreativeTabs;
+import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
@@ -74,6 +78,15 @@ public class BlockCompactor extends BlockContainer{
 	public TileEntity createNewTileEntity(World var1) 
 	{
 		return new TileEntityCompactor();
+	}
+	
+	@Override
+	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving) {
+		Orientations orientation = Utils.get2dOrientation(new Position(entityliving.posX, entityliving.posY, entityliving.posZ),
+				new Position(i, j, k));
+
+		world.setBlockMetadataWithNotify(i, j, k, orientation.reverse().ordinal());
+		//CompactMobsCore.instance.cmLog.info(String.valueOf(world.getBlockMetadata(i,j,k)));
 	}
 	
 	/**
