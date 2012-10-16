@@ -17,7 +17,7 @@ public class MobHolder extends Item
 	}
 	
 	@Override
-	public String getItemNameIS(ItemStack stack)
+	public String getItemDisplayName(ItemStack stack)
 	{
 		return "Empty Mob Holder";
 	}

@@ -24,7 +24,7 @@ public class FullMobHolder extends Item
 	}
 	
 	@Override
-	public String getItemNameIS(ItemStack stack)
+	public String getItemDisplayName(ItemStack stack)
 	{
 		NBTTagCompound nbttag = stack.getTagCompound();
 		if (nbttag != null)
@@ -43,7 +43,7 @@ public class FullMobHolder extends Item
 	
 	public String getTextureFile()
     {
-		return DefaultProps.ITEM_TEXTURES+"/Holder.png";
+		return DefaultProps.ITEM_TEXTURES+"/items.png";
     }
 	
 		

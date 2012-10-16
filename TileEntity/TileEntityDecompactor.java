@@ -324,48 +324,49 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
 						entitySlime.setSlimeSize(size);
 					}
 					world.spawnEntityInWorld(entitySlime);
-					return;
-				}
-				
-				if (entity instanceof EntityAgeable)
-				{
-					EntityAgeable entityAgeable = (EntityAgeable)entity;
-					if (nbttag.hasKey("entityGrowingAge"))
-					{
-						int age = nbttag.getInteger("entityGrowingAge");
-						entityAgeable.setGrowingAge(age);
-					}
-					if (entityAgeable instanceof EntitySheep)
-					{
-						EntitySheep entitySheep = (EntitySheep)entityAgeable;
-						if (nbttag.hasKey("entitySheared"))
-						{
-							boolean sheared = nbttag.getBoolean("entitySheared");
-							entitySheep.setSheared(sheared);
-						}
-						if (nbttag.hasKey("entityColor"))
-						{
-							int color = nbttag.getInteger("entityColor");
-							entitySheep.setFleeceColor(color);
-						}
-						world.spawnEntityInWorld(entitySheep);
-						
-					} else if (entityAgeable instanceof EntityVillager)
-					{
-						EntityVillager entityVillager =  (EntityVillager)entityAgeable;
-						if (nbttag.hasKey("entityProfession"))
-						{
-							int profession = nbttag.getInteger("entityProfession");
-							entityVillager.setProfession(profession);
-						}
-						world.spawnEntityInWorld(entityVillager);
-					} else
-					{
-						world.spawnEntityInWorld(entityAgeable);
-					}
+					
 				} else
 				{
-					world.spawnEntityInWorld(entity);
+					if (entity instanceof EntityAgeable)
+					{
+						EntityAgeable entityAgeable = (EntityAgeable)entity;
+						if (nbttag.hasKey("entityGrowingAge"))
+						{
+							int age = nbttag.getInteger("entityGrowingAge");
+							entityAgeable.setGrowingAge(age);
+						}
+						if (entityAgeable instanceof EntitySheep)
+						{
+							EntitySheep entitySheep = (EntitySheep)entityAgeable;
+							if (nbttag.hasKey("entitySheared"))
+							{
+								boolean sheared = nbttag.getBoolean("entitySheared");
+								entitySheep.setSheared(sheared);
+							}
+							if (nbttag.hasKey("entityColor"))
+							{
+								int color = nbttag.getInteger("entityColor");
+								entitySheep.setFleeceColor(color);
+							}
+							world.spawnEntityInWorld(entitySheep);
+							
+						} else if (entityAgeable instanceof EntityVillager)
+						{
+							EntityVillager entityVillager =  (EntityVillager)entityAgeable;
+							if (nbttag.hasKey("entityProfession"))
+							{
+								int profession = nbttag.getInteger("entityProfession");
+								entityVillager.setProfession(profession);
+							}
+							world.spawnEntityInWorld(entityVillager);
+						} else
+						{
+							world.spawnEntityInWorld(entityAgeable);
+						}
+					} else
+					{
+						world.spawnEntityInWorld(entity);
+					}
 				}
 			}
 			//int id = EntityList.getEntityID(entity);
@@ -382,7 +383,7 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
 				ItemStacks[stackNum] = null;
 			}
 			
-			if (worldObj.rand.nextInt(15) != 0)
+			if (worldObj.rand.nextInt(10) != 0)
 			{
 				if (ItemStacks[outStackNum] != null)
 				{
