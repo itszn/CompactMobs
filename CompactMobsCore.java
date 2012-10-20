@@ -45,6 +45,8 @@ public class CompactMobsCore {
 	//hardcoded id of block
 	public static int BlockID = 3391;
 	
+	public boolean useFullTagCompound = false;
+	
 	public static Block blocks;
 	public static Block blockCompactor;
 	public static Block blockDecompactor;
@@ -98,7 +100,7 @@ public class CompactMobsCore {
 			goldGear = (Item)Class.forName("buildcraft.BuildCraftCore").getField("goldGearItem").get(null);
 			GameRegistry.addRecipe(new ItemStack(blockCompactor, 1), new Object[] {"ipi", "lol", "gpg", 'i', ironGear, 'p', Block.pistonBase, 'l', new ItemStack(Item.dyePowder, 1, 4), 'o', Block.obsidian, 'g', goldGear});
 			GameRegistry.addRecipe(new ItemStack(blockDecompactor, 1), new Object[] {"oro", "ild", "grg", 'o', ironGear, 'r', Item.redstone, 'i', Item.ingotIron, 'l', Block.blockLapis, 'd', Block.dispenser, 'g', goldGear});
-			GameRegistry.addRecipe(new ItemStack(CompactMobsItems.mobHolder, 1), new Object[] {"hhh", "ibi", "sss", 'h', new ItemStack(Block.stoneSingleSlab, 1, 0), 'i', Item.ingotIron, 'b', Block.fenceIron, 's', Block.stone});
+			GameRegistry.addRecipe(new ItemStack(CompactMobsItems.mobHolder, 2), new Object[] {"hhh", "ibi", "sss", 'h', new ItemStack(Block.stoneSingleSlab, 1, 0), 'i', Item.ingotIron, 'b', Block.fenceIron, 's', Block.stone});
 			cmLog.info("Adding Compactmob Recipes");
 					
 		} catch (Exception ex)

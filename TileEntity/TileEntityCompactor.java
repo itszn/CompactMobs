@@ -44,6 +44,8 @@ import net.minecraft.src.World;
 public class TileEntityCompactor extends TileEntity implements IInventory, IPowerReceptor
 {
 	
+	
+	
 	public ItemStack[] ItemStacks;
 	
 	IPowerProvider provider;
@@ -262,6 +264,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 						break;
 					}
 				}
+				
 				if (empty > 0)
 				{
 					
@@ -273,34 +276,40 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 						nbttag = new NBTTagCompound();
 					}
 					nbttag.setInteger("entityId", id);
-					nbttag.setInteger("entityHealth", entity.getHealth());
-					
-					if (entity instanceof EntitySlime)
+					if (!CompactMobsCore.instance.useFullTagCompound)
 					{
-						EntitySlime entitySlime = (EntitySlime)entity;
-						nbttag.setInteger("entitySize", entitySlime.getSlimeSize());
-					}
-					if (entity instanceof EntityAgeable)
+						nbttag.setInteger("entityHealth", entity.getHealth());
+						
+						if (entity instanceof EntitySlime)
+						{
+							EntitySlime entitySlime = (EntitySlime)entity;
+							nbttag.setInteger("entitySize", entitySlime.getSlimeSize());
+						}
+						if (entity instanceof EntityAgeable)
+						{
+							EntityAgeable entityAge = (EntityAgeable)entity;
+							nbttag.setInteger("entityGrowingAge", entityAge.getGrowingAge());
+						}
+						
+						if (entity instanceof EntitySheep)
+						{
+							EntitySheep entitySheep = (EntitySheep)entity;
+							nbttag.setBoolean("entitySheared", entitySheep.getSheared());
+							nbttag.setInteger("entityColor", entitySheep.getFleeceColor());
+						}
+						
+						if (entity instanceof EntityVillager)
+						{
+							EntityVillager entityVillager = (EntityVillager)entity;
+							nbttag.setInteger("entityProfession", entityVillager.getProfession());
+						}
+					} else
 					{
-						EntityAgeable entityAge = (EntityAgeable)entity;
-						nbttag.setInteger("entityGrowingAge", entityAge.getGrowingAge());
+						nbttag.setCompoundTag("compound", entity.getEntityData());
 					}
-					
-					if (entity instanceof EntitySheep)
-					{
-						EntitySheep entitySheep = (EntitySheep)entity;
-						nbttag.setBoolean("entitySheared", entitySheep.getSheared());
-						nbttag.setInteger("entityColor", entitySheep.getFleeceColor());
-					}
-					
-					if (entity instanceof EntityVillager)
-					{
-						EntityVillager entityVillager = (EntityVillager)entity;
-						nbttag.setInteger("entityProfession", entityVillager.getProfession());
-					}
-					
 					String name = entity.getEntityName();
 					nbttag.setString("name", name);
+					holder.setItemDamage(id);
 					
 					holder.setTagCompound(nbttag);
 					ItemStacks[var3] = holder;

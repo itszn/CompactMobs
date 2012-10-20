@@ -277,6 +277,7 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
         
 		if (stack != null && out)
 		{
+			
 			NBTTagCompound nbttag = stack.getTagCompound();
 			if (nbttag != null)
 			{
@@ -286,8 +287,18 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
 					int id = nbttag.getInteger("entityId");
 					entity = (EntityLiving)EntityList.createEntityByID(id, world);
 				} else { return; }
+				
+				if (CompactMobsCore.instance.useFullTagCompound)
+				{
+					if (nbttag.hasKey("compound"))
+					{
+						NBTTagCompound newCompound = nbttag.getCompoundTag("compound");
+						//entity;
+					}
+				
+				}
 				int dir = world.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
-				CompactMobsCore.instance.cmLog.info("dir: "+String.valueOf(dir));
+				//CompactMobsCore.instance.cmLog.info("dir: "+String.valueOf(dir));
 				if (dir == 2)
 				{
 					entity.setPosition(this.xCoord+.5D, this.yCoord, this.zCoord-.5D);
