@@ -1,9 +1,12 @@
 package compactMobs;
 
+import compactMobs.Containers.ContainerBreeder;
 import compactMobs.Containers.ContainerCompactor;
 import compactMobs.Containers.ContainerDecompactor;
+import compactMobs.GUI.GuiBreeder;
 import compactMobs.GUI.GuiCompactor;
 import compactMobs.GUI.GuiDecompactor;
+import compactMobs.TileEntity.TileEntityBreeder;
 import compactMobs.TileEntity.TileEntityCompactor;
 import compactMobs.TileEntity.TileEntityDecompactor;
 
@@ -34,7 +37,9 @@ public class CommonProxyCompactMobs implements IGuiHandler
 				return new ContainerCompactor(player.inventory, (TileEntityCompactor) tileEntity);
 			case 1:
 				return new ContainerDecompactor(player.inventory, (TileEntityDecompactor) tileEntity);
-        	}
+			case 2:
+				return new ContainerBreeder(player.inventory, (TileEntityBreeder) tileEntity);
+			}
         }
 		return null;
 	}
@@ -51,6 +56,8 @@ public class CommonProxyCompactMobs implements IGuiHandler
 				return new GuiCompactor(player.inventory, ((TileEntityCompactor)tileEntity));
 			case 1:
 				return new GuiDecompactor(player.inventory, ((TileEntityDecompactor)tileEntity));
+			case 2:
+				return new GuiBreeder(player.inventory, ((TileEntityBreeder)tileEntity));
 			}
         }
 

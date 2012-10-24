@@ -3,8 +3,10 @@ package compactMobs;
 import java.util.logging.Logger;
 
 import compactMobs.Items.CompactMobsItems;
+import compactMobs.Blocks.BlockBreeder;
 import compactMobs.Blocks.BlockCompactor;
 import compactMobs.Blocks.BlockDecompactor;
+import compactMobs.TileEntity.TileEntityBreeder;
 import compactMobs.TileEntity.TileEntityCompactor;
 import compactMobs.TileEntity.TileEntityDecompactor;
 
@@ -50,6 +52,7 @@ public class CompactMobsCore {
 	public static Block blocks;
 	public static Block blockCompactor;
 	public static Block blockDecompactor;
+	public static Block blockBreeder;
 	
 	public static Logger cmLog = Logger.getLogger("CompactMobs");
 	
@@ -79,9 +82,13 @@ public class CompactMobsCore {
 		blockDecompactor = new BlockDecompactor(BlockID+1, Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockDecompactor");
 		GameRegistry.registerBlock(blockDecompactor);
 		LanguageRegistry.addName(blockDecompactor, "Decompactor");
+		blockBreeder = new BlockBreeder(BlockID+2, Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockBreeder");
+		GameRegistry.registerBlock(blockBreeder);
+		LanguageRegistry.addName(blockBreeder, "Breeder");
 		
 		GameRegistry.registerTileEntity(TileEntityCompactor.class,"tileEntityCompactor");
 		GameRegistry.registerTileEntity(TileEntityDecompactor.class, "tileEntityDecompactor");
+		GameRegistry.registerTileEntity(TileEntityBreeder.class, "tileEntityBreeder");
 		
 		CompactMobsItems.getInstance().instantiateItems();
 		CompactMobsItems.getInstance().nameItems();

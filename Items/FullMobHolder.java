@@ -23,7 +23,17 @@ public class FullMobHolder extends Item
 		super(par1);
 		maxStackSize = 1;
 		this.setTabToDisplayOn(CreativeTabs.tabRedstone);
+		if (!this.getShareTag())
+		{
+			
+		}
 	}
+	
+	@Override
+	public boolean getShareTag()
+    {
+        return true;
+    }
 	
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -41,6 +51,11 @@ public class FullMobHolder extends Item
 				return "Full Mob Holder (BAD ID)";
 			}
 		}
+		if (stack.getItemDamage() > 0)
+		{
+			String name = EntityList.getStringFromID(stack.getItemDamage());//nbttag.getString("name");
+			return "Compact "+name;
+		}
 		return "Full Mob Holder (BAD ID)";
 	}
 	
@@ -55,10 +70,19 @@ public class FullMobHolder extends Item
 	{
 		///NBTBase nbtbace = itemStack.getTagCompound().getTag("tag");
 		NBTTagCompound nbttag = itemStack.stackTagCompound;
+		
 		if (nbttag != null)
 		{
-			int id = nbttag.getInteger("entityId");
-			CompactMobsCore.instance.cmLog.info(String.valueOf(id));
+			
+			if (nbttag.hasKey("name"))
+			{
+				String name = nbttag.getString("name");
+				CompactMobsCore.instance.cmLog.info(String.valueOf(name));
+			} else
+			{
+				int id = nbttag.getInteger("entityId");
+				CompactMobsCore.instance.cmLog.info(String.valueOf(id));
+			}
 		} else 
 		{
 			CompactMobsCore.instance.cmLog.info("No Id");

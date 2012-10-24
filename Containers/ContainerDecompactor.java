@@ -58,14 +58,15 @@ public class ContainerDecompactor extends Container{
 	@Override
 	public ItemStack transferStackInSlot(int i) {
 		ItemStack itemstack = null;
+		int inventorySize1 = 27;
 		Slot slot = (Slot) inventorySlots.get(i);
 		if (slot != null && slot.getHasStack()) {
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 			if (i < inventorySize) {
-				if (!mergeItemStack(itemstack1, inventorySize, inventorySlots.size(), true))
+				if (!mergeItemStack(itemstack1, inventorySize1, inventorySlots.size(), true))
 					return null;
-			} else if (!mergeItemStack(itemstack1, 0, inventorySize, false))
+			} else if (!mergeItemStack(itemstack1, 0, inventorySize1, false))
 				return null;
 			if (itemstack1.stackSize == 0)
 				slot.putStack(null);

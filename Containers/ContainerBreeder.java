@@ -1,6 +1,7 @@
 package compactMobs.Containers;
 
 import compactMobs.CompactMobsCore;
+import compactMobs.TileEntity.TileEntityBreeder;
 import compactMobs.TileEntity.TileEntityCompactor;
 
 import net.minecraft.src.Container;
@@ -11,25 +12,34 @@ import net.minecraft.src.Slot;
 import net.minecraft.src.TileEntity;
 
 
-public class ContainerCompactor extends Container{
+public class ContainerBreeder extends Container{
 
 	int inventorySize;
-	public ContainerCompactor(InventoryPlayer par1InventoryPlayer, TileEntityCompactor te)
+	public ContainerBreeder(InventoryPlayer par1InventoryPlayer, TileEntityBreeder tileEntity)
     {
-		inventorySize = te.getSizeInventory();
-		this.addSlotToContainer(new Slot(te, 0, 49, 34));
+		inventorySize = tileEntity.getSizeInventory();
+		
         //this.addSlotToContainer(new Slot(te, 1, 44, 51));
         //this.addSlotToContainer(new Slot(te, 2, 116, 51));
         //this.addSlotToContainer(new SlotInbuener(par1InventoryPlayer.player, te, 3, 80, 51));
         
+        for (int var3 = 0; var3 < 2; ++var3)
+        {
+            for (int var4 = 0; var4 < 9; ++var4)
+            {
+                this.addSlotToContainer(new Slot(tileEntity, var4 + var3 * 9, 8 + var4 * 18, 6+18 + var3 * 18));
+            }
+        }
+        this.addSlotToContainer(new Slot(tileEntity, 18, 44, 65));
+        this.addSlotToContainer(new Slot(tileEntity, 19, 80, 65));
+        this.addSlotToContainer(new Slot(tileEntity, 20, 116, 65));
         for (int var3 = 0; var3 < 3; ++var3)
         {
             for (int var4 = 0; var4 < 9; ++var4)
             {
-                this.addSlotToContainer(new Slot(te, var4 + var3 * 9+1, 8 + var4 * 18, 85 + var3 * 18));
+                this.addSlotToContainer(new Slot(tileEntity, 21+var4 + var3 * 9, 8 + var4 * 18, 89 + var3 * 18));
             }
         }
-        
         for (int var3 = 0; var3 < 3; ++var3)
         {
             for (int var4 = 0; var4 < 9; ++var4)
@@ -53,7 +63,7 @@ public class ContainerCompactor extends Container{
 	@Override
 	public ItemStack transferStackInSlot(int i) {
 		ItemStack itemstack = null;
-		int inventorySize1 = 1;
+		int inventorySize1 = 27;
 		Slot slot = (Slot) inventorySlots.get(i);
 		if (slot != null && slot.getHasStack()) {
 			ItemStack itemstack1 = slot.getStack();
