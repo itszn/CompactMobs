@@ -44,18 +44,21 @@ public class FullMobHolder extends Item
 		{
 			if (nbttag.hasKey("name"))
 			{
-				String name = EntityList.getStringFromID(stack.getItemDamage());//nbttag.getString("name");
-				return "Compact "+name;
+				//String name = EntityList.getStringFromID(stack.getItemDamage());//nbttag.getString("name");
+				if (nbttag.hasKey("entityGrowingAge"))
+				{
+					if (nbttag.getInteger("entityGrowingAge") < 0)
+					{
+						return "Compact Baby "+nbttag.getString("name");
+					}
+				}
+				return "Compact "+nbttag.getString("name");
 			} else
 			{
 				return "Full Mob Holder (BAD ID)";
 			}
 		}
-		if (stack.getItemDamage() > 0)
-		{
-			String name = EntityList.getStringFromID(stack.getItemDamage());//nbttag.getString("name");
-			return "Compact "+name;
-		}
+		
 		return "Full Mob Holder (BAD ID)";
 	}
 	

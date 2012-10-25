@@ -5,6 +5,7 @@ package compactMobs.TileEntity;
 import java.io.DataInput;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import compactMobs.CompactMobsCore;
 import compactMobs.Utils;
@@ -49,6 +50,7 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
 	public ItemStack[] ItemStacks;
 	
 	IPowerProvider provider;
+	//protected Random rand;
 
 	
 	public TileEntityBreeder() {
@@ -92,7 +94,7 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
 			{
 				if (ItemStacks[i1*9+j1] != null)
 				{
-					if (ItemStacks[i1*9+j1].getItem() == Item.wheat)
+					if (ItemStacks[i1*9+j1].getItem() == CompactMobsItems.fullMobHolder)
 					{
 						if (ItemStacks[19]== null)
 						{
@@ -330,11 +332,30 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
 		
 		ItemStack wheat = ItemStacks[19];
 		ItemStack parent1 = ItemStacks[18];
-		ItemStack parent2 = ItemStacks[17];
+		ItemStack parent2 = ItemStacks[20];
+		ItemStack child = null;
 		NBTTagCompound nbttag1 = null;
 		NBTTagCompound nbttag2 = null;
 		
-		if (wheat != null)
+		int stackNum1 = -1,stackNum2 = -1, stackNum3 = -1;
+		for (int i = 21; i<48; i++)
+		{
+			if (ItemStacks[i] == null)
+			{
+				if (stackNum1 == -1)
+					stackNum1 = i;
+				else if (stackNum2 == -1)
+					stackNum2 = i;
+				else if (stackNum3 == -1)
+					stackNum3 = i;
+				else
+					break;
+			}
+		}
+		CompactMobsCore.instance.cmLog.info("***");
+		CompactMobsCore.instance.cmLog.info(String.valueOf(stackNum1)+" "+String.valueOf(stackNum2)+" "+String.valueOf(stackNum3));
+		CompactMobsCore.instance.cmLog.info(String.valueOf(wheat != null)+" "+String.valueOf(parent1 != null)+" "+String.valueOf(parent2 != null));
+		if (wheat != null && wheat.getItem() == CompactMobsItems.fullMobHolder && stackNum1 >= 0 && stackNum2 >= 0 && stackNum3 >= 0 && parent1 != null && parent2 != null)
 		{
 			if (parent1.getItem() == CompactMobsItems.fullMobHolder && parent2.getItem() == CompactMobsItems.fullMobHolder)
 			{
@@ -342,15 +363,47 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
 				{
 					nbttag1 = parent1.getTagCompound();
 					nbttag2 = parent2.getTagCompound();
+					//CompactMobsCore.instance.cmLog.info("1: "+String.valueOf(nbttag1.hasKey("entityGrowingAge")));
+					//CompactMobsCore.instance.cmLog.info("2: "+String.valueOf(nbttag2.hasKey("entityGrowingAge")));
 					if (nbttag1.hasKey("entityGrowingAge") && nbttag2.hasKey("entityGrowingAge"))
 					{
-						if (nbttag1.getInteger("entityId") != 120 && nbttag1.getInteger("entityId") ==nbttag2.getInteger("entityId"))
+						if (nbttag1.getInteger("entityGrowingAge") == 0 && nbttag1.getInteger("entityGrowingAge") == 0)
 						{
-							NBTTagCompound nbttag3 = null;
-							nbttag1.setInteger("entityGrowingAge", 6000);
-							nbttag2.setInteger("entityGrowingAge", 6000);
-							nbttag3.setInteger("entityGrowingAge", -24000);
-							
+						//CompactMobsCore.instance.cmLog.info("3: "+String.valueOf(nbttag1.getInteger("entityId")));
+						//CompactMobsCore.instance.cmLog.info("4: "+String.valueOf(nbttag2.getInteger("entityId")));
+							if (nbttag1.getInteger("entityId") != 120 && nbttag1.getInteger("entityId") ==nbttag2.getInteger("entityId"))
+							{
+								NBTTagCompound nbttag3 = new NBTTagCompound();
+								nbttag1.setInteger("entityGrowingAge", 6000);
+								nbttag2.setInteger("entityGrowingAge", 6000);
+								nbttag3.setInteger("entityGrowingAge", -24000);
+								nbttag3.setInteger("entityId", nbttag1.getInteger("entityId"));
+								nbttag3.setString("name", nbttag1.getString("name"));
+								if (nbttag1.getInteger("entityId") == 91)
+								{
+									if (worldObj.rand.nextBoolean())
+							        {
+							            nbttag3.setInteger("entityColor", nbttag1.getInteger("entityColor"));
+							        }
+							        else
+							        {
+							        	nbttag3.setInteger("entityColor", nbttag2.getInteger("entityColor"));
+							        }
+								}
+								parent1.setTagCompound(nbttag1);
+								parent2.setTagCompound(nbttag2);
+								child = new ItemStack(CompactMobsItems.fullMobHolder, 1, nbttag1.getInteger("entityId"));
+								child.setTagCompound(nbttag3);
+								ItemStacks[stackNum1] = parent1;
+								ItemStacks[stackNum2] = parent2;
+								ItemStacks[stackNum3] = child;
+								if(ItemStacks[19].stackSize>1)
+									ItemStacks[19].stackSize = ItemStacks[19].stackSize - 1;
+								else
+									ItemStacks[19] = null;
+								ItemStacks[18] = null;
+								ItemStacks[20] = null;
+							}
 						}
 					}
 				}
@@ -403,7 +456,7 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
 	 
 	public void dumpToInventory(IInventory[] inventories)
 	{
-	for (int i = 8; i < 57; i++) {
+	for (int i = 8; i < 48; i++) {
 		if (ItemStacks[i]!=null && ItemStacks[i].stackSize>0)
 		{
 			
