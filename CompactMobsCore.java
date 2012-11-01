@@ -6,9 +6,11 @@ import compactMobs.Items.CompactMobsItems;
 import compactMobs.Blocks.BlockBreeder;
 import compactMobs.Blocks.BlockCompactor;
 import compactMobs.Blocks.BlockDecompactor;
+import compactMobs.Blocks.BlockIncubator;
 import compactMobs.TileEntity.TileEntityBreeder;
 import compactMobs.TileEntity.TileEntityCompactor;
 import compactMobs.TileEntity.TileEntityDecompactor;
+import compactMobs.TileEntity.TileEntityIncubator;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.CraftingManager;
@@ -53,6 +55,7 @@ public class CompactMobsCore {
 	public static Block blockCompactor;
 	public static Block blockDecompactor;
 	public static Block blockBreeder;
+	public static Block blockIncubator;
 	
 	public static Logger cmLog = Logger.getLogger("CompactMobs");
 	
@@ -85,10 +88,14 @@ public class CompactMobsCore {
 		blockBreeder = new BlockBreeder(BlockID+2, Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockBreeder");
 		GameRegistry.registerBlock(blockBreeder);
 		LanguageRegistry.addName(blockBreeder, "Breeder");
+		blockIncubator = new BlockIncubator(BlockID+3, Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockIncubator");
+		GameRegistry.registerBlock(blockIncubator);
+		LanguageRegistry.addName(blockIncubator, "Incubator");
 		
 		GameRegistry.registerTileEntity(TileEntityCompactor.class,"tileEntityCompactor");
 		GameRegistry.registerTileEntity(TileEntityDecompactor.class, "tileEntityDecompactor");
 		GameRegistry.registerTileEntity(TileEntityBreeder.class, "tileEntityBreeder");
+		GameRegistry.registerTileEntity(TileEntityIncubator.class, "tileEntityIncubator");
 		
 		CompactMobsItems.getInstance().instantiateItems();
 		CompactMobsItems.getInstance().nameItems();
@@ -103,12 +110,15 @@ public class CompactMobsCore {
 		Item goldGear = Item.ingotGold;
 		
 		try {
+			cmLog.info("Adding Compactmob Recipes");
 			ironGear = (Item)Class.forName("buildcraft.BuildCraftCore").getField("ironGearItem").get(null);
 			goldGear = (Item)Class.forName("buildcraft.BuildCraftCore").getField("goldGearItem").get(null);
 			GameRegistry.addRecipe(new ItemStack(blockCompactor, 1), new Object[] {"ipi", "lol", "gpg", 'i', ironGear, 'p', Block.pistonBase, 'l', new ItemStack(Item.dyePowder, 1, 4), 'o', Block.obsidian, 'g', goldGear});
 			GameRegistry.addRecipe(new ItemStack(blockDecompactor, 1), new Object[] {"oro", "ild", "grg", 'o', ironGear, 'r', Item.redstone, 'i', Item.ingotIron, 'l', Block.blockLapis, 'd', Block.dispenser, 'g', goldGear});
 			GameRegistry.addRecipe(new ItemStack(CompactMobsItems.mobHolder, 2), new Object[] {"hhh", "ibi", "sss", 'h', new ItemStack(Block.stoneSingleSlab, 1, 0), 'i', Item.ingotIron, 'b', Block.fenceIron, 's', Block.stone});
-			cmLog.info("Adding Compactmob Recipes");
+			GameRegistry.addRecipe(new ItemStack(blockBreeder, 1), new Object[] {"oho", "iwi", "gag", 'o', ironGear, 'h', CompactMobsItems.mobHolder, 'i', Item.ingotIron, 'w', Item.wheat, 'g', goldGear, 'a', new ItemStack(Item.appleGold, 1, 0)});
+			GameRegistry.addRecipe(new ItemStack(blockIncubator, 1), new Object[] {"oco","ifi","gbg", 'o', ironGear, 'c', Block.chest, 'i', Item.ingotIron, 'f', Block.stoneOvenIdle, 'g', goldGear, 'b', Item.blazePowder});
+			
 					
 		} catch (Exception ex)
 		{

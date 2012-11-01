@@ -1,6 +1,7 @@
 package compactMobs.Containers;
 
 import compactMobs.CompactMobsCore;
+import compactMobs.Items.CompactMobsItems;
 import compactMobs.TileEntity.TileEntityBreeder;
 import compactMobs.TileEntity.TileEntityCompactor;
 
@@ -10,6 +11,8 @@ import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 import net.minecraft.src.TileEntity;
+import net.minecraft.src.TileEntityFurnace;
+import net.minecraftforge.common.ISidedInventory;
 
 
 public class ContainerBreeder extends Container{
@@ -30,14 +33,14 @@ public class ContainerBreeder extends Container{
                 this.addSlotToContainer(new Slot(tileEntity, var4 + var3 * 9, 8 + var4 * 18, 6+18 + var3 * 18));
             }
         }
-        this.addSlotToContainer(new Slot(tileEntity, 18, 44, 65));
-        this.addSlotToContainer(new Slot(tileEntity, 19, 80, 65));
-        this.addSlotToContainer(new Slot(tileEntity, 20, 116, 65));
+        this.addSlotToContainer(new FullMobHolderSlot(tileEntity, 18, 44, 65));
+        this.addSlotToContainer(new EmptyMobHolderSlot(tileEntity, 19, 80, 65));
+        this.addSlotToContainer(new FullMobHolderSlot(tileEntity, 20, 116, 65));
         for (int var3 = 0; var3 < 3; ++var3)
         {
             for (int var4 = 0; var4 < 9; ++var4)
             {
-                this.addSlotToContainer(new Slot(tileEntity, 21+var4 + var3 * 9, 8 + var4 * 18, 89 + var3 * 18));
+                this.addSlotToContainer(new ClosedSlot(tileEntity, 21+var4 + var3 * 9, 8 + var4 * 18, 89 + var3 * 18));
             }
         }
         for (int var3 = 0; var3 < 3; ++var3)
@@ -61,8 +64,8 @@ public class ContainerBreeder extends Container{
 	}
 	
 	@Override
-	public ItemStack transferStackInSlot(int i) {
-		ItemStack itemstack = null;
+	public ItemStack transferStackInSlot(int par1) {
+		/*ItemStack itemstack = null;
 		int inventorySize1 = 27;
 		Slot slot = (Slot) inventorySlots.get(i);
 		if (slot != null && slot.getHasStack()) {
@@ -78,6 +81,74 @@ public class ContainerBreeder extends Container{
 			else
 				slot.onSlotChanged();
 		}
-		return itemstack;
+		return itemstack;*/
+		ItemStack var2 = null;
+        Slot var3 = (Slot)this.inventorySlots.get(par1);
+
+        if (var3 != null && var3.getHasStack())
+        {
+            ItemStack var4 = var3.getStack();
+            var2 = var4.copy();
+
+            if (par1 >= 0 && par1 < 48)
+            {
+                if (!this.mergeItemStack(var4, 48, 84, true))
+                {
+                    return null;
+                }
+
+                var3.onSlotChange(var4, var2);
+            }
+            else if (par1 >= 48)
+            {
+                if (var4.getItem() == CompactMobsItems.fullMobHolder)
+                {
+                    if (!this.mergeItemStack(var4, 0, 18, false))
+                    {
+                        return null;
+                    }
+                }
+                else if (var4.getItem() == CompactMobsItems.mobHolder)
+                {
+                    if (!this.mergeItemStack(var4, 0, 18, false))
+                    {
+                        return null;
+                    }
+                }
+                else if (par1 >= 48 && par1 < 75)
+                {
+                    if (!this.mergeItemStack(var4, 75, 84, false))
+                    {
+                        return null;
+                    }
+                }
+                else if (par1 >= 75 && par1 < 84 && !this.mergeItemStack(var4, 48, 75, false))
+                {
+                    return null;
+                }
+            }
+            else if (!this.mergeItemStack(var4, 48, 84, false))
+            {
+                return null;
+            }
+
+            if (var4.stackSize == 0)
+            {
+                var3.putStack((ItemStack)null);
+            }
+            else
+            {
+                var3.onSlotChanged();
+            }
+
+            if (var4.stackSize == var2.stackSize)
+            {
+                return null;
+            }
+
+            var3.onPickupFromSlot(var4);
+        }
+
+        return var2;
 	}
 }

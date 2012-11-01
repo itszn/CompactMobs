@@ -47,14 +47,44 @@ public class FullMobHolder extends Item
 				//String name = EntityList.getStringFromID(stack.getItemDamage());//nbttag.getString("name");
 				if (nbttag.hasKey("entityGrowingAge"))
 				{
+					if (nbttag.hasKey("inIncubator"))
+					{
+						//CompactMobsCore.instance.cmLog.info(String.valueOf(nbttag.getInteger("entityGrowingAge")));
+						//CompactMobsCore.instance.cmLog.info(String.valueOf(nbttag.getBoolean("inIncubator")));
+						float age = nbttag.getInteger("entityGrowingAge");
+						//CompactMobsCore.instance.cmLog.info(String.valueOf(age)+ " "+ String.valueOf((-24000-age)) + " " + String.valueOf(((6000-age)/6000)));
+						
+						if (nbttag.getBoolean("inIncubator"))
+						{
+							if (age > 0)
+							{
+								int percent;
+								percent = (int) Math.floor(((6000-age)/6000)*100);
+								return "Compact "+nbttag.getString("name")+ " ("+String.valueOf(percent)+"%)";
+								//return String.format("Compact %1 (%2(.1f)%)", nbttag.getString("name"), percent);
+							}
+							if (age < 0)
+							{
+								int percent;
+								percent = (int) Math.floor((((-24000-age)/-24000)*100));
+								return "Compact Baby "+nbttag.getString("name")+ " ("+String.valueOf(percent)+"%)";
+								//return String.format("Compact Baby %1 (%2(.1f)%)", nbttag.getString("name"), percent);
+							}
+						}
+					}
 					if (nbttag.getInteger("entityGrowingAge") < 0)
 					{
+						
 						return "Compact Baby "+nbttag.getString("name");
 					}
 				}
 				return "Compact "+nbttag.getString("name");
 			} else
 			{
+				if (stack.getItemDamage() > 0)
+				{
+					return "Sort By Compact " + EntityList.getStringFromID(stack.getItemDamage());
+				}
 				return "Full Mob Holder (BAD ID)";
 			}
 		}

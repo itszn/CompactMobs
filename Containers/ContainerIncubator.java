@@ -1,8 +1,10 @@
 package compactMobs.Containers;
 
+import compactMobs.CompactMobsCore;
 import compactMobs.Items.CompactMobsItems;
+import compactMobs.TileEntity.TileEntityBreeder;
 import compactMobs.TileEntity.TileEntityCompactor;
-import compactMobs.TileEntity.TileEntityDecompactor;
+import compactMobs.TileEntity.TileEntityIncubator;
 
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
@@ -12,14 +14,13 @@ import net.minecraft.src.Slot;
 import net.minecraft.src.TileEntity;
 
 
-public class ContainerDecompactor extends Container{
-	
+public class ContainerIncubator extends Container{
+
 	int inventorySize;
-	
-	public ContainerDecompactor(InventoryPlayer par1InventoryPlayer, TileEntityDecompactor te)
+	public ContainerIncubator(InventoryPlayer par1InventoryPlayer, TileEntityIncubator tileEntity)
     {
-		inventorySize = te.getSizeInventory();
-		//this.addSlotToContainer(new Slot(te, 0, 49, 34));
+		inventorySize = tileEntity.getSizeInventory();
+		
         //this.addSlotToContainer(new Slot(te, 1, 44, 51));
         //this.addSlotToContainer(new Slot(te, 2, 116, 51));
         //this.addSlotToContainer(new SlotInbuener(par1InventoryPlayer.player, te, 3, 80, 51));
@@ -28,14 +29,16 @@ public class ContainerDecompactor extends Container{
         {
             for (int var4 = 0; var4 < 9; ++var4)
             {
-                this.addSlotToContainer(new FullMobHolderSlot(te, var4 + var3 * 9, 8 + var4 * 18, 23 + var3 * 18));
+                this.addSlotToContainer(new IncubatorSlot(tileEntity, var4 + var3 * 9, 8 + var4 * 18, 6+18 + var3 * 18));
             }
         }
-        //62, 105
-        this.addSlotToContainer(new EmptyMobHolderSlot(te, 27, 62, 105));
-        this.addSlotToContainer(new EmptyMobHolderSlot(te, 28, 80, 105));
-        this.addSlotToContainer(new EmptyMobHolderSlot(te, 29, 98, 105));
-        
+        for (int var3 = 0; var3 < 3; ++var3)
+        {
+            for (int var4 = 0; var4 < 9; ++var4)
+            {
+                this.addSlotToContainer(new ClosedIncubatorSlot(tileEntity, 27+var4 + var3 * 9, 8 + var4 * 18, 89 + var3 * 18));
+            }
+        }
         for (int var3 = 0; var3 < 3; ++var3)
         {
             for (int var4 = 0; var4 < 9; ++var4)
@@ -83,16 +86,16 @@ public class ContainerDecompactor extends Container{
             ItemStack var4 = var3.getStack();
             var2 = var4.copy();
 
-            if (par1 >= 0 && par1 < 30)
+            if (par1 >= 0 && par1 < 54)
             {
-                if (!this.mergeItemStack(var4, 30, 66, true))
+                if (!this.mergeItemStack(var4, 54, 90, true))
                 {
                     return null;
                 }
 
                 var3.onSlotChange(var4, var2);
             }
-            else if (par1 >= 30)
+            else if (par1 >= 54)
             {
                 if (var4.getItem() == CompactMobsItems.fullMobHolder)
                 {
@@ -101,19 +104,19 @@ public class ContainerDecompactor extends Container{
                         return null;
                     }
                 }
-                else if (par1 >= 30 && par1 < 57)
+                else if (par1 >= 54 && par1 < 81)
                 {
-                    if (!this.mergeItemStack(var4, 57, 66, false))
+                    if (!this.mergeItemStack(var4, 81, 90, false))
                     {
                         return null;
                     }
                 }
-                else if (par1 >= 57 && par1 < 66 && !this.mergeItemStack(var4, 30, 56, false))
+                else if (par1 >= 81 && par1 < 90 && !this.mergeItemStack(var4, 54, 81, false))
                 {
                     return null;
                 }
             }
-            else if (!this.mergeItemStack(var4, 30, 66, false))
+            else if (!this.mergeItemStack(var4, 54, 90, false))
             {
                 return null;
             }
@@ -138,4 +141,10 @@ public class ContainerDecompactor extends Container{
         return var2;
 	}
 	
+	@Override
+	public void putStackInSlot(int slot, ItemStack stack)
+	{
+		if (getSlot(slot).isItemValid(stack))
+			this.getSlot(slot).putStack(stack);
+	}
 }

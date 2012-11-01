@@ -41,8 +41,10 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.ISidedInventory;
 
-public class TileEntityBreeder extends TileEntity implements IInventory, IPowerReceptor
+public class TileEntityBreeder extends TileEntity implements IInventory, IPowerReceptor, ISidedInventory
 {
 	
 	
@@ -85,93 +87,86 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
 			override = ItemStacks[20];
 			oneIn = true;
 		}
-			
+		//CompactMobsCore.instance.cmLog.info("***");
+		//CompactMobsCore.instance.cmLog.info("0: " + String.valueOf(oneIn));
+		
 		int i1 = 0, j1 = 0, i2 = 0, j2=0;
 		
-		for (i1 = 0; i1 < 2; i1++)
+		for (i1 = 0; i1 < 18; i1++)
 		{
-			for (j1 = 0; j1 < 9; j1++)
+			if (ItemStacks[i1] != null)
 			{
-				if (ItemStacks[i1*9+j1] != null)
+				if (ItemStacks[i1].getItem() == CompactMobsItems.mobHolder)
 				{
-					if (ItemStacks[i1*9+j1].getItem() == CompactMobsItems.fullMobHolder)
+					if (ItemStacks[19]== null)
 					{
-						if (ItemStacks[19]== null)
-						{
-							ItemStacks[19] = ItemStacks[i1*9+j1];
-							ItemStacks[i1*9+j1] = null;
-						}
-						else if (ItemStacks[19].stackSize < 64)
-						{
-							int overflow = ItemStacks[i1*9+j1].stackSize - (64 - ItemStacks[19].stackSize);
-							if (overflow < 0) overflow = 0;
-							ItemStacks[19].stackSize = ItemStacks[19].stackSize + ItemStacks[i1*9+j1].stackSize - overflow;
-							if (overflow == 0)
-								ItemStacks[i1*9+j1] = null;
-							else
-								ItemStacks[i1*9+j1].stackSize = overflow;
-							
-							//ItemStacks[19].stackSize = ItemStacks[19].stackSize + ItemStacks[i1*9+j1].stackSize - overflow;
-							continue;
-						}
-						
+						ItemStacks[19] = ItemStacks[i1];
+						ItemStacks[i1] = null;
 					}
+					else if (ItemStacks[19].stackSize < 64)
+					{
+						int overflow = ItemStacks[i1].stackSize - (64 - ItemStacks[19].stackSize);
+						if (overflow < 0) overflow = 0;
+						ItemStacks[19].stackSize = ItemStacks[19].stackSize + ItemStacks[i1].stackSize - overflow;
+						if (overflow == 0)
+							ItemStacks[i1] = null;
+						else
+							ItemStacks[i1].stackSize = overflow;
+						
+						//ItemStacks[19].stackSize = ItemStacks[19].stackSize + ItemStacks[i1*9+j1].stackSize - overflow;
+						continue;
+					}
+					
 				}
+			
 				else if (oneIn)
 				{
 					parent1Stack = override;
 				}
 				else
 				{
-					parent1Stack = ItemStacks[i1*9+j1];
+					parent1Stack = ItemStacks[i1];
 				}
 				if (parent1Stack != null)
 				{
 					if (parent1Stack.getTagCompound() != null)
 					{
-						//CompactMobsCore.instance.cmLog.info("***");
 						//CompactMobsCore.instance.cmLog.info("0: "+String.valueOf(parent1Stack.getTagCompound().hasKey("entityId")));
 						if (parent1Stack.getTagCompound().hasKey("entityId") && parent1Stack.getTagCompound().hasKey("entityGrowingAge"))
 						{
-							for (i2 = 0; i2 < 2; i2++)
+							for (i2 = 0; i2 < 18; i2++)
 							{
-								for (j2 = 0; j2 < 9; j2++)
+								if (!(i1==i2) || oneIn)
 								{
-									if (!(i1==i2 && j1==j2))
+									parent2Stack = ItemStacks[i2];
+									if (parent2Stack != null)
 									{
-										parent2Stack = ItemStacks[i2*9+j2];
-										if (parent2Stack != null)
+										if (parent2Stack.getTagCompound() != null)
 										{
-											if (parent2Stack.getTagCompound() != null)
+											if (parent2Stack.getTagCompound().hasKey("entityId")&&parent2Stack.getTagCompound().hasKey("entityGrowingAge"))
 											{
-												if (parent2Stack.getTagCompound().hasKey("entityId")&&parent2Stack.getTagCompound().hasKey("entityGrowingAge"))
+												if (parent1Stack.getTagCompound().getInteger("entityGrowingAge") == 0 && parent2Stack.getTagCompound().getInteger("entityGrowingAge") == 0)
 												{
-													//parent2 = (EntityLiving)EntityList.createEntityByID(parent2Stack.getTagCompound().getInteger("entityId"), worldObj);
-													//CompactMobsCore.instance.cmLog.info("2: "+parent2.toString());
-													//CompactMobsCore.instance.cmLog.info("3: "+String.valueOf(parent1.getClass()));
-													//CompactMobsCore.instance.cmLog.info("4: "+String.valueOf(parent2.getClass()));
-													//CompactMobsCore.instance.cmLog.info("5: "+String.valueOf(parent2.getClass().equals(parent1.getClass())));
 													if (parent1Stack.getTagCompound().getInteger("entityId") == parent2Stack.getTagCompound().getInteger("entityId"))
 													{
 														parents = true;
 														break;
 													}
-												}	
+												}
 											}
+												
 										}
 									}
 								}
-								if (parents)
-									break;
 							}
+							
 							if (parents)
 								break;
 						}
 					}
 				}
 			}
-			if (parents)
-				break;
+
 		}
 		
 		if (parents)
@@ -180,26 +175,26 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
 			{
 				if (ItemStacks[18] == null)
 				{
-					ItemStacks[18] = ItemStacks[i2*9+j2];
-					ItemStacks[i2*9+j2] = null;
+					ItemStacks[18] = ItemStacks[i2];
+					ItemStacks[i2] = null;
 				}
 				if(ItemStacks[20] == null)
 				{
-					ItemStacks[20] = ItemStacks[i2*9+j2];
-					ItemStacks[i2*9+j2] = null;
+					ItemStacks[20] = ItemStacks[i2];
+					ItemStacks[i2] = null;
 				}
 			}
 			else
 			{
 				if (ItemStacks[18] == null)
 				{
-					ItemStacks[18] = ItemStacks[i1*9+j1];
-					ItemStacks[i1*9+j1] = null;
+					ItemStacks[18] = ItemStacks[i1];
+					ItemStacks[i1] = null;
 				}
 				if(ItemStacks[20] == null)
 				{
-					ItemStacks[20] = ItemStacks[i2*9+j2];
-					ItemStacks[i2*9+j2] = null;
+					ItemStacks[20] = ItemStacks[i2];
+					ItemStacks[i2] = null;
 				}
 			}
 		}
@@ -352,10 +347,10 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
 					break;
 			}
 		}
-		CompactMobsCore.instance.cmLog.info("***");
-		CompactMobsCore.instance.cmLog.info(String.valueOf(stackNum1)+" "+String.valueOf(stackNum2)+" "+String.valueOf(stackNum3));
-		CompactMobsCore.instance.cmLog.info(String.valueOf(wheat != null)+" "+String.valueOf(parent1 != null)+" "+String.valueOf(parent2 != null));
-		if (wheat != null && wheat.getItem() == CompactMobsItems.fullMobHolder && stackNum1 >= 0 && stackNum2 >= 0 && stackNum3 >= 0 && parent1 != null && parent2 != null)
+		//CompactMobsCore.instance.cmLog.info("***");
+		//CompactMobsCore.instance.cmLog.info(String.valueOf(stackNum1)+" "+String.valueOf(stackNum2)+" "+String.valueOf(stackNum3));
+		//CompactMobsCore.instance.cmLog.info(String.valueOf(wheat != null)+" "+String.valueOf(parent1 != null)+" "+String.valueOf(parent2 != null));
+		if (wheat != null && wheat.getItem() == CompactMobsItems.mobHolder && stackNum1 >= 0 && stackNum2 >= 0 && stackNum3 >= 0 && parent1 != null && parent2 != null)
 		{
 			if (parent1.getItem() == CompactMobsItems.fullMobHolder && parent2.getItem() == CompactMobsItems.fullMobHolder)
 			{
@@ -456,21 +451,19 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
 	 
 	public void dumpToInventory(IInventory[] inventories)
 	{
-	for (int i = 8; i < 48; i++) {
-		if (ItemStacks[i]!=null && ItemStacks[i].stackSize>0)
-		{
-			
-		 
-			for (int j = 0; j < inventories.length; j++)
+		for (int i = 27; i < 48; i++) {
+			if (ItemStacks[i]!=null && ItemStacks[i].stackSize>0)
 			{
-				if (inventories[j] != null)
+				for (int j = 0; j < inventories.length; j++)
 				{
-					IInventory inventory = Utils.getChest(inventories[j]);
-				
-				
-					Utils.stowInInventory(ItemStacks[i], inventory, true);
-					if (this.ItemStacks[i].stackSize <= 0)
-						this.ItemStacks[i] = null;
+					if (inventories[j] != null)
+					{
+						IInventory inventory = Utils.getChest(inventories[j]);
+					
+					
+						Utils.stowInInventory(ItemStacks[i], inventory, true);
+						if (this.ItemStacks[i].stackSize <= 0)
+							this.ItemStacks[i] = null;
 					}
 				}
 			}
@@ -486,5 +479,17 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
         double var6 = this.zCoord - par1Entity.posZ;
         return var2 * var2 + var4 * var4 + var6 * var6;
     }
+
+	@Override
+	public int getStartInventorySide(ForgeDirection side) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getSizeInventorySide(ForgeDirection side) {
+		// TODO Auto-generated method stub
+		return 18;
+	}
 	
 }

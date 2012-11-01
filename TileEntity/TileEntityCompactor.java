@@ -40,8 +40,10 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.ISidedInventory;
 
-public class TileEntityCompactor extends TileEntity implements IInventory, IPowerReceptor
+public class TileEntityCompactor extends TileEntity implements IInventory, IPowerReceptor, ISidedInventory
 {
 	
 	
@@ -276,35 +278,37 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 						nbttag = new NBTTagCompound();
 					}
 					nbttag.setInteger("entityId", id);
-					if (!CompactMobsCore.instance.useFullTagCompound)
+					
+					
+					nbttag.setInteger("entityHealth", entity.getHealth());
+					
+					if (entity instanceof EntitySlime)
 					{
-						nbttag.setInteger("entityHealth", entity.getHealth());
-						
-						if (entity instanceof EntitySlime)
-						{
-							EntitySlime entitySlime = (EntitySlime)entity;
-							nbttag.setInteger("entitySize", entitySlime.getSlimeSize());
-						}
-						if (entity instanceof EntityAgeable)
-						{
-							EntityAgeable entityAge = (EntityAgeable)entity;
-							nbttag.setInteger("entityGrowingAge", entityAge.getGrowingAge());
-						}
-						
-						if (entity instanceof EntitySheep)
-						{
-							EntitySheep entitySheep = (EntitySheep)entity;
-							nbttag.setBoolean("entitySheared", entitySheep.getSheared());
-							nbttag.setInteger("entityColor", entitySheep.getFleeceColor());
-						}
-						
-						if (entity instanceof EntityVillager)
-						{
-							EntityVillager entityVillager = (EntityVillager)entity;
-							nbttag.setInteger("entityProfession", entityVillager.getProfession());
-						}
-					} else
+						EntitySlime entitySlime = (EntitySlime)entity;
+						nbttag.setInteger("entitySize", entitySlime.getSlimeSize());
+					}
+					if (entity instanceof EntityAgeable)
 					{
+						EntityAgeable entityAge = (EntityAgeable)entity;
+						nbttag.setInteger("entityGrowingAge", entityAge.getGrowingAge());
+					}
+					
+					if (entity instanceof EntitySheep)
+					{
+						EntitySheep entitySheep = (EntitySheep)entity;
+						nbttag.setBoolean("entitySheared", entitySheep.getSheared());
+						nbttag.setInteger("entityColor", entitySheep.getFleeceColor());
+					}
+					if (entity instanceof EntityVillager)
+					{
+						EntityVillager entityVillager = (EntityVillager)entity;
+						nbttag.setInteger("entityProfession", entityVillager.getProfession());
+						//nbttag.setCompoundTag("Offers", entityVillager.get)
+					}
+					if (CompactMobsCore.instance.useFullTagCompound)
+					{
+						NBTTagCompound nbttag2 = new NBTTagCompound();
+						entity.writeEntityToNBT(nbttag2);
 						nbttag.setCompoundTag("compound", entity.getEntityData());
 					}
 					String name = entity.getEntityName();
@@ -432,5 +436,17 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
         double var6 = this.zCoord - par1Entity.posZ;
         return var2 * var2 + var4 * var4 + var6 * var6;
     }
+
+	@Override
+	public int getStartInventorySide(ForgeDirection side) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getSizeInventorySide(ForgeDirection side) {
+		// TODO Auto-generated method stub
+		return 1;
+	}
 	
 }
