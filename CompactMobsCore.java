@@ -1,5 +1,6 @@
 package compactMobs;
 
+import java.io.File;
 import java.util.logging.Logger;
 
 import compactMobs.Items.CompactMobsItems;
@@ -16,7 +17,9 @@ import net.minecraft.src.Block;
 import net.minecraft.src.CraftingManager;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
+import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DungeonHooks;
+import net.minecraftforge.common.Property;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -57,8 +60,17 @@ public class CompactMobsCore {
 	public static Block blockBreeder;
 	public static Block blockIncubator;
 	
+	public static Configuration mainConfig;
+	
 	public static Logger cmLog = Logger.getLogger("CompactMobs");
 	
+	
+	public Property compatorId;// = CompactMobsCore.mainConfig.getOrCreateBlockIdProperty("CompactorId", 3391);
+	public Property decompatorId;// = CompactMobsCore.mainConfig.getOrCreateBlockIdProperty("DecompactorId", 3392);
+	public Property breederId;// = CompactMobsCore.mainConfig.getOrCreateBlockIdProperty("BreederId", 3393);
+	public Property incubatorId;// = CompactMobsCore.mainConfig.getOrCreateBlockIdProperty("IncubatorId", 3394);
+	public Property emptyMobHolderId;// = CompactMobsCore.mainConfig.getOrCreateBlockIdProperty("EmptyMobHolderId", 3395);
+	public Property fullMobHolderId;
 	
 	@SidedProxy(clientSide = "compactMobs.ClientProxyCompactMobs", serverSide = "compactMobs.CommonProxyCompactMobs")
 	public static CommonProxyCompactMobs proxy;
@@ -69,6 +81,22 @@ public class CompactMobsCore {
 		cmLog.setParent(FMLLog.getLogger());
 		cmLog.info("Starting CompactMobs v1.0.0");
 		
+		mainConfig = new Configuration(new File(evt.getModConfigurationDirectory(), "CompactMobs.cfg"));
+		try
+		{
+			mainConfig.load();
+			compatorId = CompactMobsCore.mainConfig.getOrCreateBlockIdProperty("CompactorId", 3391);
+			decompatorId = CompactMobsCore.mainConfig.getOrCreateBlockIdProperty("DecompactorId", 3392);
+			breederId = CompactMobsCore.mainConfig.getOrCreateBlockIdProperty("BreederId", 3393);
+			incubatorId = CompactMobsCore.mainConfig.getOrCreateBlockIdProperty("IncubatorId", 3394);
+			emptyMobHolderId = CompactMobsCore.mainConfig.getOrCreateIntProperty("EmptyMobHolderId",mainConfig.CATEGORY_ITEM, 3395);
+			fullMobHolderId = CompactMobsCore.mainConfig.getOrCreateIntProperty("FullMobHolderId",mainConfig.CATEGORY_ITEM, 3396);
+			
+		}
+		finally
+		{
+			mainConfig.save();
+		}
 	}
 	
 	@Init
@@ -79,16 +107,16 @@ public class CompactMobsCore {
 		
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 		
-		blockCompactor = new BlockCompactor(BlockID, Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockCompactor");
+		blockCompactor = new BlockCompactor(compatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockCompactor");
 		GameRegistry.registerBlock(blockCompactor);
 		LanguageRegistry.addName(blockCompactor, "Compactor"); 
-		blockDecompactor = new BlockDecompactor(BlockID+1, Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockDecompactor");
+		blockDecompactor = new BlockDecompactor(decompatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockDecompactor");
 		GameRegistry.registerBlock(blockDecompactor);
 		LanguageRegistry.addName(blockDecompactor, "Decompactor");
-		blockBreeder = new BlockBreeder(BlockID+2, Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockBreeder");
+		blockBreeder = new BlockBreeder(breederId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockBreeder");
 		GameRegistry.registerBlock(blockBreeder);
 		LanguageRegistry.addName(blockBreeder, "Breeder");
-		blockIncubator = new BlockIncubator(BlockID+3, Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockIncubator");
+		blockIncubator = new BlockIncubator(incubatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockIncubator");
 		GameRegistry.registerBlock(blockIncubator);
 		LanguageRegistry.addName(blockIncubator, "Incubator");
 		

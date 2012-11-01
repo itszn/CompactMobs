@@ -1,5 +1,7 @@
 package compactMobs.Items;
 
+import compactMobs.CompactMobsCore;
+
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.src.Item;
 
@@ -28,8 +30,8 @@ public class CompactMobsItems
 	
 	public void instantiateItems()
 	{
-		mobHolder = new MobHolder(3352).setIconIndex(0).setItemName("MobHolder");
-		fullMobHolder = new FullMobHolder(3353).setIconIndex(1).setItemName("FullMobHolder");
+		mobHolder = new MobHolder(CompactMobsCore.instance.emptyMobHolderId.getInt()).setIconIndex(0).setItemName("MobHolder");
+		fullMobHolder = new FullMobHolder(CompactMobsCore.instance.fullMobHolderId.getInt()).setIconIndex(1).setItemName("FullMobHolder");
 	}
 	
 	

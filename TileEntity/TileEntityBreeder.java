@@ -129,39 +129,44 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
 				}
 				if (parent1Stack != null)
 				{
-					if (parent1Stack.getTagCompound() != null)
+					if (parent1Stack.getItem() == CompactMobsItems.fullMobHolder)
 					{
-						//CompactMobsCore.instance.cmLog.info("0: "+String.valueOf(parent1Stack.getTagCompound().hasKey("entityId")));
-						if (parent1Stack.getTagCompound().hasKey("entityId") && parent1Stack.getTagCompound().hasKey("entityGrowingAge"))
+						if (parent1Stack.getTagCompound() != null)
 						{
-							for (i2 = 0; i2 < 18; i2++)
+							//CompactMobsCore.instance.cmLog.info("0: "+String.valueOf(parent1Stack.getTagCompound().hasKey("entityId")));
+							if (parent1Stack.getTagCompound().hasKey("entityId") && parent1Stack.getTagCompound().hasKey("entityGrowingAge"))
 							{
-								if (!(i1==i2) || oneIn)
+								for (i2 = 0; i2 < 18; i2++)
 								{
-									parent2Stack = ItemStacks[i2];
-									if (parent2Stack != null)
+									if (!(i1==i2) || oneIn)
 									{
-										if (parent2Stack.getTagCompound() != null)
+										parent2Stack = ItemStacks[i2];
+										if (parent2Stack != null)
 										{
-											if (parent2Stack.getTagCompound().hasKey("entityId")&&parent2Stack.getTagCompound().hasKey("entityGrowingAge"))
+											if (parent2Stack.getItem() == CompactMobsItems.fullMobHolder)
 											{
-												if (parent1Stack.getTagCompound().getInteger("entityGrowingAge") == 0 && parent2Stack.getTagCompound().getInteger("entityGrowingAge") == 0)
+												if (parent2Stack.getTagCompound() != null)
 												{
-													if (parent1Stack.getTagCompound().getInteger("entityId") == parent2Stack.getTagCompound().getInteger("entityId"))
+													if (parent2Stack.getTagCompound().hasKey("entityId")&&parent2Stack.getTagCompound().hasKey("entityGrowingAge"))
 													{
-														parents = true;
-														break;
-													}
+														if (parent1Stack.getTagCompound().getInteger("entityGrowingAge") == 0 && parent2Stack.getTagCompound().getInteger("entityGrowingAge") == 0)
+														{
+															if (parent1Stack.getTagCompound().getInteger("entityId") == parent2Stack.getTagCompound().getInteger("entityId"))
+															{
+																parents = true;
+																break;
+															}
+														}
+													}	
 												}
 											}
-												
 										}
 									}
 								}
+								
+								if (parents)
+									break;
 							}
-							
-							if (parents)
-								break;
 						}
 					}
 				}

@@ -22,7 +22,7 @@ public class FullMobHolder extends Item
 	{
 		super(par1);
 		maxStackSize = 1;
-		this.setTabToDisplayOn(CreativeTabs.tabRedstone);
+		//this.setTabToDisplayOn(CreativeTabs.tabRedstone);
 		if (!this.getShareTag())
 		{
 			
@@ -98,7 +98,7 @@ public class FullMobHolder extends Item
     }
 	
 		
-	@Override
+	/*@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player)
 	{
 		///NBTBase nbtbace = itemStack.getTagCompound().getTag("tag");
@@ -122,7 +122,7 @@ public class FullMobHolder extends Item
 			
 		}
 		return itemStack;
-	}
+	}*/
 	
 	
 }
