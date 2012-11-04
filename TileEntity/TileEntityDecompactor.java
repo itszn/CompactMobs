@@ -5,6 +5,7 @@ package compactMobs.TileEntity;
 import java.io.DataInput;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import compactMobs.CompactMobsCore;
 import compactMobs.Utils;
@@ -299,25 +300,32 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
 					//entity = (EntityLiving) EntityList.createEntityFromNBT(newCompound, world);
 					
 					//CompactMobsCore.instance.cmLog.info("dir: "+String.valueOf(dir));
+					
+					Random random = new Random();
 					if (dir == 2)
 					{
 						entity.setPosition(this.xCoord+.5D, this.yCoord, this.zCoord-.5D);
+						CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord+.5D, this.yCoord+.5D, this.zCoord, 0,0,-.1, 10);
 					}
 					else if (dir == 3)
 					{
 						entity.setPosition(this.xCoord+.5D, this.yCoord, this.zCoord+1.5D);
+						CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord+.5D, this.yCoord+.5D, this.zCoord+1D, 0,0,.1, 10);
 					}
 					else if (dir == 4)
 					{
 						entity.setPosition(this.xCoord-.5D, this.yCoord, this.zCoord+.5D);
+						CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord, this.yCoord+.5D, this.zCoord+.5D, -.1,0,0, 10);
 					}
 					else if (dir == 5)
 					{
 						entity.setPosition(this.xCoord+1.5D, this.yCoord, this.zCoord+.5D);
+						CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord-1D, this.yCoord+.5D, this.zCoord+.5D, .1,0,0, 10);
 					}
 					else
 					{
-						entity.setPosition(this.xCoord+.5D, this.yCoord+1D, this.zCoord+.5D);
+						entity.setPosition(this.xCoord+.5D, this.yCoord, this.zCoord-.5D);
+						CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord+.5D, this.yCoord+.5D, this.zCoord, 0,0,-.1, 10);
 					}
 					
 					world.spawnEntityInWorld(entity);
@@ -332,22 +340,27 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
 					if (dir == 2)
 					{
 						entity.setPosition(this.xCoord+.5D, this.yCoord, this.zCoord-.5D);
+						CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord+.5D, this.yCoord+.5D, this.zCoord+1D, 0,0,-.1, 10);
 					}
 					else if (dir == 3)
 					{
 						entity.setPosition(this.xCoord+.5D, this.yCoord, this.zCoord+1.5D);
+						CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord+.5D, this.yCoord+.5D, this.zCoord, 0,0,.1, 10);
 					}
 					else if (dir == 4)
 					{
 						entity.setPosition(this.xCoord-.5D, this.yCoord, this.zCoord+.5D);
+						CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord, this.yCoord+.5D, this.zCoord+.5D, -.1,0,0, 10);
 					}
 					else if (dir == 5)
 					{
 						entity.setPosition(this.xCoord+1.5D, this.yCoord, this.zCoord+.5D);
+						CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord+1D, this.yCoord+.5D, this.zCoord+.5D, .1,0,0, 10);
 					}
 					else
 					{
-						entity.setPosition(this.xCoord+.5D, this.yCoord+1D, this.zCoord+.5D);
+						entity.setPosition(this.xCoord+.5D, this.yCoord, this.zCoord-.5D);
+						CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord+.5D, this.yCoord+.5D, this.zCoord+1D, 0,0,-.1, 10);
 					}
 					
 					if (nbttag.hasKey("entityHealth"))

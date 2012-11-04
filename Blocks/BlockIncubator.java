@@ -118,8 +118,17 @@ public class BlockIncubator extends BlockContainer{
     /**
      * A randomly called display update to be able to add particles or other items for display
      */
-    public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random)
+    public void randomDisplayTick(World world, int x, int y, int z, Random random)
     {
-        super.randomDisplayTick(par1World, par2, par3, par4, par5Random);
+    	//int dir = world.getBlockMetadata(x, y, z);
+        double extra = random.nextDouble()*(8D/10D);
+        int dir = random.nextInt(4);
+        switch(dir)
+        {
+        case 0: world.spawnParticle("flame", (double)x+1D, (double)y+.3D, (double)z+extra+.1D, 0.0D, 0.0D, 0.0D); break;
+        case 1: world.spawnParticle("flame", (double)x, (double)y+.3D, (double)z+extra+.1D, 0.0D, 0.0D, 0.0D); break;
+        case 2: world.spawnParticle("flame", (double)x+.1D+extra, (double)y+.3D, (double)z+1D, 0.0D, 0.0D, 0.0D); break;
+        case 3: world.spawnParticle("flame", (double)x+.1D+extra, (double)y+.3D, (double)z, 0.0D, 0.0D, 0.0D); break;
+        }
     }
 }

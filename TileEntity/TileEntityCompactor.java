@@ -51,6 +51,8 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 	public ItemStack[] ItemStacks;
 	
 	IPowerProvider provider;
+	boolean drawParticle;
+	
 
 	
 	public TileEntityCompactor() {
@@ -68,7 +70,10 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 
 			receptor.getPowerProvider().update(receptor);
 		}
-		/*if (ItemStacks[0] != null)
+		//worldObj.spawnParticle("smoke", this.xCoord+1.5D, this.yCoord+.5D, this.zCoord+.5, -.1, 0, 0);
+		//this.worldObj.spawnParticle("smoke", this.xCoord+1.5D, this.yCoord+.5D, this.zCoord+.5, -.1, 0, 0);
+		
+			/*if (ItemStacks[0] != null)
 		{
 			if (ItemStacks[0].getItem() == Item.redstone)
 			{
@@ -258,7 +263,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 			{
 				int empty = 0;
 				int var3;
-				for (var3 = 1; var3 < 29; ++var3)
+				for (var3 = 1; var3 < 28; ++var3)
 				{
 					if(ItemStacks[var3] == null)
 					{
@@ -315,6 +320,10 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 					nbttag.setString("name", name);
 					holder.setItemDamage(id);
 					
+					spawnParticles(world, entity.posX, entity.posY, entity.posZ);
+					//spawnParticles(world, entity.posX, entity.posY, entity.posZ);
+					
+					
 					holder.setTagCompound(nbttag);
 					ItemStacks[var3] = holder;
 					world.removeEntity(entity);
@@ -365,7 +374,53 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 			}
 		}
 		dumpItems();
+		//worldObj.spawnParticle("smoke", this.xCoord+1.5D, this.yCoord+.5D, this.zCoord+.5, -.1, 0, 0);
+		//spawnParticles(this.worldObj, this.xCoord+1, this.yCoord, this.zCoord);
+		//spawnParticles(this.worldObj, this.xCoord+1, this.yCoord, this.zCoord);
+		//this.worldObj.spawnParticle("smoke", this.xCoord+1.5D, this.yCoord+.5D, this.zCoord+.5, -.1, 0, 0);
 		
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void spawnParticles (World world, double x, double y, double z)
+	{
+		//CompactMobsCore.instance.cmLog.info("Got");
+		double xv, yv, zv;
+		if (this.yCoord - y > 0)
+		{
+			yv = (this.yCoord - y)/10;
+		}
+		else
+		{
+			yv = 0;
+		}
+		if (this.xCoord - x > 0)
+		{
+			xv = (this.xCoord - x)/10;
+		}
+		else if(this.xCoord - x < 0)
+		{
+			xv = (this.xCoord - x)/10;
+		}
+		else
+		{
+			xv = 0;
+		}
+		if (this.zCoord - z > 0)
+		{
+			zv = (this.zCoord - z)/10;
+		}
+		else if(this.zCoord - z < 0)
+		{
+			zv = (this.zCoord - z)/10;
+		}
+		else
+		{
+			zv = 0;
+		}
+		CompactMobsCore.instance.proxy.spawnParticle("explode", x+.5D, y+.5D, z+.5D, xv, yv, zv, 10);
+		//this.worldObj.spawnParticle("smoke", this.xCoord+1.5D, this.yCoord+.5D, this.zCoord+.5, -.1, 0, 0);
+		//world.spawnParticle("smoke", x+.5D, y+.5D, z+.5D, xv, yv, zv);
 	}
 
 	@Override

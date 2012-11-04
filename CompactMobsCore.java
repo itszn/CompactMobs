@@ -17,9 +17,12 @@ import net.minecraft.src.Block;
 import net.minecraft.src.CraftingManager;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.RenderGlobal;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DungeonHooks;
 import net.minecraftforge.common.Property;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -43,7 +46,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 
 
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
-@Mod(modid = "CM", name = "CompactMobs", version = "1.0.0")
+@Mod(modid = "CM", name = "CompactMobs", version = "1.0.2")
 public class CompactMobsCore {
 	
 	@Instance 
@@ -79,7 +82,7 @@ public class CompactMobsCore {
 	@PreInit
 	public void loadConfiguration(FMLPreInitializationEvent evt) {
 		cmLog.setParent(FMLLog.getLogger());
-		cmLog.info("Starting CompactMobs v1.0.0");
+		cmLog.info("Starting CompactMobs v1.0.2");
 		
 		mainConfig = new Configuration(new File(evt.getModConfigurationDirectory(), "CompactMobs.cfg"));
 		try
@@ -127,6 +130,7 @@ public class CompactMobsCore {
 		
 		CompactMobsItems.getInstance().instantiateItems();
 		CompactMobsItems.getInstance().nameItems();
+		
 		
 		
 		

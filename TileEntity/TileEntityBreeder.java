@@ -403,6 +403,10 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
 									ItemStacks[19] = null;
 								ItemStacks[18] = null;
 								ItemStacks[20] = null;
+								Random random = new Random();
+								
+								CompactMobsCore.instance.proxy.spawnParticle("heart", this.xCoord+(random.nextDouble()/2)+.25D, this.yCoord+1.5D, this.zCoord+(random.nextDouble()/2)+.25D, 0,0,-.1, 3);
+								CompactMobsCore.instance.proxy.spawnParticle("heart", this.xCoord+(random.nextDouble()/2)+.25D, this.yCoord+1.5D, this.zCoord+(random.nextDouble()/2)+.25D, 0,0,-.1, 3);
 							}
 						}
 					}

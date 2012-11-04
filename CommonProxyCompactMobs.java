@@ -12,12 +12,14 @@ import compactMobs.TileEntity.TileEntityBreeder;
 import compactMobs.TileEntity.TileEntityCompactor;
 import compactMobs.TileEntity.TileEntityDecompactor;
 import compactMobs.TileEntity.TileEntityIncubator;
+import compactMobs.network.PacketParticleSpawn;
 
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class CommonProxyCompactMobs implements IGuiHandler
@@ -73,5 +75,10 @@ public class CommonProxyCompactMobs implements IGuiHandler
 	
 	public boolean isRenderWorld(World world) {
 		return world.isRemote;
+	}
+	
+	public void spawnParticle(String type, double x, double y, double z, double vx, double vy, double vz, int number)
+	{
+		PacketDispatcher.sendPacketToAllPlayers(PacketParticleSpawn.buildParticleSpawnPacket(type, x, y, z, vx, vy, vz, number));
 	}
 }
