@@ -381,7 +381,6 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 		
 	}
 	
-	@SideOnly(Side.CLIENT)
 	public void spawnParticles (World world, double x, double y, double z)
 	{
 		//CompactMobsCore.instance.cmLog.info("Got");

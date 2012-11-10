@@ -46,7 +46,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 
 
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
-@Mod(modid = "CM", name = "CompactMobs", version = "1.0.2")
+@Mod(modid = "CM", name = "CompactMobs", version = "1.0.3")
 public class CompactMobsCore {
 	
 	@Instance 
@@ -82,7 +82,7 @@ public class CompactMobsCore {
 	@PreInit
 	public void loadConfiguration(FMLPreInitializationEvent evt) {
 		cmLog.setParent(FMLLog.getLogger());
-		cmLog.info("Starting CompactMobs v1.0.2");
+		cmLog.info("Starting CompactMobs v1.0.3");
 		
 		mainConfig = new Configuration(new File(evt.getModConfigurationDirectory(), "CompactMobs.cfg"));
 		try
