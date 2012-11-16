@@ -2,6 +2,5 @@ package compactMobs;
 
 public interface IDropControlInventory {
 
-	public boolean doDrop();
-
+    public boolean doDrop();
 }
