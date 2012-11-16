@@ -7,7 +7,6 @@ import compactMobs.Containers.ContainerCompactor;
 import compactMobs.TileEntity.TileEntityCompactor;
 
 
-import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.GuiContainer;
 import net.minecraft.src.InventoryPlayer;
@@ -26,11 +25,13 @@ public class GuiCompactor extends GuiContainer
 		xSize = 175;
 	}
 
-	@Override
-	protected void drawGuiContainerForegroundLayer(){
-		fontRenderer.drawString("Compactor", 10, 10, 0x404040);
-	}
-	
+    @Override
+    protected void drawGuiContainerForegroundLayer(int par1, int par2) {
+        fontRenderer.drawString("Compactor", 10, 10, 0x404040);
+        super.drawGuiContainerForegroundLayer(par1, par2);
+    }
+
+
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) 
 	{
