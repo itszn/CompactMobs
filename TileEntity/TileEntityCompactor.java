@@ -237,9 +237,8 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
                         nbttag = new NBTTagCompound();
                     }
                     nbttag.setInteger("entityId", id);
-
-
-                    nbttag.setInteger("entityHealth", entity.getHealth());
+                 
+                    /*nbttag.setInteger("entityHealth", entity.getHealth());
 
                     if (entity instanceof EntitySlime) {
                         EntitySlime entitySlime = (EntitySlime) entity;
@@ -254,17 +253,50 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
                         EntitySheep entitySheep = (EntitySheep) entity;
                         nbttag.setBoolean("entitySheared", entitySheep.getSheared());
                         nbttag.setInteger("entityColor", entitySheep.getFleeceColor());
+                        
                     }
                     if (entity instanceof EntityVillager) {
                         EntityVillager entityVillager = (EntityVillager) entity;
                         nbttag.setInteger("entityProfession", entityVillager.getProfession());
                         //nbttag.setCompoundTag("Offers", entityVillager.get)
-                    }
+                    }*/
                     if (CompactMobsCore.instance.useFullTagCompound) {
-                        NBTTagCompound nbttag2 = new NBTTagCompound();
-                        entity.writeEntityToNBT(nbttag2);
-                        nbttag.setCompoundTag("compound", entity.getEntityData());
+                    	NBTTagCompound entityTags = new NBTTagCompound();
+                    	//entityTags=entity.;
+                    	
+                    	NBTTagCompound var2 = new NBTTagCompound();
+                        entity.writeToNBT(var2);
+                        //entity.writeEntityToNBT(entityTags);
+                    	
+                    	/*if (entity instanceof EntitySlime)
+                    	{
+                    		EntitySlime entitySlime = (EntitySlime) entity;
+                    		entitySlime.writeEntityToNBT(entityTags);
+                    	}
+                    	else if (entity instanceof EntityAgeable)
+                    	{
+                    		if (entity instanceof EntitySheep) 
+                    		{
+                    			 EntitySheep entitySheep = (EntitySheep) entity;
+                    			 entitySheep.writeEntityToNBT(entityTags);
+                    		}
+                    		else if (entity instanceof EntityVillager)
+                    		{
+                    			EntityVillager entityVillager = (EntityVillager) entity;
+                    			entityVillager.writeEntityToNBT(entityTags);
+                    		}
+                    		else
+                    		{
+                    			EntityAgeable entityAge = (EntityAgeable) entity;
+                    			entityAge.writeEntityToNBT(entityTags);
+                    		}
+                    			
+                    	}*/
+                    	//entity.writeToNBT(entityTags);
+                    	nbttag.setCompoundTag("entityTags", var2);
+                    	CompactMobsCore.instance.cmLog.info(var2.toString());
                     }
+                
                     String name = entity.getEntityName();
                     nbttag.setString("name", name);
                     holder.setItemDamage(id);

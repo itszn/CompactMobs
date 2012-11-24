@@ -34,14 +34,14 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
-@Mod(modid = "CM", name = "CompactMobs", version = "1.0.3")
+@Mod(modid = "CM", name = "CompactMobs", version = "1.1.3")
 public class CompactMobsCore {
 
     @Instance
     public static CompactMobsCore instance;
     //hardcoded id of block
     public static int BlockID = 3391;
-    public boolean useFullTagCompound = false;
+    public boolean useFullTagCompound = true;
     public static Block blocks;
     public static Block blockCompactor;
     public static Block blockDecompactor;
@@ -61,7 +61,7 @@ public class CompactMobsCore {
     @PreInit
     public void loadConfiguration(FMLPreInitializationEvent evt) {
         cmLog.setParent(FMLLog.getLogger());
-        cmLog.info("Starting CompactMobs v1.0.3");
+        cmLog.info("Starting CompactMobs v1.1.2");
 
         mainConfig = new Configuration(new File(evt.getModConfigurationDirectory(), "CompactMobs.cfg"));
         try {
@@ -72,6 +72,7 @@ public class CompactMobsCore {
             incubatorId = CompactMobsCore.mainConfig.get("block", "IncubatorId", 3394);
             emptyMobHolderId = CompactMobsCore.mainConfig.get("item", "EmptyMobHolderId", 3395);
             fullMobHolderId = CompactMobsCore.mainConfig.get("item", "FullMobHolderId", 3396);
+            
 
         } finally {
             mainConfig.save();
@@ -86,15 +87,20 @@ public class CompactMobsCore {
         NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
         blockCompactor = new BlockCompactor(compatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockCompactor");
+        blockDecompactor = new BlockDecompactor(decompatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockDecompactor");
+        blockBreeder = new BlockBreeder(breederId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockBreeder");
+        blockIncubator = new BlockIncubator(incubatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockIncubator");
+
         GameRegistry.registerBlock(blockCompactor);
         LanguageRegistry.addName(blockCompactor, "Compactor");
-        blockDecompactor = new BlockDecompactor(decompatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockDecompactor");
+        
+        
         GameRegistry.registerBlock(blockDecompactor);
         LanguageRegistry.addName(blockDecompactor, "Decompactor");
-        blockBreeder = new BlockBreeder(breederId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockBreeder");
+        
         GameRegistry.registerBlock(blockBreeder);
         LanguageRegistry.addName(blockBreeder, "Breeder");
-        blockIncubator = new BlockIncubator(incubatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockIncubator");
+        
         GameRegistry.registerBlock(blockIncubator);
         LanguageRegistry.addName(blockIncubator, "Incubator");
 

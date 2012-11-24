@@ -234,15 +234,17 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
                 int dir = world.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
 
                 EntityLiving entity = null;
-                if (CompactMobsCore.instance.useFullTagCompound && nbttag.hasKey("compound")) {
+                if (CompactMobsCore.instance.useFullTagCompound && nbttag.hasKey("entityTags")) {
                     //CompactMobsCore.instance.cmLog.info(String.valueOf(nbttag.hasKey("compound")));
 
 
 
-                    NBTTagCompound newCompound = nbttag.getCompoundTag("compound");
+                    NBTTagCompound newCompound = nbttag.getCompoundTag("entityTags");
                     int id = nbttag.getInteger("entityId");
                     entity = (EntityLiving) EntityList.createEntityByID(id, world);
-                    entity.readEntityFromNBT(newCompound);
+                    //entity = (EntityLiving) EntityList.createEntityFromNBT(newCompound, world);
+                    entity.readFromNBT(newCompound);
+                    
                     //entity = (EntityLiving) EntityList.createEntityFromNBT(newCompound, world);
 
                     //CompactMobsCore.instance.cmLog.info("dir: "+String.valueOf(dir));
