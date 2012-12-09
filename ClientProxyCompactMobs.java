@@ -1,6 +1,8 @@
 package compactMobs;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.registry.TickRegistry;
 import net.minecraft.src.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 
@@ -25,4 +27,5 @@ public class ClientProxyCompactMobs extends CommonProxyCompactMobs {
             world.spawnParticle(type, x1, y1, z1, x2, y2, z2);
         }
     }
+    
 }

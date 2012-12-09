@@ -17,6 +17,7 @@ import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Property;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod.Instance;
@@ -25,6 +26,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
 
 import net.minecraft.src.Material;
 import cpw.mods.fml.common.Mod;
@@ -47,6 +49,7 @@ public class CompactMobsCore {
     public static Block blockDecompactor;
     public static Block blockBreeder;
     public static Block blockIncubator;
+    public boolean tick;
     public static Configuration mainConfig;
     public static Logger cmLog = Logger.getLogger("CompactMobs");
     public Property compatorId;// = CompactMobsCore.mainConfig.getOrCreateBlockIdProperty("CompactorId", 3391);
@@ -55,6 +58,8 @@ public class CompactMobsCore {
     public Property incubatorId;// = CompactMobsCore.mainConfig.getOrCreateBlockIdProperty("IncubatorId", 3394);
     public Property emptyMobHolderId;// = CompactMobsCore.mainConfig.getOrCreateBlockIdProperty("EmptyMobHolderId", 3395);
     public Property fullMobHolderId;
+    public Property handCompactorId;
+    public Property handDecompactorId;
     @SidedProxy(clientSide = "compactMobs.ClientProxyCompactMobs", serverSide = "compactMobs.CommonProxyCompactMobs")
     public static CommonProxyCompactMobs proxy;
 
@@ -62,7 +67,8 @@ public class CompactMobsCore {
     public void loadConfiguration(FMLPreInitializationEvent evt) {
         cmLog.setParent(FMLLog.getLogger());
         cmLog.info("Starting CompactMobs v1.1.2");
-
+        tick = false;
+        
         mainConfig = new Configuration(new File(evt.getModConfigurationDirectory(), "CompactMobs.cfg"));
         try {
             mainConfig.load();
@@ -72,7 +78,8 @@ public class CompactMobsCore {
             incubatorId = CompactMobsCore.mainConfig.get("block", "IncubatorId", 3394);
             emptyMobHolderId = CompactMobsCore.mainConfig.get("item", "EmptyMobHolderId", 3395);
             fullMobHolderId = CompactMobsCore.mainConfig.get("item", "FullMobHolderId", 3396);
-            
+            handCompactorId = CompactMobsCore.mainConfig.get("item", "HandheldCompactorId", 3397);
+            handDecompactorId = CompactMobsCore.mainConfig.get("item", "HandheldDecompactorId", 3398);
 
         } finally {
             mainConfig.save();
@@ -83,7 +90,6 @@ public class CompactMobsCore {
     public void load(FMLInitializationEvent event) {
 
         CompactMobsItems.createInstance();
-
         NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
         blockCompactor = new BlockCompactor(compatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockCompactor");
@@ -111,6 +117,8 @@ public class CompactMobsCore {
 
         CompactMobsItems.getInstance().instantiateItems();
         CompactMobsItems.getInstance().nameItems();
+        
+        MinecraftForge.EVENT_BUS.register(new CompactMobsEventHandler());
 
 
 

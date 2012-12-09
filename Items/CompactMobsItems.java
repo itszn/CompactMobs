@@ -9,6 +9,8 @@ public class CompactMobsItems {
 
     public static Item mobHolder;
     public static Item fullMobHolder;
+    public static Item handCompactor;
+    public static Item handDecompactor;
 
     private CompactMobsItems() {
     }
@@ -25,6 +27,7 @@ public class CompactMobsItems {
     public void instantiateItems() {
         mobHolder = new MobHolder(CompactMobsCore.instance.emptyMobHolderId.getInt()).setIconIndex(0).setItemName("MobHolder");
         fullMobHolder = new FullMobHolder(CompactMobsCore.instance.fullMobHolderId.getInt()).setIconIndex(1).setItemName("FullMobHolder");
+        handCompactor = new HandheldCompactor(CompactMobsCore.instance.handCompactorId.getInt()).setIconIndex(2).setItemName("HandheldCompactor");
     }
 
     public void nameItems() {

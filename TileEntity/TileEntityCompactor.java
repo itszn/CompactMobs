@@ -237,6 +237,18 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
                         nbttag = new NBTTagCompound();
                     }
                     nbttag.setInteger("entityId", id);
+                    
+                    if (entity instanceof EntityAgeable) {
+                        EntityAgeable entityAge = (EntityAgeable) entity;
+                        nbttag.setInteger("entityGrowingAge", entityAge.getGrowingAge());
+                    }
+
+                    if (entity instanceof EntitySheep) {
+                        EntitySheep entitySheep = (EntitySheep) entity;
+                        nbttag.setBoolean("entitySheared", entitySheep.getSheared());
+                        nbttag.setInteger("entityColor", entitySheep.getFleeceColor());
+                        
+                    }
                  
                     /*nbttag.setInteger("entityHealth", entity.getHealth());
 
