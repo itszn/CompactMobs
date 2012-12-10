@@ -11,6 +11,7 @@ import net.minecraft.src.EntityItem;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.InventoryLargeChest;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.TileEntityChest;
 import net.minecraft.src.World;
@@ -218,4 +219,13 @@ public class Utils {
         }
         return (IInventory[]) inventories.toArray(new IInventory[inventories.size()]);
     }
+    
+    public static ItemStack readStackFromNBT(NBTTagCompound nbt) {
+		try {
+			return ItemStack.loadItemStackFromNBT(nbt);
+		}catch (NullPointerException npe) {
+			return null;
+		}
+
+	}
 }

@@ -3,11 +3,15 @@ package compactMobs;
 import compactMobs.Containers.ContainerBreeder;
 import compactMobs.Containers.ContainerCompactor;
 import compactMobs.Containers.ContainerDecompactor;
+import compactMobs.Containers.ContainerHandDecompactor;
 import compactMobs.Containers.ContainerIncubator;
 import compactMobs.GUI.GuiBreeder;
 import compactMobs.GUI.GuiCompactor;
 import compactMobs.GUI.GuiDecompactor;
+import compactMobs.GUI.GuiHandDecompactor;
 import compactMobs.GUI.GuiIncubator;
+import compactMobs.Items.HandheldDecompactor;
+import compactMobs.Items.HandheldDecompactorInv;
 import compactMobs.TileEntity.TileEntityBreeder;
 import compactMobs.TileEntity.TileEntityCompactor;
 import compactMobs.TileEntity.TileEntityDecompactor;
@@ -28,19 +32,30 @@ public class CommonProxyCompactMobs implements IGuiHandler {
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-
-        if (tileEntity != null) {
-            switch (ID) {
-                case 0:
-                    return new ContainerCompactor(player.inventory, (TileEntityCompactor) tileEntity);
-                case 1:
-                    return new ContainerDecompactor(player.inventory, (TileEntityDecompactor) tileEntity);
-                case 2:
-                    return new ContainerBreeder(player.inventory, (TileEntityBreeder) tileEntity);
-                case 3:
-                    return new ContainerIncubator(player.inventory, (TileEntityIncubator) tileEntity);
-            }
+        if (ID != 5)
+        {
+			TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+		
+		    if (tileEntity != null) {
+		        switch (ID) {
+		            case 0:
+		                return new ContainerCompactor(player.inventory, (TileEntityCompactor) tileEntity);
+		            case 1:
+		                return new ContainerDecompactor(player.inventory, (TileEntityDecompactor) tileEntity);
+		            case 2:
+		                return new ContainerBreeder(player.inventory, (TileEntityBreeder) tileEntity);
+		            case 3:
+		                return new ContainerIncubator(player.inventory, (TileEntityIncubator) tileEntity);
+		        }
+		    }
+        }
+        else
+        {
+        	if (ID == 5)
+        	{
+        		HandheldDecompactorInv inv = new HandheldDecompactorInv(player.inventory.getCurrentItem(), player);
+        		return new ContainerHandDecompactor(player.inventory, inv);
+        	}
         }
         return null;
     }
@@ -52,19 +67,30 @@ public class CommonProxyCompactMobs implements IGuiHandler {
 
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-
-        if (tileEntity != null) {
-            switch (ID) {
-                case 0:
-                    return new GuiCompactor(player.inventory, ((TileEntityCompactor) tileEntity));
-                case 1:
-                    return new GuiDecompactor(player.inventory, ((TileEntityDecompactor) tileEntity));
-                case 2:
-                    return new GuiBreeder(player.inventory, ((TileEntityBreeder) tileEntity));
-                case 3:
-                    return new GuiIncubator(player.inventory, ((TileEntityIncubator) tileEntity));
-            }
+        if (ID != 5)
+        {
+	    	TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+	
+	        if (tileEntity != null) {
+	            switch (ID) {
+	                case 0:
+	                    return new GuiCompactor(player.inventory, ((TileEntityCompactor) tileEntity));
+	                case 1:
+	                    return new GuiDecompactor(player.inventory, ((TileEntityDecompactor) tileEntity));
+	                case 2:
+	                    return new GuiBreeder(player.inventory, ((TileEntityBreeder) tileEntity));
+	                case 3:
+	                    return new GuiIncubator(player.inventory, ((TileEntityIncubator) tileEntity));
+	            }
+	        }
+        }
+        else
+        {
+        	if (ID == 5)
+        	{
+        		HandheldDecompactorInv inv = new HandheldDecompactorInv(player.inventory.getCurrentItem(), player);
+        		return new GuiHandDecompactor(player.inventory, inv);
+        	}
         }
 
         return null;

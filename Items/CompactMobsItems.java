@@ -28,6 +28,7 @@ public class CompactMobsItems {
         mobHolder = new MobHolder(CompactMobsCore.instance.emptyMobHolderId.getInt()).setIconIndex(0).setItemName("MobHolder");
         fullMobHolder = new FullMobHolder(CompactMobsCore.instance.fullMobHolderId.getInt()).setIconIndex(1).setItemName("FullMobHolder");
         handCompactor = new HandheldCompactor(CompactMobsCore.instance.handCompactorId.getInt()).setIconIndex(2).setItemName("HandheldCompactor");
+        handDecompactor = new HandheldDecompactor(CompactMobsCore.instance.handDecompactorId.getInt()).setIconIndex(3).setItemName("HandheldDecompactor");
     }
 
     public void nameItems() {
