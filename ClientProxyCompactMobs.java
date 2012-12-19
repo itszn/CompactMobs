@@ -1,8 +1,13 @@
 package compactMobs;
 
+import compactMobs.network.PacketParticleSpawn;
+
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.TickRegistry;
+import net.minecraft.src.EntityLiving;
+import net.minecraft.src.Packet24MobSpawn;
 import net.minecraft.src.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 
@@ -26,6 +31,12 @@ public class ClientProxyCompactMobs extends CommonProxyCompactMobs {
         for (int i = 0; i < number; i++) {
             world.spawnParticle(type, x1, y1, z1, x2, y2, z2);
         }
+    }
+    
+    @Override
+    public void spawnMob(EntityLiving entity)
+    {
+    	PacketDispatcher.sendPacketToAllPlayers(new Packet24MobSpawn(entity));
     }
     
 }

@@ -5,9 +5,11 @@ import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 
 import net.minecraft.src.EntityList;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
+import net.minecraft.src.World;
 
 public class FullMobHolder extends Item {
 
@@ -72,6 +74,35 @@ public class FullMobHolder extends Item {
 
     public String getTextureFile() {
         return DefaultProps.ITEM_TEXTURES + "/items.png";
+    }
+    
+    
+    @Override
+    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+    {
+    	ItemStack stack2;
+    	for (int i = 0; i<player.inventory.getSizeInventory();i++)
+    	{
+    		stack2 = player.inventory.getStackInSlot(i);
+    		if (stack2 != null)
+    		{
+	    		if (stack2.getItem()==CompactMobsItems.handDecompactor)
+	    		{
+	    			NBTTagCompound nbttag = stack2.getTagCompound();
+	    			if (nbttag == null)
+	    			{
+	    				nbttag = new NBTTagCompound();
+	    			}
+	    			nbttag.setBoolean("targeted", true);
+	    			NBTTagCompound tag = new NBTTagCompound();
+	    			stack.writeToNBT(tag);
+	    			nbttag.setTag("target", tag);
+	    			stack2.setTagCompound(nbttag);
+	    			stack2.setItemDamage(1);
+	    		}
+    		}
+    	}
+    	return stack;
     }
     /*
      * @Override public ItemStack onItemRightClick(ItemStack itemStack, World

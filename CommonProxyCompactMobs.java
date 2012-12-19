@@ -3,24 +3,23 @@ package compactMobs;
 import compactMobs.Containers.ContainerBreeder;
 import compactMobs.Containers.ContainerCompactor;
 import compactMobs.Containers.ContainerDecompactor;
-import compactMobs.Containers.ContainerHandDecompactor;
 import compactMobs.Containers.ContainerIncubator;
 import compactMobs.GUI.GuiBreeder;
 import compactMobs.GUI.GuiCompactor;
 import compactMobs.GUI.GuiDecompactor;
-import compactMobs.GUI.GuiHandDecompactor;
 import compactMobs.GUI.GuiIncubator;
 import compactMobs.Items.HandheldDecompactor;
-import compactMobs.Items.HandheldDecompactorInv;
 import compactMobs.TileEntity.TileEntityBreeder;
 import compactMobs.TileEntity.TileEntityCompactor;
 import compactMobs.TileEntity.TileEntityDecompactor;
 import compactMobs.TileEntity.TileEntityIncubator;
 import compactMobs.network.PacketParticleSpawn;
 
+import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
@@ -49,14 +48,7 @@ public class CommonProxyCompactMobs implements IGuiHandler {
 		        }
 		    }
         }
-        else
-        {
-        	if (ID == 5)
-        	{
-        		HandheldDecompactorInv inv = new HandheldDecompactorInv(player.inventory.getCurrentItem(), player);
-        		return new ContainerHandDecompactor(player.inventory, inv);
-        	}
-        }
+
         return null;
     }
     
@@ -84,15 +76,6 @@ public class CommonProxyCompactMobs implements IGuiHandler {
 	            }
 	        }
         }
-        else
-        {
-        	if (ID == 5)
-        	{
-        		HandheldDecompactorInv inv = new HandheldDecompactorInv(player.inventory.getCurrentItem(), player);
-        		return new GuiHandDecompactor(player.inventory, inv);
-        	}
-        }
-
         return null;
     }
 
@@ -102,5 +85,11 @@ public class CommonProxyCompactMobs implements IGuiHandler {
 
     public void spawnParticle(String type, double x, double y, double z, double vx, double vy, double vz, int number) {
         PacketDispatcher.sendPacketToAllPlayers(PacketParticleSpawn.buildParticleSpawnPacket(type, x, y, z, vx, vy, vz, number));
+    }
+    
+    public void spawnMob(EntityLiving entity)
+    {
+    	World world = FMLClientHandler.instance().getClient().theWorld;
+    	world.spawnEntityInWorld(entity);
     }
 }

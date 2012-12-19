@@ -84,7 +84,7 @@ public class HandheldCompactor extends Item{
     
     public int getMaxItemUseDuration(ItemStack par1ItemStack)
     {
-        return 720;
+        return 50;
     }
     
     public ItemStack onFoodEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
@@ -187,7 +187,7 @@ public class HandheldCompactor extends Item{
 			    	}
 			    	
 			    	nbttag.setInteger("charge", charge);
-			    	player.getCurrentEquippedItem().setTagCompound(nbttag);
+			    	stack.setTagCompound(nbttag);
 	    		}
 	    	}
 	    	
@@ -195,7 +195,7 @@ public class HandheldCompactor extends Item{
     	}
     	else 
     		{
-    		if (!stack2.equals(stack))
+    		if (!stack2.isItemEqual(stack))
 	    	{
 	    		
 		    	if (stack.hasTagCompound())
@@ -221,7 +221,7 @@ public class HandheldCompactor extends Item{
 				    	}
 				    	
 				    	nbttag.setInteger("charge", charge);
-				    	player.getCurrentEquippedItem().setTagCompound(nbttag);
+				    	stack.setTagCompound(nbttag);
 		    		}
 		    	}
 	    	}
