@@ -84,7 +84,7 @@ public class HandheldCompactor extends Item{
     
     public int getMaxItemUseDuration(ItemStack par1ItemStack)
     {
-        return 50;
+        return 5;
     }
     
     public ItemStack onFoodEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)

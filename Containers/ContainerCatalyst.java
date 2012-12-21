@@ -1,7 +1,8 @@
 package compactMobs.Containers;
 
 import compactMobs.Items.CompactMobsItems;
-import compactMobs.TileEntity.TileEntityDecompactor;
+import compactMobs.TileEntity.TileEntityCatalyst;
+import compactMobs.TileEntity.TileEntityIncubator;
 
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
@@ -9,26 +10,23 @@ import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 
-public class ContainerDecompactor extends Container {
+public class ContainerCatalyst extends Container {
 
     int inventorySize;
 
-    public ContainerDecompactor(InventoryPlayer par1InventoryPlayer, TileEntityDecompactor te) {
-        inventorySize = te.getSizeInventory();
-        //this.addSlotToContainer(new Slot(te, 0, 49, 34));
-        //this.addSlotToContainer(new Slot(te, 1, 44, 51));
-        //this.addSlotToContainer(new Slot(te, 2, 116, 51));
-        //this.addSlotToContainer(new SlotInbuener(par1InventoryPlayer.player, te, 3, 80, 51));
+    public ContainerCatalyst(InventoryPlayer par1InventoryPlayer, TileEntityCatalyst tileEntity) {
+        inventorySize = tileEntity.getSizeInventory();
+
 
         for (int var3 = 0; var3 < 3; ++var3) {
             for (int var4 = 0; var4 < 9; ++var4) {
-                this.addSlotToContainer(new FullMobHolderSlot(te, var4 + var3 * 9, 8 + var4 * 18, 23 + var3 * 18));
+                this.addSlotToContainer(new FullMobHolderSlot(tileEntity, var4 + var3 * 9, 8 + var4 * 18, 23 + var3 * 18));
             }
         }
         //62, 105
-        this.addSlotToContainer(new EmptyMobHolderSlot(te, 27, 62, 105));
-        this.addSlotToContainer(new EmptyMobHolderSlot(te, 28, 80, 105));
-        this.addSlotToContainer(new EmptyMobHolderSlot(te, 29, 98, 105));
+        this.addSlotToContainer(new EmptyMobHolderSlot(tileEntity, 27, 62, 105));
+        this.addSlotToContainer(new EmptyMobHolderSlot(tileEntity, 28, 80, 105));
+        this.addSlotToContainer(new EmptyMobHolderSlot(tileEntity, 29, 98, 105));
 
         for (int var3 = 0; var3 < 3; ++var3) {
             for (int var4 = 0; var4 < 9; ++var4) {
@@ -102,7 +100,7 @@ public class ContainerDecompactor extends Container {
 
         return var2;
     }
-    
+
     @Override
     public void putStackInSlot(int slot, ItemStack stack) {
         if (getSlot(slot).isItemValid(stack)) {

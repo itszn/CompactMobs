@@ -5,10 +5,12 @@ import java.util.logging.Logger;
 
 import compactMobs.Items.CompactMobsItems;
 import compactMobs.Blocks.BlockBreeder;
+import compactMobs.Blocks.BlockCatalyst;
 import compactMobs.Blocks.BlockCompactor;
 import compactMobs.Blocks.BlockDecompactor;
 import compactMobs.Blocks.BlockIncubator;
 import compactMobs.TileEntity.TileEntityBreeder;
+import compactMobs.TileEntity.TileEntityCatalyst;
 import compactMobs.TileEntity.TileEntityCompactor;
 import compactMobs.TileEntity.TileEntityDecompactor;
 import compactMobs.TileEntity.TileEntityIncubator;
@@ -49,6 +51,7 @@ public class CompactMobsCore {
     public static Block blockDecompactor;
     public static Block blockBreeder;
     public static Block blockIncubator;
+    public static Block blockCatalyst;
     public boolean tick;
     public static Configuration mainConfig;
     public static Logger cmLog = Logger.getLogger("CompactMobs");
@@ -60,6 +63,7 @@ public class CompactMobsCore {
     public Property fullMobHolderId;
     public Property handCompactorId;
     public Property handDecompactorId;
+    public Property catalystId;
     @SidedProxy(clientSide = "compactMobs.ClientProxyCompactMobs", serverSide = "compactMobs.CommonProxyCompactMobs")
     public static CommonProxyCompactMobs proxy;
 
@@ -76,6 +80,7 @@ public class CompactMobsCore {
             decompatorId = CompactMobsCore.mainConfig.get("block", "DecompactorId", 3392);
             breederId = CompactMobsCore.mainConfig.get("block", "BreederId", 3393);
             incubatorId = CompactMobsCore.mainConfig.get("block", "IncubatorId", 3394);
+            catalystId = CompactMobsCore.mainConfig.get("block", "CatalystBlockId", 3399);
             emptyMobHolderId = CompactMobsCore.mainConfig.get("item", "EmptyMobHolderId", 3395);
             fullMobHolderId = CompactMobsCore.mainConfig.get("item", "FullMobHolderId", 3396);
             handCompactorId = CompactMobsCore.mainConfig.get("item", "HandheldCompactorId", 3397);
@@ -96,7 +101,8 @@ public class CompactMobsCore {
         blockDecompactor = new BlockDecompactor(decompatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockDecompactor");
         blockBreeder = new BlockBreeder(breederId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockBreeder");
         blockIncubator = new BlockIncubator(incubatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockIncubator");
-
+        blockCatalyst = new BlockCatalyst(catalystId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockCatalyst");
+        
         GameRegistry.registerBlock(blockCompactor);
         LanguageRegistry.addName(blockCompactor, "Compactor");
         
@@ -109,11 +115,15 @@ public class CompactMobsCore {
         
         GameRegistry.registerBlock(blockIncubator);
         LanguageRegistry.addName(blockIncubator, "Incubator");
+        
+        GameRegistry.registerBlock(blockCatalyst);
+        LanguageRegistry.addName(blockCatalyst, "Catalyst");
 
         GameRegistry.registerTileEntity(TileEntityCompactor.class, "tileEntityCompactor");
         GameRegistry.registerTileEntity(TileEntityDecompactor.class, "tileEntityDecompactor");
         GameRegistry.registerTileEntity(TileEntityBreeder.class, "tileEntityBreeder");
         GameRegistry.registerTileEntity(TileEntityIncubator.class, "tileEntityIncubator");
+        GameRegistry.registerTileEntity(TileEntityCatalyst.class, "tileEntityCatalyst");
 
         CompactMobsItems.getInstance().instantiateItems();
         CompactMobsItems.getInstance().nameItems();

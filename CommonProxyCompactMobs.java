@@ -1,15 +1,18 @@
 package compactMobs;
 
 import compactMobs.Containers.ContainerBreeder;
+import compactMobs.Containers.ContainerCatalyst;
 import compactMobs.Containers.ContainerCompactor;
 import compactMobs.Containers.ContainerDecompactor;
 import compactMobs.Containers.ContainerIncubator;
 import compactMobs.GUI.GuiBreeder;
+import compactMobs.GUI.GuiCatalyst;
 import compactMobs.GUI.GuiCompactor;
 import compactMobs.GUI.GuiDecompactor;
 import compactMobs.GUI.GuiIncubator;
 import compactMobs.Items.HandheldDecompactor;
 import compactMobs.TileEntity.TileEntityBreeder;
+import compactMobs.TileEntity.TileEntityCatalyst;
 import compactMobs.TileEntity.TileEntityCompactor;
 import compactMobs.TileEntity.TileEntityDecompactor;
 import compactMobs.TileEntity.TileEntityIncubator;
@@ -45,6 +48,8 @@ public class CommonProxyCompactMobs implements IGuiHandler {
 		                return new ContainerBreeder(player.inventory, (TileEntityBreeder) tileEntity);
 		            case 3:
 		                return new ContainerIncubator(player.inventory, (TileEntityIncubator) tileEntity);
+		            case 4:
+		            	return new ContainerCatalyst(player.inventory, (TileEntityCatalyst) tileEntity);
 		        }
 		    }
         }
@@ -73,6 +78,8 @@ public class CommonProxyCompactMobs implements IGuiHandler {
 	                    return new GuiBreeder(player.inventory, ((TileEntityBreeder) tileEntity));
 	                case 3:
 	                    return new GuiIncubator(player.inventory, ((TileEntityIncubator) tileEntity));
+	                case 4:
+	                	return new GuiCatalyst(player.inventory, ((TileEntityCatalyst) tileEntity));
 	            }
 	        }
         }

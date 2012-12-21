@@ -17,8 +17,9 @@ public class EmptyMobHolderSlot extends Slot{
 	@Override
 	public boolean isItemValid(ItemStack itemStack)
     {
-		if (itemStack.getItem() == CompactMobsItems.mobHolder)
-			return true;
+		if (itemStack != null)
+			if (itemStack.getItem() == CompactMobsItems.mobHolder)
+				return true;
 		return false;
     }
 

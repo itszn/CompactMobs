@@ -1,11 +1,11 @@
-
-
 package compactMobs.GUI;
 
 import org.lwjgl.opengl.GL11;
 
 import compactMobs.DefaultProps;
+import compactMobs.Containers.ContainerCatalyst;
 import compactMobs.Containers.ContainerIncubator;
+import compactMobs.TileEntity.TileEntityCatalyst;
 import compactMobs.TileEntity.TileEntityIncubator;
 
 
@@ -13,13 +13,13 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.GuiContainer;
 import net.minecraft.src.InventoryPlayer;
 
-public class GuiIncubator extends GuiContainer {
+public class GuiCatalyst extends GuiContainer {
 
-    private TileEntityIncubator te;
+    private TileEntityCatalyst te;
     private EntityPlayer player;
 
-    public GuiIncubator(InventoryPlayer player, TileEntityIncubator tileEntity) {
-        super(new ContainerIncubator(player, tileEntity));
+    public GuiCatalyst(InventoryPlayer player, TileEntityCatalyst tileEntity) {
+        super(new ContainerCatalyst(player, tileEntity));
         this.te = tileEntity;
         this.player = player.player;
         ySize = 240;
@@ -28,13 +28,13 @@ public class GuiIncubator extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-        fontRenderer.drawString("Incubator", 10, 10, 0x404040);
+        fontRenderer.drawString("Catalyst", 10, 10, 0x404040);
         super.drawGuiContainerForegroundLayer(par1, par2);
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
-        int i = mc.renderEngine.getTexture(DefaultProps.GUI_TEXTURES + "/incubator_gui.png");
+        int i = mc.renderEngine.getTexture(DefaultProps.GUI_TEXTURES + "/decompactor_gui.png");
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         mc.renderEngine.bindTexture(i);
         //int j = (width - xSize) / 2;
@@ -57,4 +57,3 @@ public class GuiIncubator extends GuiContainer {
 	}
      */
 }
-

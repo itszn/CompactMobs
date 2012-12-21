@@ -10,14 +10,11 @@ import compactMobs.Items.CompactMobsItems;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
+import net.minecraft.src.DamageSource;
 import net.minecraft.src.Entity;
-import net.minecraft.src.EntityAgeable;
 import net.minecraft.src.EntityList;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.EntitySheep;
-import net.minecraft.src.EntitySlime;
-import net.minecraft.src.EntityVillager;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
@@ -27,18 +24,20 @@ import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 
-public class TileEntityDecompactor extends TileEntity implements IInventory, IPowerReceptor, ISidedInventory {
+public class TileEntityCatalyst extends TileEntity implements IInventory, IPowerReceptor, ISidedInventory {
 
     public ItemStack[] ItemStacks;
     IPowerProvider provider;
+    //protected Random rand;
 
-    public TileEntityDecompactor() {
-        ItemStacks = new ItemStack[30];
+    public TileEntityCatalyst() {
+        ItemStacks = new ItemStack[54];
         if (PowerFramework.currentFramework != null) {
             provider = PowerFramework.currentFramework.createPowerProvider();
         }
         provider.configure(50, 25, 25, 25, 1000);
     }
+
 
     @Override
     public void updateEntity() {
@@ -267,79 +266,10 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
                         CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord + .5D, this.yCoord + .5D, this.zCoord, 0, 0, -.1, 10);
                     }
 
-                    world.spawnEntityInWorld(entity);
+                    entity.onDeath(DamageSource.generic);
+                    entity.onDeath(DamageSource.generic);
 
-                } /*else if (nbttag.hasKey("entityId")) {
-                    int id = nbttag.getInteger("entityId");
-                    entity = (EntityLiving) EntityList.createEntityByID(id, world);
-
-                    //CompactMobsCore.instance.cmLog.info("dir: "+String.valueOf(dir));
-                    if (dir == 2) {
-                        entity.setPosition(this.xCoord + .5D, this.yCoord, this.zCoord - .5D);
-                        CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord + .5D, this.yCoord + .5D, this.zCoord + 1D, 0, 0, -.1, 10);
-                    } else if (dir == 3) {
-                        entity.setPosition(this.xCoord + .5D, this.yCoord, this.zCoord + 1.5D);
-                        CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord + .5D, this.yCoord + .5D, this.zCoord, 0, 0, .1, 10);
-                    } else if (dir == 4) {
-                        entity.setPosition(this.xCoord - .5D, this.yCoord, this.zCoord + .5D);
-                        CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord, this.yCoord + .5D, this.zCoord + .5D, -.1, 0, 0, 10);
-                    } else if (dir == 5) {
-                        entity.setPosition(this.xCoord + 1.5D, this.yCoord, this.zCoord + .5D);
-                        CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord + 1D, this.yCoord + .5D, this.zCoord + .5D, .1, 0, 0, 10);
-                    } else {
-                        entity.setPosition(this.xCoord + .5D, this.yCoord, this.zCoord - .5D);
-                        CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord + .5D, this.yCoord + .5D, this.zCoord + 1D, 0, 0, -.1, 10);
-                    }
-
-                    if (nbttag.hasKey("entityHealth")) {
-                        int health = nbttag.getInteger("entityHealth");
-                        entity.setEntityHealth(health);
-                    }
-
-                    if (entity instanceof EntitySlime) {
-                        EntitySlime entitySlime = (EntitySlime) entity;
-                        if (nbttag.hasKey("entitySize")) {
-                            int size = nbttag.getInteger("entitySize");
-                            entitySlime.func_85034_r(size);
-                        }
-                        world.spawnEntityInWorld(entitySlime);
-
-                    } else {
-                        if (entity instanceof EntityAgeable) {
-                            EntityAgeable entityAgeable = (EntityAgeable) entity;
-                            if (nbttag.hasKey("entityGrowingAge")) {
-                                int age = nbttag.getInteger("entityGrowingAge");
-                                entityAgeable.setGrowingAge(age);
-                            }
-                            if (entityAgeable instanceof EntitySheep) {
-                                EntitySheep entitySheep = (EntitySheep) entityAgeable;
-                                if (nbttag.hasKey("entitySheared")) {
-                                    boolean sheared = nbttag.getBoolean("entitySheared");
-                                    entitySheep.setSheared(sheared);
-                                }
-                                if (nbttag.hasKey("entityColor")) {
-                                    int color = nbttag.getInteger("entityColor");
-                                    entitySheep.setFleeceColor(color);
-                                }
-                                world.spawnEntityInWorld(entitySheep);
-
-                            } else if (entityAgeable instanceof EntityVillager) {
-                                EntityVillager entityVillager = (EntityVillager) entityAgeable;
-                                if (nbttag.hasKey("entityProfession")) {
-                                    int profession = nbttag.getInteger("entityProfession");
-                                    entityVillager.setProfession(profession);
-                                }
-                                world.spawnEntityInWorld(entityVillager);
-                            } else {
-                                world.spawnEntityInWorld(entityAgeable);
-                            }
-                        } else {
-                            world.spawnEntityInWorld(entity);
-                        }
-                    }
-                } else {
-                    return;
-                }*/
+                }
 
 
 
@@ -442,3 +372,4 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
         return 27;
     }
 }
+
