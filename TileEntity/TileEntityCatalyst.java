@@ -31,7 +31,7 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
     //protected Random rand;
 
     public TileEntityCatalyst() {
-        ItemStacks = new ItemStack[54];
+        ItemStacks = new ItemStack[31];
         if (PowerFramework.currentFramework != null) {
             provider = PowerFramework.currentFramework.createPowerProvider();
         }
@@ -226,74 +226,83 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
         }
 
 
-        if (stack != null && out) {
+        if (stack != null && out && ItemStacks[30]!= null) {
 
-            NBTTagCompound nbttag = stack.getTagCompound();
-            if (nbttag != null) {
-                int dir = world.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
-
-                EntityLiving entity = null;
-                if (CompactMobsCore.instance.useFullTagCompound && nbttag.hasKey("entityTags")) {
-                    //CompactMobsCore.instance.cmLog.info(String.valueOf(nbttag.hasKey("compound")));
-
-
-
-                    NBTTagCompound newCompound = nbttag.getCompoundTag("entityTags");
-                    int id = nbttag.getInteger("entityId");
-                    entity = (EntityLiving) EntityList.createEntityByID(id, world);
-                    //entity = (EntityLiving) EntityList.createEntityFromNBT(newCompound, world);
-                    entity.readFromNBT(newCompound);
-                    
-                    //entity = (EntityLiving) EntityList.createEntityFromNBT(newCompound, world);
-
-                    //CompactMobsCore.instance.cmLog.info("dir: "+String.valueOf(dir));
-
-                    Random random = new Random();
-                    if (dir == 2) {
-                        entity.setPosition(this.xCoord + .5D, this.yCoord, this.zCoord - .5D);
-                        CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord + .5D, this.yCoord + .5D, this.zCoord, 0, 0, -.1, 10);
-                    } else if (dir == 3) {
-                        entity.setPosition(this.xCoord + .5D, this.yCoord, this.zCoord + 1.5D);
-                        CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord + .5D, this.yCoord + .5D, this.zCoord + 1D, 0, 0, .1, 10);
-                    } else if (dir == 4) {
-                        entity.setPosition(this.xCoord - .5D, this.yCoord, this.zCoord + .5D);
-                        CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord, this.yCoord + .5D, this.zCoord + .5D, -.1, 0, 0, 10);
-                    } else if (dir == 5) {
-                        entity.setPosition(this.xCoord + 1.5D, this.yCoord, this.zCoord + .5D);
-                        CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord - 1D, this.yCoord + .5D, this.zCoord + .5D, .1, 0, 0, 10);
-                    } else {
-                        entity.setPosition(this.xCoord + .5D, this.yCoord, this.zCoord - .5D);
-                        CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord + .5D, this.yCoord + .5D, this.zCoord, 0, 0, -.1, 10);
-                    }
-
-                    entity.onDeath(DamageSource.generic);
-                    entity.onDeath(DamageSource.generic);
-
-                }
-
-
-
-            }
-            //int id = EntityList.getEntityID(entity);
-
-            //CompactMobsCore.instance.cmLog.info("1: " + String.valueOf(id));
-
-            //var5.getHealth();
-            //world.spawnEntityInWorld(newMob);
-            if (ItemStacks[stackNum].stackSize > 1) {
-                ItemStacks[stackNum] = new ItemStack(ItemStacks[stackNum].getItem(), ItemStacks[stackNum].stackSize - 1);
-            } else {
-                ItemStacks[stackNum] = null;
-            }
-
-            if (worldObj.rand.nextInt(10) != 0) {
-                if (ItemStacks[outStackNum] != null) {
-                    ItemStacks[outStackNum] = new ItemStack(ItemStacks[outStackNum].getItem(), ItemStacks[outStackNum].stackSize + 1);
-                } else {
-                    ItemStacks[outStackNum] = new ItemStack(CompactMobsItems.mobHolder, 1);
-                }
-            }
-
+        	if (ItemStacks[30].getItem()==CompactMobsItems.catalystCore)
+        	{
+	            NBTTagCompound nbttag = stack.getTagCompound();
+	            if (nbttag != null) {
+	                int dir = world.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+	
+	                EntityLiving entity = null;
+	                if (CompactMobsCore.instance.useFullTagCompound && nbttag.hasKey("entityTags")) {
+	                    //CompactMobsCore.instance.cmLog.info(String.valueOf(nbttag.hasKey("compound")));
+	
+	
+	
+	                    NBTTagCompound newCompound = nbttag.getCompoundTag("entityTags");
+	                    int id = nbttag.getInteger("entityId");
+	                    entity = (EntityLiving) EntityList.createEntityByID(id, world);
+	                    //entity = (EntityLiving) EntityList.createEntityFromNBT(newCompound, world);
+	                    entity.readFromNBT(newCompound);
+	                    
+	                    //entity = (EntityLiving) EntityList.createEntityFromNBT(newCompound, world);
+	
+	                    //CompactMobsCore.instance.cmLog.info("dir: "+String.valueOf(dir));
+	
+	                    Random random = new Random();
+	                    if (dir == 2) {
+	                        entity.setPosition(this.xCoord + .5D, this.yCoord, this.zCoord - .5D);
+	                        CompactMobsCore.instance.proxy.spawnParticle("largesmoke", this.xCoord + .5D, this.yCoord + .5D, this.zCoord, 0, 0, -.1, 10);
+	                    } else if (dir == 3) {
+	                        entity.setPosition(this.xCoord + .5D, this.yCoord, this.zCoord + 1.5D);
+	                        CompactMobsCore.instance.proxy.spawnParticle("largesmoke", this.xCoord + .5D, this.yCoord + .5D, this.zCoord + 1D, 0, 0, .1, 10);
+	                    } else if (dir == 4) {
+	                        entity.setPosition(this.xCoord - .5D, this.yCoord, this.zCoord + .5D);
+	                        CompactMobsCore.instance.proxy.spawnParticle("largesmoke", this.xCoord, this.yCoord + .5D, this.zCoord + .5D, -.1, 0, 0, 10);
+	                    } else if (dir == 5) {
+	                        entity.setPosition(this.xCoord + 1.5D, this.yCoord, this.zCoord + .5D);
+	                        CompactMobsCore.instance.proxy.spawnParticle("largesmoke", this.xCoord - 1D, this.yCoord + .5D, this.zCoord + .5D, .1, 0, 0, 10);
+	                    } else {
+	                        entity.setPosition(this.xCoord + .5D, this.yCoord, this.zCoord - .5D);
+	                        CompactMobsCore.instance.proxy.spawnParticle("largesmoke", this.xCoord + .5D, this.yCoord + .5D, this.zCoord, 0, 0, -.1, 10);
+	                    }
+	
+	                    entity.onDeath(DamageSource.generic);
+	                    entity.onDeath(DamageSource.generic);
+	
+	                }
+	
+	
+	
+	            }
+	            //int id = EntityList.getEntityID(entity);
+	
+	            //CompactMobsCore.instance.cmLog.info("1: " + String.valueOf(id));
+	
+	            //var5.getHealth();
+	            //world.spawnEntityInWorld(newMob);
+	            if (ItemStacks[stackNum].stackSize > 1) {
+	                ItemStacks[stackNum] = new ItemStack(ItemStacks[stackNum].getItem(), ItemStacks[stackNum].stackSize - 1);
+	            } else {
+	                ItemStacks[stackNum] = null;
+	            }
+	
+	            if (worldObj.rand.nextInt(10) != 0) {
+	                if (ItemStacks[outStackNum] != null) {
+	                    ItemStacks[outStackNum] = new ItemStack(ItemStacks[outStackNum].getItem(), ItemStacks[outStackNum].stackSize + 1);
+	                } else {
+	                    ItemStacks[outStackNum] = new ItemStack(CompactMobsItems.mobHolder, 1);
+	                }
+	            }
+	            
+	            ItemStacks[30].setItemDamage(ItemStacks[30].getItemDamage()+1);
+	            if (ItemStacks[30].getItemDamage() > 150)
+	            {
+	            	ItemStacks[30]=null;
+	            }
+	
+	        }
         }
         dumpItems();
 

@@ -27,6 +27,7 @@ public class ContainerCatalyst extends Container {
         this.addSlotToContainer(new EmptyMobHolderSlot(tileEntity, 27, 62, 105));
         this.addSlotToContainer(new EmptyMobHolderSlot(tileEntity, 28, 80, 105));
         this.addSlotToContainer(new EmptyMobHolderSlot(tileEntity, 29, 98, 105));
+        this.addSlotToContainer(new CatalystCoreSlot(tileEntity, 30, 23, 91));
 
         for (int var3 = 0; var3 < 3; ++var3) {
             for (int var4 = 0; var4 < 9; ++var4) {
@@ -63,25 +64,32 @@ public class ContainerCatalyst extends Container {
             ItemStack var4 = var3.getStack();
             var2 = var4.copy();
 
-            if (par2 >= 0 && par2 < 30) {
-                if (!this.mergeItemStack(var4, 30, 66, true)) {
+            if (par2 >= 0 && par2 < 31) {
+                if (!this.mergeItemStack(var4, 31, 67, true)) {
                     return null;
                 }
 
                 var3.onSlotChange(var4, var2);
-            } else if (par2 >= 30) {
+            } else if (par2 >= 31) {
                 if (var4.getItem() == CompactMobsItems.fullMobHolder) {
                     if (!this.mergeItemStack(var4, 0, 27, false)) {
                         return null;
                     }
-                } else if (par2 >= 30 && par2 < 57) {
-                    if (!this.mergeItemStack(var4, 57, 66, false)) {
+                }
+                else if (var4.getItem() == CompactMobsItems.fullMobHolder) 
+                {
+                	if (!this.mergeItemStack(var4, 30, 31, false)) {
                         return null;
                     }
-                } else if (par2 >= 57 && par2 < 66 && !this.mergeItemStack(var4, 30, 56, false)) {
+                }
+                else if (par2 >= 31 && par2 < 58) {
+                    if (!this.mergeItemStack(var4, 58, 67, false)) {
+                        return null;
+                    }
+                } else if (par2 >= 58 && par2 < 67 && !this.mergeItemStack(var4, 31, 57, false)) {
                     return null;
                 }
-            } else if (!this.mergeItemStack(var4, 30, 66, false)) {
+            } else if (!this.mergeItemStack(var4, 31, 67, false)) {
                 return null;
             }
 

@@ -14,6 +14,8 @@ public class ClosedSlot extends Slot{
 	@Override
 	public boolean isItemValid(ItemStack par1ItemStack)
     {
+		if (par1ItemStack==null)
+				return true;
         return false;
     }
 }

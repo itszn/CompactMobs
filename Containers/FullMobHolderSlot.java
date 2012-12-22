@@ -21,6 +21,8 @@ public class FullMobHolderSlot extends Slot{
 		if (itemStack != null)
 			if (itemStack.getItem() == CompactMobsItems.fullMobHolder)
 				return true;
+		if (itemStack == null)
+			return true;
 		return false;
 		
     }

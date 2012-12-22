@@ -23,12 +23,17 @@ import net.minecraftforge.common.ForgeDirection;
 
 public class BlockCatalyst extends BlockContainer {
 
+	int textureFront, textureSides, textureBack, textureTop;
+	
     public BlockCatalyst(int par1, Material par2Material) {
         super(par1, par2Material);
         super.blockIndexInTexture = 12;
         this.setLightOpacity(10);
         this.setCreativeTab(CreativeTabs.tabRedstone);
-
+        textureFront = 15; //3
+        textureSides = 12; //5
+        textureBack = 14; //6
+        textureTop = 13;
     }
 
     @Override
@@ -52,18 +57,24 @@ public class BlockCatalyst extends BlockContainer {
         return DefaultProps.BLOCK_TEXTURES + "/blocks.png";
     }
 
+    
+    
     @Override
-    public int getBlockTextureFromSide(int i) {
-        switch (i) {
-            case 0:
-                //bottom
-                return 14;
-            case 1:
-                //top
-                return 13;
-            default:
-                //side
-                return 12;
+    public int getBlockTextureFromSideAndMetadata(int i, int j) {
+        if (j == 0 && i == 3) {
+            return textureFront;
+        }
+
+        if (i == 1) {
+            return textureTop;
+        } else if (i == 0) {
+            return textureBack;
+        } else if (i == j) {
+            return textureFront;
+        } else if (j >= 0 && j < 6 && ForgeDirection.values()[j].getOpposite().ordinal() == i) {
+            return textureBack;
+        } else {
+            return textureSides;
         }
     }
 

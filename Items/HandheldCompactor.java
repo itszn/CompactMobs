@@ -31,6 +31,7 @@ import net.minecraft.src.EntitySnowShovelFX;
 import net.minecraft.src.EntitySpellParticleFX;
 import net.minecraft.src.EntitySplashFX;
 import net.minecraft.src.EntitySuspendFX;
+import net.minecraft.src.EnumAction;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
@@ -361,6 +362,11 @@ public class HandheldCompactor extends Item{
 		//return true;
     	
     }
+    
+    /*public EnumAction getItemUseAction(ItemStack par1ItemStack)
+    {
+        return EnumAction.block;
+    }*/
     
     
     /*@Override

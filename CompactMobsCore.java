@@ -18,6 +18,7 @@ import compactMobs.TileEntity.TileEntityIncubator;
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.ItemSword;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Property;
@@ -38,7 +39,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
-@Mod(modid = "CM", name = "CompactMobs", version = "1.1.3")
+@Mod(modid = "CM", name = "CompactMobs", version = "1.2.0")
 public class CompactMobsCore {
 
     @Instance
@@ -64,13 +65,14 @@ public class CompactMobsCore {
     public Property handCompactorId;
     public Property handDecompactorId;
     public Property catalystId;
+    public Property catalystCoreId;
     @SidedProxy(clientSide = "compactMobs.ClientProxyCompactMobs", serverSide = "compactMobs.CommonProxyCompactMobs")
     public static CommonProxyCompactMobs proxy;
 
     @PreInit
     public void loadConfiguration(FMLPreInitializationEvent evt) {
         cmLog.setParent(FMLLog.getLogger());
-        cmLog.info("Starting CompactMobs v1.1.2");
+        cmLog.info("Starting CompactMobs v1.2.0");
         tick = false;
         
         mainConfig = new Configuration(new File(evt.getModConfigurationDirectory(), "CompactMobs.cfg"));
@@ -85,6 +87,7 @@ public class CompactMobsCore {
             fullMobHolderId = CompactMobsCore.mainConfig.get("item", "FullMobHolderId", 3396);
             handCompactorId = CompactMobsCore.mainConfig.get("item", "HandheldCompactorId", 3397);
             handDecompactorId = CompactMobsCore.mainConfig.get("item", "HandheldDecompactorId", 3398);
+            catalystCoreId = CompactMobsCore.mainConfig.get("item", "CatalystCoreId", 3400);
 
         } finally {
             mainConfig.save();
@@ -139,18 +142,22 @@ public class CompactMobsCore {
     public void initialize(FMLInitializationEvent evt) {
         Item ironGear = Item.ingotIron;
         Item goldGear = Item.ingotGold;
+        Item diamondGear = Item.diamond;
 
         try {
             cmLog.info("Adding Compactmob Recipes");
             ironGear = (Item) Class.forName("buildcraft.BuildCraftCore").getField("ironGearItem").get(null);
             goldGear = (Item) Class.forName("buildcraft.BuildCraftCore").getField("goldGearItem").get(null);
+            diamondGear = (Item) Class.forName("buildcraft.BuildCraftCore").getField("diamondGearItem").get(null);
             GameRegistry.addRecipe(new ItemStack(blockCompactor, 1), new Object[]{"ipi", "lol", "gpg", 'i', ironGear, 'p', Block.pistonBase, 'l', new ItemStack(Item.dyePowder, 1, 4), 'o', Block.obsidian, 'g', goldGear});
             GameRegistry.addRecipe(new ItemStack(blockDecompactor, 1), new Object[]{"oro", "ild", "grg", 'o', ironGear, 'r', Item.redstone, 'i', Item.ingotIron, 'l', Block.blockLapis, 'd', Block.dispenser, 'g', goldGear});
             GameRegistry.addRecipe(new ItemStack(CompactMobsItems.mobHolder, 2), new Object[]{"hhh", "ibi", "sss", 'h', new ItemStack(Block.stoneSingleSlab, 1, 0), 'i', Item.ingotIron, 'b', Block.fenceIron, 's', Block.stone});
             GameRegistry.addRecipe(new ItemStack(blockBreeder, 1), new Object[]{"oho", "iwi", "gag", 'o', ironGear, 'h', CompactMobsItems.mobHolder, 'i', Item.ingotIron, 'w', Item.wheat, 'g', goldGear, 'a', new ItemStack(Item.appleGold, 1, 0)});
             GameRegistry.addRecipe(new ItemStack(blockIncubator, 1), new Object[]{"oco", "ifi", "gbg", 'o', ironGear, 'c', Block.chest, 'i', Item.ingotIron, 'f', Block.stoneOvenIdle, 'g', goldGear, 'b', Item.blazePowder});
-
-
+            GameRegistry.addRecipe(new ItemStack(CompactMobsItems.handCompactor,1), new Object[]{"d t", "rch", "dgr", 'd', new ItemStack(Item.dyePowder, 1, 1), 't', Block.torchRedstoneActive, 'r', Item.redstone, 'c', blockCompactor, 'h', CompactMobsItems.mobHolder, 'g', diamondGear});
+            GameRegistry.addRecipe(new ItemStack(CompactMobsItems.handDecompactor,1), new Object[]{"p t", "ldr", " gr", 'p', Block.thinGlass, 't', Block.torchRedstoneActive, 'l', new ItemStack(Item.dyePowder, 1, 4), 'd', blockDecompactor, 'r', Item.redstone, 'g', diamondGear});
+            GameRegistry.addRecipe(new ItemStack(blockCatalyst,1), new Object[]{"rdr", "ixi", "gsg", 'r', Item.redstone, 'd', diamondGear, 'i', Item.ingotIron, 'x', blockBreeder.dispenser, 'g', goldGear, 's', new ItemStack(Item.swordSteel, 1, 0)});
+            GameRegistry.addRecipe(new ItemStack(CompactMobsItems.catalystCore,1), new Object[]{"idr", "geg", "rdi", 'i', Block.fenceIron, 'd', Item.diamond, 'g', Item.gunpowder, 'e', Item.eyeOfEnder, 'r', Item.redstone});
         } catch (Exception ex) {
             cmLog.info("NO BUILDCRAFT FOUND!!! NEEDED FOR COMPACTMOBS");
         }

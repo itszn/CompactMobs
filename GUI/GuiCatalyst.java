@@ -34,7 +34,7 @@ public class GuiCatalyst extends GuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
-        int i = mc.renderEngine.getTexture(DefaultProps.GUI_TEXTURES + "/decompactor_gui.png");
+        int i = mc.renderEngine.getTexture(DefaultProps.GUI_TEXTURES + "/catalyst_gui.png");
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         mc.renderEngine.bindTexture(i);
         //int j = (width - xSize) / 2;
