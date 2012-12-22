@@ -1,13 +1,14 @@
 package compactMobs.GUI;
 
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+
 import org.lwjgl.opengl.GL11;
 
 import compactMobs.DefaultProps;
 import compactMobs.Containers.ContainerBreeder;
 import compactMobs.TileEntity.TileEntityBreeder;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.GuiContainer;
-import net.minecraft.src.InventoryPlayer;
 
 public class GuiBreeder extends GuiContainer {
 

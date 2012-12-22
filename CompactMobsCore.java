@@ -3,43 +3,41 @@ package compactMobs;
 import java.io.File;
 import java.util.logging.Logger;
 
-import compactMobs.Items.CompactMobsItems;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.Property;
+
 import compactMobs.Blocks.BlockBreeder;
 import compactMobs.Blocks.BlockCatalyst;
 import compactMobs.Blocks.BlockCompactor;
 import compactMobs.Blocks.BlockDecompactor;
 import compactMobs.Blocks.BlockIncubator;
+import compactMobs.Items.CompactMobsItems;
 import compactMobs.TileEntity.TileEntityBreeder;
 import compactMobs.TileEntity.TileEntityCatalyst;
 import compactMobs.TileEntity.TileEntityCompactor;
 import compactMobs.TileEntity.TileEntityDecompactor;
 import compactMobs.TileEntity.TileEntityIncubator;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.ItemSword;
-import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.Property;
 import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.common.registry.TickRegistry;
-
-import net.minecraft.src.Material;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.Init;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.network.NetworkMod;
 
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
-@Mod(modid = "CM", name = "CompactMobs", version = "1.2.0")
+@Mod(modid = "CM", name = "CompactMobs", version = "1.2.1")
 public class CompactMobsCore {
 
     @Instance
@@ -72,7 +70,7 @@ public class CompactMobsCore {
     @PreInit
     public void loadConfiguration(FMLPreInitializationEvent evt) {
         cmLog.setParent(FMLLog.getLogger());
-        cmLog.info("Starting CompactMobs v1.2.0");
+        cmLog.info("Starting CompactMobs v1.2.1");
         tick = false;
         
         mainConfig = new Configuration(new File(evt.getModConfigurationDirectory(), "CompactMobs.cfg"));

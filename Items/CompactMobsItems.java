@@ -1,8 +1,8 @@
 package compactMobs.Items;
 
-import compactMobs.CompactMobsCore;
+import net.minecraft.item.Item;
 
-import net.minecraft.src.Item;
+import compactMobs.CompactMobsCore;
 
 public class CompactMobsItems {
     //Item variables

@@ -3,33 +3,30 @@ package compactMobs.TileEntity;
 import java.util.Iterator;
 import java.util.List;
 
-import compactMobs.CompactMobsCore;
-import compactMobs.Utils;
-import compactMobs.Vect;
-import compactMobs.Items.CompactMobsItems;
-
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.ISidedInventory;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
 
-import net.minecraft.src.AxisAlignedBB;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityAgeable;
-import net.minecraft.src.EntityDragon;
-import net.minecraft.src.EntityList;
-import net.minecraft.src.EntityLiving;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.EntitySheep;
-import net.minecraft.src.EntitySlime;
-import net.minecraft.src.EntityVillager;
-import net.minecraft.src.IInventory;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NBTTagList;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.ISidedInventory;
+import compactMobs.CompactMobsCore;
+import compactMobs.Utils;
+import compactMobs.Vect;
+import compactMobs.Items.CompactMobsItems;
 
 public class TileEntityCompactor extends TileEntity implements IInventory, IPowerReceptor, ISidedInventory {
 

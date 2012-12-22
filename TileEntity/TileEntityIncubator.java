@@ -1,22 +1,22 @@
 package compactMobs.TileEntity;
 
-import compactMobs.Utils;
-import compactMobs.Vect;
-import compactMobs.Items.CompactMobsItems;
-
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.ISidedInventory;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.IInventory;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NBTTagList;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.ISidedInventory;
+
+import compactMobs.Utils;
+import compactMobs.Vect;
+import compactMobs.Items.CompactMobsItems;
 
 public class TileEntityIncubator extends TileEntity implements IInventory, IPowerReceptor, ISidedInventory {
 

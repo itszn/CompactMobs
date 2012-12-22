@@ -1,5 +1,10 @@
 package compactMobs;
 
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
 import compactMobs.Containers.ContainerBreeder;
 import compactMobs.Containers.ContainerCatalyst;
 import compactMobs.Containers.ContainerCompactor;
@@ -10,7 +15,6 @@ import compactMobs.GUI.GuiCatalyst;
 import compactMobs.GUI.GuiCompactor;
 import compactMobs.GUI.GuiDecompactor;
 import compactMobs.GUI.GuiIncubator;
-import compactMobs.Items.HandheldDecompactor;
 import compactMobs.TileEntity.TileEntityBreeder;
 import compactMobs.TileEntity.TileEntityCatalyst;
 import compactMobs.TileEntity.TileEntityCompactor;
@@ -18,10 +22,6 @@ import compactMobs.TileEntity.TileEntityDecompactor;
 import compactMobs.TileEntity.TileEntityIncubator;
 import compactMobs.network.PacketParticleSpawn;
 
-import net.minecraft.src.EntityLiving;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;

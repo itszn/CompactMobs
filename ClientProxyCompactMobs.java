@@ -1,15 +1,11 @@
 package compactMobs;
 
-import compactMobs.network.PacketParticleSpawn;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.registry.TickRegistry;
-import net.minecraft.src.EntityLiving;
-import net.minecraft.src.Packet24MobSpawn;
-import net.minecraft.src.World;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.network.packet.Packet24MobSpawn;
+import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class ClientProxyCompactMobs extends CommonProxyCompactMobs {
     //in charge of textures and rendering

@@ -1,8 +1,8 @@
 package compactMobs.Containers;
 
-import net.minecraft.src.IInventory;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.Slot;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 import compactMobs.Items.CompactMobsItems;
 

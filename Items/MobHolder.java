@@ -1,10 +1,10 @@
 package compactMobs.Items;
 
-import compactMobs.DefaultProps;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
-import net.minecraft.src.CreativeTabs;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import compactMobs.DefaultProps;
 
 public class MobHolder extends Item {
 

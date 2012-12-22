@@ -1,14 +1,13 @@
 package compactMobs.Containers;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+
 import compactMobs.Items.CompactMobsItems;
 import compactMobs.TileEntity.TileEntityCatalyst;
-import compactMobs.TileEntity.TileEntityIncubator;
-
-import net.minecraft.src.Container;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.InventoryPlayer;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.Slot;
 
 public class ContainerCatalyst extends Container {
 

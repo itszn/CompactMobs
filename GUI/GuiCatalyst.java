@@ -1,17 +1,14 @@
 package compactMobs.GUI;
 
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+
 import org.lwjgl.opengl.GL11;
 
 import compactMobs.DefaultProps;
 import compactMobs.Containers.ContainerCatalyst;
-import compactMobs.Containers.ContainerIncubator;
 import compactMobs.TileEntity.TileEntityCatalyst;
-import compactMobs.TileEntity.TileEntityIncubator;
-
-
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.GuiContainer;
-import net.minecraft.src.InventoryPlayer;
 
 public class GuiCatalyst extends GuiContainer {
 

@@ -1,17 +1,16 @@
 package compactMobs.network;
 
 import java.io.ByteArrayOutputStream;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.world.World;
+
 import compactMobs.CompactMobsCore;
-
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
-
-import net.minecraft.src.Packet;
-import net.minecraft.src.Packet250CustomPayload;
-import net.minecraft.src.World;
 
 public class PacketMobSpawn extends PacketCommon {
 

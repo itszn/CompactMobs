@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryLargeChest;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.core.Position;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.transport.IPipeEntry;
-import net.minecraft.src.EntityItem;
-import net.minecraft.src.IInventory;
-import net.minecraft.src.InventoryLargeChest;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.TileEntityChest;
-import net.minecraft.src.World;
-import net.minecraftforge.common.ForgeDirection;
 
 public class Utils {
 

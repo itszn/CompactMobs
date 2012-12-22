@@ -1,49 +1,16 @@
 package compactMobs.Items;
 
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+
 import compactMobs.CompactMobsCore;
 import compactMobs.DefaultProps;
-import cpw.mods.fml.common.registry.TickRegistry;
-
-import net.minecraft.src.Block;
-import net.minecraft.src.CreativeTabs;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityAuraFX;
-import net.minecraft.src.EntityBreakingFX;
-import net.minecraft.src.EntityBubbleFX;
-import net.minecraft.src.EntityCloudFX;
-import net.minecraft.src.EntityCritFX;
-import net.minecraft.src.EntityDiggingFX;
-import net.minecraft.src.EntityDropParticleFX;
-import net.minecraft.src.EntityEnchantmentTableParticleFX;
-import net.minecraft.src.EntityExplodeFX;
-import net.minecraft.src.EntityFX;
-import net.minecraft.src.EntityFlameFX;
-import net.minecraft.src.EntityFootStepFX;
-import net.minecraft.src.EntityHeartFX;
-import net.minecraft.src.EntityLavaFX;
-import net.minecraft.src.EntityLiving;
-import net.minecraft.src.EntityNoteFX;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.EntityPortalFX;
-import net.minecraft.src.EntityReddustFX;
-import net.minecraft.src.EntitySmokeFX;
-import net.minecraft.src.EntitySnowShovelFX;
-import net.minecraft.src.EntitySpellParticleFX;
-import net.minecraft.src.EntitySplashFX;
-import net.minecraft.src.EntitySuspendFX;
-import net.minecraft.src.EnumAction;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.Material;
-import net.minecraft.src.MathHelper;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.Event;
-import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.IEventListener;
-import net.minecraftforge.event.entity.player.ArrowNockEvent;
-import net.minecraftforge.event.entity.player.EntityInteractEvent;
 
 public class HandheldCompactor extends Item{
 	public HandheldCompactor(int par1) {

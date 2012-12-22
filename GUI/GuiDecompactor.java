@@ -1,15 +1,14 @@
 package compactMobs.GUI;
 
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+
 import org.lwjgl.opengl.GL11;
 
 import compactMobs.DefaultProps;
 import compactMobs.Containers.ContainerDecompactor;
 import compactMobs.TileEntity.TileEntityDecompactor;
-
-
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.GuiContainer;
-import net.minecraft.src.InventoryPlayer;
 
 public class GuiDecompactor extends GuiContainer {
 
