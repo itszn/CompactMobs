@@ -36,8 +36,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@NetworkMod(clientSideRequired = true, serverSideRequired = false)
-@Mod(modid = "CM", name = "CompactMobs", version = "1.2.1")
+@NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = { "CMC" })
+@Mod(modid = "CM", name = "CompactMobs", version = "1.2.2")
 public class CompactMobsCore {
 
     @Instance
@@ -70,7 +70,7 @@ public class CompactMobsCore {
     @PreInit
     public void loadConfiguration(FMLPreInitializationEvent evt) {
         cmLog.setParent(FMLLog.getLogger());
-        cmLog.info("Starting CompactMobs v1.2.1");
+        cmLog.info("Starting CompactMobs v1.2.2");
         tick = false;
         
         mainConfig = new Configuration(new File(evt.getModConfigurationDirectory(), "CompactMobs.cfg"));

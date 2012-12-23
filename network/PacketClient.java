@@ -4,27 +4,30 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.world.World;
 
 import compactMobs.CompactMobsCore;
 
-import cpw.mods.fml.client.FMLClientHandler;
+//import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PacketClient implements IPacketHandler {
 
     public static String channel = "compactMobs";
     protected Packet250CustomPayload internalPacket;
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
         String name = ((EntityPlayer) player).username;
-        EntityPlayer playerEntity = FMLClientHandler.instance().getClient().thePlayer;
+        EntityPlayer playerEntity = (EntityPlayer)player;//
+        		//EntityPlayer playerEntity = FMLClientHandler.instance().getClient().thePlayer;
         recieve(packet, playerEntity, manager);
     }
 
@@ -33,7 +36,7 @@ public class PacketClient implements IPacketHandler {
             return;
         }
 
-        WorldClient world = Minecraft.getMinecraft().theWorld;
+        World world = Minecraft.getMinecraft().theWorld;
 
         try {
             DataInputStream stream = new DataInputStream(new ByteArrayInputStream(packet.data));

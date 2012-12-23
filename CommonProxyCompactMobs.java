@@ -94,9 +94,5 @@ public class CommonProxyCompactMobs implements IGuiHandler {
         PacketDispatcher.sendPacketToAllPlayers(PacketParticleSpawn.buildParticleSpawnPacket(type, x, y, z, vx, vy, vz, number));
     }
     
-    public void spawnMob(EntityLiving entity)
-    {
-    	World world = FMLClientHandler.instance().getClient().theWorld;
-    	world.spawnEntityInWorld(entity);
-    }
+    
 }
