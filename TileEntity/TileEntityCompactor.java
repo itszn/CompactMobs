@@ -275,35 +275,9 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
                     	
                     	NBTTagCompound var2 = new NBTTagCompound();
                         entity.writeToNBT(var2);
-                        //entity.writeEntityToNBT(entityTags);
-                    	
-                    	/*if (entity instanceof EntitySlime)
-                    	{
-                    		EntitySlime entitySlime = (EntitySlime) entity;
-                    		entitySlime.writeEntityToNBT(entityTags);
-                    	}
-                    	else if (entity instanceof EntityAgeable)
-                    	{
-                    		if (entity instanceof EntitySheep) 
-                    		{
-                    			 EntitySheep entitySheep = (EntitySheep) entity;
-                    			 entitySheep.writeEntityToNBT(entityTags);
-                    		}
-                    		else if (entity instanceof EntityVillager)
-                    		{
-                    			EntityVillager entityVillager = (EntityVillager) entity;
-                    			entityVillager.writeEntityToNBT(entityTags);
-                    		}
-                    		else
-                    		{
-                    			EntityAgeable entityAge = (EntityAgeable) entity;
-                    			entityAge.writeEntityToNBT(entityTags);
-                    		}
-                    			
-                    	}*/
-                    	//entity.writeToNBT(entityTags);
+                       
                     	nbttag.setCompoundTag("entityTags", var2);
-                    	CompactMobsCore.instance.cmLog.info(var2.toString());
+                    	//CompactMobsCore.instance.cmLog.info(var2.toString());
                     }
                 
                     String name = entity.getEntityName();

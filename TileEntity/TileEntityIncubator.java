@@ -197,12 +197,20 @@ public class TileEntityIncubator extends TileEntity implements IInventory, IPowe
                                         age = 0;
                                     }
                                     nbttag.setInteger("entityGrowingAge", age);
+                                    NBTTagCompound var;
+                                    var = nbttag.getCompoundTag("entityTags");
+                                    var.setInteger("Age", age);
+                                    nbttag.setCompoundTag("entityTags",var);
                                 } else if (age < 0) {
                                     age = age + 200;
                                     if (age > 0) {
                                         age = 0;
                                     }
                                     nbttag.setInteger("entityGrowingAge", age);
+                                    NBTTagCompound var;
+                                    var = nbttag.getCompoundTag("entityTags");
+                                    var.setInteger("Age", age);
+                                    nbttag.setCompoundTag("entityTags",var);
                                 }
                                 ItemStacks[i].setTagCompound(nbttag);
                             }

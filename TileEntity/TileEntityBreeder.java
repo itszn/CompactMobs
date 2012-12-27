@@ -3,6 +3,7 @@ package compactMobs.TileEntity;
 import java.util.Random;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -312,17 +313,41 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
                                 nbttag3.setInteger("entityGrowingAge", -24000);
                                 nbttag3.setInteger("entityId", nbttag1.getInteger("entityId"));
                                 nbttag3.setString("name", nbttag1.getString("name"));
+                                
+                                NBTTagCompound var3 = new NBTTagCompound();
+                                EntityLiving entity = (EntityLiving) EntityList.createEntityByID(nbttag1.getInteger("entityId"), world);
+                                entity.writeToNBT(var3);
+                                world.removeEntity(entity);
+                                var3.setInteger("Age", -24000);
+                                
+                                NBTTagCompound var1, var2;
+                                var1 = nbttag1.getCompoundTag("entityTags");
+                                var2 = nbttag1.getCompoundTag("entityTags");
+                                
+                                var1.setInteger("Age", 6000);
+                                var2.setInteger("Age", 6000);
+                                
                                 if (nbttag1.getInteger("entityId") == 91) {
                                     if (worldObj.rand.nextBoolean()) {
                                         nbttag3.setInteger("entityColor", nbttag1.getInteger("entityColor"));
+                                        var3.setByte("Color",var1.getByte("Color"));
                                     } else {
                                         nbttag3.setInteger("entityColor", nbttag2.getInteger("entityColor"));
+                                        var3.setByte("Color",var2.getByte("Color"));
                                     }
                                 }
+                                
+                                child = new ItemStack(CompactMobsItems.fullMobHolder, 1, nbttag1.getInteger("entityId"));
+                                
+                                
+                               
+                                nbttag1.setCompoundTag("entityTags", var1);
+                                nbttag2.setCompoundTag("entityTags", var2);
+                            	nbttag3.setCompoundTag("entityTags", var3);
+                                child.setTagCompound(nbttag3);
                                 parent1.setTagCompound(nbttag1);
                                 parent2.setTagCompound(nbttag2);
-                                child = new ItemStack(CompactMobsItems.fullMobHolder, 1, nbttag1.getInteger("entityId"));
-                                child.setTagCompound(nbttag3);
+                                
                                 ItemStacks[stackNum1] = parent1;
                                 ItemStacks[stackNum2] = parent2;
                                 ItemStacks[stackNum3] = child;

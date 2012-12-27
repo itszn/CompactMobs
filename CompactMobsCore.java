@@ -10,6 +10,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Property;
+import buildcraft.core.network.PacketHandler;
+
+import cpw.mods.fml.common.Mod.PostInit;
 
 import compactMobs.Blocks.BlockBreeder;
 import compactMobs.Blocks.BlockCatalyst;
@@ -30,14 +33,15 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = { "CMC" })
-@Mod(modid = "CM", name = "CompactMobs", version = "1.2.2")
+@NetworkMod(clientSideRequired = true, serverSideRequired = true, channels = { "CMC" }, packetHandler = PacketHandler.class)
+@Mod(modid = "CM", name = "CompactMobs", version = "1.2.3", dependencies = "required-after:BuildCraft|Transport;required-after:BuildCraft|Builders;required-after:BuildCraft|Silicon;required-after:BuildCraft|Core;")
 public class CompactMobsCore {
 
     @Instance
@@ -70,7 +74,7 @@ public class CompactMobsCore {
     @PreInit
     public void loadConfiguration(FMLPreInitializationEvent evt) {
         cmLog.setParent(FMLLog.getLogger());
-        cmLog.info("Starting CompactMobs v1.2.2");
+        cmLog.info("Starting CompactMobs v1.2.3");
         tick = false;
         
         mainConfig = new Configuration(new File(evt.getModConfigurationDirectory(), "CompactMobs.cfg"));
@@ -136,9 +140,10 @@ public class CompactMobsCore {
 
     }
 
-    @Init
-    public void initialize(FMLInitializationEvent evt) {
-        Item ironGear = Item.ingotIron;
+    @PostInit
+    //public void initialize(FMLInitializationEvent evt) {
+    public void PostLoad(FMLPostInitializationEvent event) {
+    	Item ironGear = Item.ingotIron;
         Item goldGear = Item.ingotGold;
         Item diamondGear = Item.diamond;
 
@@ -156,9 +161,19 @@ public class CompactMobsCore {
             GameRegistry.addRecipe(new ItemStack(CompactMobsItems.handDecompactor,1), new Object[]{"p t", "ldr", " gr", 'p', Block.thinGlass, 't', Block.torchRedstoneActive, 'l', new ItemStack(Item.dyePowder, 1, 4), 'd', blockDecompactor, 'r', Item.redstone, 'g', diamondGear});
             GameRegistry.addRecipe(new ItemStack(blockCatalyst,1), new Object[]{"rdr", "ixi", "gsg", 'r', Item.redstone, 'd', diamondGear, 'i', Item.ingotIron, 'x', blockBreeder.dispenser, 'g', goldGear, 's', new ItemStack(Item.swordSteel, 1, 0)});
             GameRegistry.addRecipe(new ItemStack(CompactMobsItems.catalystCore,1), new Object[]{"idr", "geg", "rdi", 'i', Block.fenceIron, 'd', Item.diamond, 'g', Item.gunpowder, 'e', Item.eyeOfEnder, 'r', Item.redstone});
-        } catch (Exception ex) {
-            cmLog.info("NO BUILDCRAFT FOUND!!! NEEDED FOR COMPACTMOBS");
+        
+       } catch (Exception ex) {
+            	cmLog.info("Generic Buildcraft Item Check Failed, Attempting Direct");
+            	/*try {
+            		 ironGear = BuildCraftCore.ironGearItem;
+                     goldGear = BuildCraftCore.goldGearItem;
+                     diamondGear = BuildCraftCore.diamondGearItem;
+                     
+	            } catch (Exception exx) {
+	            	cmLog.info("No buildcraft detected at all. Using generic recipes, Warning, Compact Mobs may not work");
+	            }*/
         }
+        
 
     }
 
