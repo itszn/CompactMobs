@@ -121,7 +121,7 @@ public class HandheldDecompactor extends Item{
 					CompactMobsCore.instance.cmLog.info(String.valueOf(player.inventory.hasItemStack(tempStack)));
 					if (tempStack != null)
 					{
-						if (player.inventory.hasItemStack(tempStack) && player.inventory.hasItem(Item.coal.shiftedIndex))
+						if (player.inventory.hasItemStack(tempStack) && player.inventory.hasItem(Item.coal.itemID))
 						{
 							xVel = (double)(MathHelper.cos((player.rotationYaw+90) / 180.0F * (float)Math.PI) * -.05F);
 					    	zVel = (double)(MathHelper.sin((player.rotationYaw+90) / 180.0F * (float)Math.PI) * -.05F);
@@ -183,7 +183,7 @@ public class HandheldDecompactor extends Item{
 							
 							if (found && nbttag2.hasKey("entityTags") && nbttag2.hasKey("entityId") && found && space)
 							{
-								player.inventory.consumeInventoryItem(Item.coal.shiftedIndex);
+								player.inventory.consumeInventoryItem(Item.coal.itemID);
 								
 								player.inventory.setInventorySlotContents(spot2, null);
 								if (part)

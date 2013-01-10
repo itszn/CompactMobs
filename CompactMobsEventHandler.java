@@ -63,7 +63,7 @@ public class CompactMobsEventHandler {
 						if (stack.getItemDamage() <= stack.getItem().getMaxDamage()*.05 && stack.getItemDamage() != 0 )
 						{
 							charge = 0;
-							if (player.inventory.hasItem(Item.coal.shiftedIndex)&&player.inventory.hasItem(CompactMobsItems.mobHolder.shiftedIndex))
+							if (player.inventory.hasItem(Item.coal.itemID)&&player.inventory.hasItem(CompactMobsItems.mobHolder.itemID))
 							{
 								boolean space = false;
 								boolean useS1 = false;
@@ -97,11 +97,11 @@ public class CompactMobsEventHandler {
 									spawnParticles(player.worldObj, entity, player);
 									if (!useS1)
 									{
-										player.inventory.consumeInventoryItem(Item.coal.shiftedIndex);
+										player.inventory.consumeInventoryItem(Item.coal.itemID);
 									}
 									if (!useS2)
 									{
-										player.inventory.consumeInventoryItem(CompactMobsItems.mobHolder.shiftedIndex);
+										player.inventory.consumeInventoryItem(CompactMobsItems.mobHolder.itemID);
 									}
 									player.inventory.setInventorySlotContents(spot, compact(entity));
 								}
