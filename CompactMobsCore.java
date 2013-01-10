@@ -108,20 +108,20 @@ public class CompactMobsCore {
         blockIncubator = new BlockIncubator(incubatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockIncubator");
         blockCatalyst = new BlockCatalyst(catalystId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockCatalyst");
         
-        GameRegistry.registerBlock(blockCompactor);
+        GameRegistry.registerBlock(blockCompactor, "Compactor");
         LanguageRegistry.addName(blockCompactor, "Compactor");
         
         
-        GameRegistry.registerBlock(blockDecompactor);
+        GameRegistry.registerBlock(blockDecompactor, "Decompactor");
         LanguageRegistry.addName(blockDecompactor, "Decompactor");
         
-        GameRegistry.registerBlock(blockBreeder);
+        GameRegistry.registerBlock(blockBreeder, "Breeder");
         LanguageRegistry.addName(blockBreeder, "Breeder");
         
-        GameRegistry.registerBlock(blockIncubator);
+        GameRegistry.registerBlock(blockIncubator, "Incubator");
         LanguageRegistry.addName(blockIncubator, "Incubator");
         
-        GameRegistry.registerBlock(blockCatalyst);
+        GameRegistry.registerBlock(blockCatalyst, "Catalyst");
         LanguageRegistry.addName(blockCatalyst, "Catalyst");
 
         GameRegistry.registerTileEntity(TileEntityCompactor.class, "tileEntityCompactor");
