@@ -122,6 +122,7 @@ public class CompactMobsEventHandler {
 				    	
 				    	
 				    	//spawnParticles(player.worldObj, entity, player);
+				    	event.setCanceled(true);
 						
 					}
 				}
