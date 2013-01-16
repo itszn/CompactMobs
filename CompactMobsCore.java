@@ -41,7 +41,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 @NetworkMod(clientSideRequired = true, serverSideRequired = true, channels = { "CMC" }, packetHandler = PacketHandler.class)
-@Mod(modid = "CM", name = "CompactMobs", version = "1.2.3", dependencies = "required-after:BuildCraft|Transport;required-after:BuildCraft|Builders;required-after:BuildCraft|Silicon;required-after:BuildCraft|Core;")
+@Mod(modid = "CM", name = "CompactMobs", version = "1.2.4", dependencies = "required-after:BuildCraft|Transport;required-after:BuildCraft|Builders;required-after:BuildCraft|Silicon;required-after:BuildCraft|Core;")
 public class CompactMobsCore {
 
     @Instance
@@ -74,7 +74,7 @@ public class CompactMobsCore {
     @PreInit
     public void loadConfiguration(FMLPreInitializationEvent evt) {
         cmLog.setParent(FMLLog.getLogger());
-        cmLog.info("Starting CompactMobs v1.2.3");
+        cmLog.info("Starting CompactMobs v1.2.4");
         tick = false;
         
         mainConfig = new Configuration(new File(evt.getModConfigurationDirectory(), "CompactMobs.cfg"));

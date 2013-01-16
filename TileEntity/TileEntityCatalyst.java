@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -267,10 +268,16 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
 	                        entity.setPosition(this.xCoord + .5D, this.yCoord, this.zCoord - .5D);
 	                        CompactMobsCore.instance.proxy.spawnParticle("largesmoke", this.xCoord + .5D, this.yCoord + .5D, this.zCoord, 0, 0, -.1, 10);
 	                    }
-	
+	                    
+	                    if (entity instanceof EntityWither)
+	                    {
+	                    	world.spawnEntityInWorld(entity);
+	                    }
+	                    else
+	                    {	                    
 	                    entity.onDeath(DamageSource.generic);
 	                    entity.onDeath(DamageSource.generic);
-	
+	                    }
 	                }
 	
 	
