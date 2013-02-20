@@ -25,7 +25,7 @@ public class CompactMobsEventHandler {
 			if (event.target instanceof EntityLiving)
 			{
 				EntityLiving entity = (EntityLiving) event.target;
-				if (player.getCurrentEquippedItem() != null)
+				if (player.getCurrentEquippedItem() != null && EntityList.getEntityID(entity)!=0)
 				{
 					if (player.getCurrentEquippedItem().getItem() == CompactMobsItems.handCompactor)
 					{

@@ -239,12 +239,15 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
                     int id = nbttag.getInteger("entityId");
                     entity = (EntityLiving) EntityList.createEntityByID(id, world);
                     //entity = (EntityLiving) EntityList.createEntityFromNBT(newCompound, world);
-                    entity.readFromNBT(newCompound);
+                    
+                    for(int j=0; j<newCompound.getTags().toArray().length;j++)
+                    	System.out.println(newCompound.getTags().toArray()[j]);
+                    //entity.readFromNBT(newCompound);
                     
                     //entity = (EntityLiving) EntityList.createEntityFromNBT(newCompound, world);
 
                     //CompactMobsCore.instance.cmLog.info("dir: "+String.valueOf(dir));
-
+                    /*
                     Random random = new Random();
                     if (dir == 2) {
                         entity.setPosition(this.xCoord + .5D, this.yCoord, this.zCoord - .5D);
@@ -264,7 +267,7 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
                     }
 
                     world.spawnEntityInWorld(entity);
-
+					*/
                 } /*else if (nbttag.hasKey("entityId")) {
                     int id = nbttag.getInteger("entityId");
                     entity = (EntityLiving) EntityList.createEntityByID(id, world);

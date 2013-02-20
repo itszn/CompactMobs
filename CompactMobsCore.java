@@ -68,6 +68,7 @@ public class CompactMobsCore {
     public Property handDecompactorId;
     public Property catalystId;
     public Property catalystCoreId;
+    public Property autoOutput;
     @SidedProxy(clientSide = "compactMobs.ClientProxyCompactMobs", serverSide = "compactMobs.CommonProxyCompactMobs")
     public static CommonProxyCompactMobs proxy;
 
@@ -80,6 +81,7 @@ public class CompactMobsCore {
         mainConfig = new Configuration(new File(evt.getModConfigurationDirectory(), "CompactMobs.cfg"));
         try {
             mainConfig.load();
+            autoOutput = CompactMobsCore.mainConfig.get("options", "AutoOutput", true, "Outputs without redstone engines from all sides");
             compatorId = CompactMobsCore.mainConfig.get("block", "CompactorId", 3391);
             decompatorId = CompactMobsCore.mainConfig.get("block", "DecompactorId", 3392);
             breederId = CompactMobsCore.mainConfig.get("block", "BreederId", 3393);

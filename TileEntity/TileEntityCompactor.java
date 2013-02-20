@@ -201,7 +201,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
             if (!(var9 instanceof EntityPlayer) && !(var9 instanceof EntityDragon)) {
                 double var10 = this.getDistanceSqToEntity(var9);
 
-                if (var10 <= var6) {
+                if (var10 <= var6 && EntityList.getEntityID(var9)!=0) {
                     entity = var9;
                     var6 = var10;
                 }
@@ -209,6 +209,9 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
         }
         if (ItemStacks[0] != null && entity != null) {
             int id = EntityList.getEntityID(entity);
+            
+            
+            	
 
             //CompactMobsCore.instance.cmLog.info("1: " + String.valueOf(id));
 
