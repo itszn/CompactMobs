@@ -48,7 +48,7 @@ public class CompactMobsCore {
     public static CompactMobsCore instance;
     //hardcoded id of block
     public static int BlockID = 3391;
-    public boolean useFullTagCompound = true;
+    public static boolean useFullTagCompound = true;
     public static Block blocks;
     public static Block blockCompactor;
     public static Block blockDecompactor;
@@ -69,6 +69,7 @@ public class CompactMobsCore {
     public Property catalystId;
     public Property catalystCoreId;
     public Property autoOutput;
+    public static boolean doAutoOutput = true;
     @SidedProxy(clientSide = "compactMobs.ClientProxyCompactMobs", serverSide = "compactMobs.CommonProxyCompactMobs")
     public static CommonProxyCompactMobs proxy;
 
@@ -92,10 +93,11 @@ public class CompactMobsCore {
             handCompactorId = CompactMobsCore.mainConfig.get("item", "HandheldCompactorId", 3397);
             handDecompactorId = CompactMobsCore.mainConfig.get("item", "HandheldDecompactorId", 3398);
             catalystCoreId = CompactMobsCore.mainConfig.get("item", "CatalystCoreId", 3400);
-
+            
         } finally {
             mainConfig.save();
         }
+        	doAutoOutput = autoOutput.getBoolean(true);
     }
 
     @Init

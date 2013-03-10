@@ -14,6 +14,7 @@ import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
 
+import compactMobs.CompactMobsCore;
 import compactMobs.Utils;
 import compactMobs.Vect;
 import compactMobs.Items.CompactMobsItems;
@@ -22,6 +23,7 @@ public class TileEntityIncubator extends TileEntity implements IInventory, IPowe
 
     public ItemStack[] ItemStacks;
     IPowerProvider provider;
+    
     //protected Random rand;
 
     public TileEntityIncubator() {
@@ -29,7 +31,7 @@ public class TileEntityIncubator extends TileEntity implements IInventory, IPowe
         if (PowerFramework.currentFramework != null) {
             provider = PowerFramework.currentFramework.createPowerProvider();
         }
-        provider.configure(50, 25, 25, 25, 1000);
+        provider.configure(50, 25, 25, 25*5, 25*27);
     }
 
     @Override
@@ -47,6 +49,7 @@ public class TileEntityIncubator extends TileEntity implements IInventory, IPowe
                 if (nbttag != null) {
                     if (nbttag.hasKey("entityGrowingAge")) {
                         nbttag.setBoolean("inIncubator", true);
+                        nbttag.setBoolean("FertilityVisiable", true);
                         ItemStacks[i].setTagCompound(nbttag);
                     }
                 }
@@ -55,6 +58,8 @@ public class TileEntityIncubator extends TileEntity implements IInventory, IPowe
 
         return;
     }
+    
+    
 
     @Override
     public int getSizeInventory() {
@@ -170,9 +175,7 @@ public class TileEntityIncubator extends TileEntity implements IInventory, IPowe
 
     @Override
     public void doWork() {
-        if (provider.useEnergy(25, 25, true) < 25) {
-            return;
-        }
+    	
         World world = worldObj;
 
         /*
@@ -191,28 +194,31 @@ public class TileEntityIncubator extends TileEntity implements IInventory, IPowe
                             int age = nbttag.getInteger("entityGrowingAge");
                             //CompactMobsCore.instance.cmLog.info(String.valueOf(age));
                             if (age != 0) {
-                                if (age > 0) {
-                                    age = age - 100;
-                                    if (age < 0) {
-                                        age = 0;
-                                    }
-                                    nbttag.setInteger("entityGrowingAge", age);
-                                    NBTTagCompound var;
-                                    var = nbttag.getCompoundTag("entityTags");
-                                    var.setInteger("Age", age);
-                                    nbttag.setCompoundTag("entityTags",var);
-                                } else if (age < 0) {
-                                    age = age + 200;
-                                    if (age > 0) {
-                                        age = 0;
-                                    }
-                                    nbttag.setInteger("entityGrowingAge", age);
-                                    NBTTagCompound var;
-                                    var = nbttag.getCompoundTag("entityTags");
-                                    var.setInteger("Age", age);
-                                    nbttag.setCompoundTag("entityTags",var);
-                                }
-                                ItemStacks[i].setTagCompound(nbttag);
+                            	if (provider.useEnergy(25, 25, true) ==25)
+                            	{
+	                                if (age > 0) {
+	                                    age = age - 100;
+	                                    if (age < 0) {
+	                                        age = 0;
+	                                    }
+	                                    nbttag.setInteger("entityGrowingAge", age);
+	                                    NBTTagCompound var;
+	                                    var = nbttag.getCompoundTag("entityTags");
+	                                    var.setInteger("Age", age);
+	                                    nbttag.setCompoundTag("entityTags",var);
+	                                } else if (age < 0) {
+	                                    age = age + 200;
+	                                    if (age > 0) {
+	                                        age = 0;
+	                                    }
+	                                    nbttag.setInteger("entityGrowingAge", age);
+	                                    NBTTagCompound var;
+	                                    var = nbttag.getCompoundTag("entityTags");
+	                                    var.setInteger("Age", age);
+	                                    nbttag.setCompoundTag("entityTags",var);
+	                                }
+	                                ItemStacks[i].setTagCompound(nbttag);
+                            	}
                             }
                             if (age == 0) {
                                 int stackNum1 = -1;
@@ -238,7 +244,8 @@ public class TileEntityIncubator extends TileEntity implements IInventory, IPowe
                 }
             }
         }
-        dumpItems();
+        if (CompactMobsCore.doAutoOutput)
+        	dumpItems();
 
     }
 
@@ -305,13 +312,20 @@ public class TileEntityIncubator extends TileEntity implements IInventory, IPowe
 
     @Override
     public int getStartInventorySide(ForgeDirection side) {
-        // TODO Auto-generated method stub
+        if (side==ForgeDirection.DOWN || side==ForgeDirection.UP)
+        	return 0;
+        if (side==ForgeDirection.NORTH||side==ForgeDirection.EAST||side==ForgeDirection.WEST||side==ForgeDirection.SOUTH)
+        	return 27;
         return 0;
     }
 
     @Override
     public int getSizeInventorySide(ForgeDirection side) {
         // TODO Auto-generated method stub
-        return 27;
+    	if (side==ForgeDirection.DOWN || side==ForgeDirection.UP)
+        	return 27;
+        if (side==ForgeDirection.NORTH||side==ForgeDirection.EAST||side==ForgeDirection.WEST||side==ForgeDirection.SOUTH)
+        	return 27;
+        return 0;
     }
 }

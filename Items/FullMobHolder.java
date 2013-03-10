@@ -1,5 +1,7 @@
 package compactMobs.Items;
 
+import java.util.List;
+
 import net.minecraft.entity.EntityList;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -25,6 +27,30 @@ public class FullMobHolder extends Item {
     public boolean getShareTag() {
         return true;
     }
+    
+    @SuppressWarnings({ "all" })
+	// @Override (client only)
+	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean advanced) {
+		if (itemstack.hasTagCompound() && itemstack.getTagCompound().hasKey("FertilityVisiable")) {
+			NBTTagCompound nbttag = itemstack.getTagCompound();
+	        if (nbttag != null) {
+	            if (nbttag.hasKey("entityGrowingAge")) {
+                    float age = nbttag.getInteger("entityGrowingAge");
+                    int percent = 100;
+                	if (age >= 0) {
+                        percent = (int) Math.floor(((6000 - age) / 6000) * 100);
+                        list.add("Fertility " + String.valueOf(percent) + "%");
+                    }
+                    if (age < 0) {
+                        percent = (int) Math.floor((((-24000 - age) / -24000) * 100));
+                        list.add("Growth " + String.valueOf(percent) + "%");
+                    }
+                    
+                }
+	        }
+			
+		}
+	}
 
     @Override
     @SideOnly(Side.CLIENT)
@@ -34,27 +60,7 @@ public class FullMobHolder extends Item {
             if (nbttag.hasKey("name")) {
                 //String name = EntityList.getStringFromID(stack.getItemDamage());//nbttag.getString("name");
                 if (nbttag.hasKey("entityGrowingAge")) {
-                    if (nbttag.hasKey("inIncubator")) {
-                        //CompactMobsCore.instance.cmLog.info(String.valueOf(nbttag.getInteger("entityGrowingAge")));
-                        //CompactMobsCore.instance.cmLog.info(String.valueOf(nbttag.getBoolean("inIncubator")));
-                        float age = nbttag.getInteger("entityGrowingAge");
-                        //CompactMobsCore.instance.cmLog.info(String.valueOf(age)+ " "+ String.valueOf((-24000-age)) + " " + String.valueOf(((6000-age)/6000)));
-
-                        if (nbttag.getBoolean("inIncubator")) {
-                            if (age > 0) {
-                                int percent;
-                                percent = (int) Math.floor(((6000 - age) / 6000) * 100);
-                                return "Compact " + nbttag.getString("name") + " (" + String.valueOf(percent) + "%)";
-                                //return String.format("Compact %1 (%2(.1f)%)", nbttag.getString("name"), percent);
-                            }
-                            if (age < 0) {
-                                int percent;
-                                percent = (int) Math.floor((((-24000 - age) / -24000) * 100));
-                                return "Compact Baby " + nbttag.getString("name") + " (" + String.valueOf(percent) + "%)";
-                                //return String.format("Compact Baby %1 (%2(.1f)%)", nbttag.getString("name"), percent);
-                            }
-                        }
-                    }
+                    
                     if (nbttag.getInteger("entityGrowingAge") < 0) {
 
                         return "Compact Baby " + nbttag.getString("name");

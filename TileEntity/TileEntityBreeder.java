@@ -28,13 +28,14 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
     public ItemStack[] ItemStacks;
     IPowerProvider provider;
     //protected Random rand;
+    boolean powered = false;
 
     public TileEntityBreeder() {
         ItemStacks = new ItemStack[48];
         if (PowerFramework.currentFramework != null) {
             provider = PowerFramework.currentFramework.createPowerProvider();
         }
-        provider.configure(50, 25, 25, 25, 1000);
+        provider.configure(50, 25, 25, 25, 25);
     }
 
     @Override
@@ -266,9 +267,16 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
 
     @Override
     public void doWork() {
-        if (provider.useEnergy(25, 25, true) < 25) {
-            return;
-        }
+    	if (!powered)
+    	{
+    		if (provider.useEnergy(25, 25, true) < 25) {
+	            return;
+	        }
+    		else
+    		{
+    			powered = true;
+    		}
+    	}
         World world = worldObj;
 
         ItemStack wheat = ItemStacks[19];
@@ -306,7 +314,8 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
                         if (nbttag1.getInteger("entityGrowingAge") == 0 && nbttag1.getInteger("entityGrowingAge") == 0) {
                             //CompactMobsCore.instance.cmLog.info("3: "+String.valueOf(nbttag1.getInteger("entityId")));
                             //CompactMobsCore.instance.cmLog.info("4: "+String.valueOf(nbttag2.getInteger("entityId")));
-                            if (nbttag1.getInteger("entityId") != 120 && nbttag1.getInteger("entityId") == nbttag2.getInteger("entityId")) {
+                            if (nbttag1.getInteger("entityId") != 120 && nbttag1.getInteger("entityId") == nbttag2.getInteger("entityId") && powered) {
+                            	powered = false;
                                 NBTTagCompound nbttag3 = new NBTTagCompound();
                                 nbttag1.setInteger("entityGrowingAge", 6000);
                                 nbttag2.setInteger("entityGrowingAge", 6000);

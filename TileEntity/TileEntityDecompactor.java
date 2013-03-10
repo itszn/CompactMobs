@@ -27,13 +27,14 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
 
     public ItemStack[] ItemStacks;
     IPowerProvider provider;
+    boolean powered = false;
 
     public TileEntityDecompactor() {
         ItemStacks = new ItemStack[30];
         if (PowerFramework.currentFramework != null) {
             provider = PowerFramework.currentFramework.createPowerProvider();
         }
-        provider.configure(50, 25, 25, 25, 1000);
+        provider.configure(50, 25, 25, 25, 25);
     }
 
     @Override
@@ -172,9 +173,16 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
 
     @Override
     public void doWork() {
-        if (provider.useEnergy(25, 25, true) < 25) {
-            return;
-        }
+    	/*if (!powered)
+    	{
+    		if (provider.useEnergy(25, 25, true) == 25) {
+	            return;
+	        }
+    		else
+    		{
+    			powered = true;
+    		}
+    	}*/
         World world = worldObj;
         //double radius = 3.0D;
         //List list1 = world.getEntitiesWithinAABB(EntityCreature.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double)this.xCoord-radius, (double)this.yCoord-1.0D, (double)this.zCoord-radius, (double)this.xCoord+radius, (double)this.yCoord+1.0D, (double)this.zCoord+radius));
@@ -231,6 +239,8 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
 
                 EntityLiving entity = null;
                 if (CompactMobsCore.instance.useFullTagCompound && nbttag.hasKey("entityTags")) {
+                	if(provider.useEnergy(25, 25, true) == 25)
+                	{
                     //CompactMobsCore.instance.cmLog.info(String.valueOf(nbttag.hasKey("compound")));
 
 
@@ -240,14 +250,14 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
                     entity = (EntityLiving) EntityList.createEntityByID(id, world);
                     //entity = (EntityLiving) EntityList.createEntityFromNBT(newCompound, world);
                     
-                    for(int j=0; j<newCompound.getTags().toArray().length;j++)
-                    	System.out.println(newCompound.getTags().toArray()[j]);
-                    //entity.readFromNBT(newCompound);
+                    //for(int j=0; j<newCompound.getTags().toArray().length;j++)
+                    	//System.out.println(newCompound.getTags().toArray()[j]);
+                    entity.readFromNBT(newCompound);
                     
                     //entity = (EntityLiving) EntityList.createEntityFromNBT(newCompound, world);
 
                     //CompactMobsCore.instance.cmLog.info("dir: "+String.valueOf(dir));
-                    /*
+                    
                     Random random = new Random();
                     if (dir == 2) {
                         entity.setPosition(this.xCoord + .5D, this.yCoord, this.zCoord - .5D);
@@ -267,81 +277,9 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
                     }
 
                     world.spawnEntityInWorld(entity);
-					*/
-                } /*else if (nbttag.hasKey("entityId")) {
-                    int id = nbttag.getInteger("entityId");
-                    entity = (EntityLiving) EntityList.createEntityByID(id, world);
-
-                    //CompactMobsCore.instance.cmLog.info("dir: "+String.valueOf(dir));
-                    if (dir == 2) {
-                        entity.setPosition(this.xCoord + .5D, this.yCoord, this.zCoord - .5D);
-                        CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord + .5D, this.yCoord + .5D, this.zCoord + 1D, 0, 0, -.1, 10);
-                    } else if (dir == 3) {
-                        entity.setPosition(this.xCoord + .5D, this.yCoord, this.zCoord + 1.5D);
-                        CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord + .5D, this.yCoord + .5D, this.zCoord, 0, 0, .1, 10);
-                    } else if (dir == 4) {
-                        entity.setPosition(this.xCoord - .5D, this.yCoord, this.zCoord + .5D);
-                        CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord, this.yCoord + .5D, this.zCoord + .5D, -.1, 0, 0, 10);
-                    } else if (dir == 5) {
-                        entity.setPosition(this.xCoord + 1.5D, this.yCoord, this.zCoord + .5D);
-                        CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord + 1D, this.yCoord + .5D, this.zCoord + .5D, .1, 0, 0, 10);
-                    } else {
-                        entity.setPosition(this.xCoord + .5D, this.yCoord, this.zCoord - .5D);
-                        CompactMobsCore.instance.proxy.spawnParticle("explode", this.xCoord + .5D, this.yCoord + .5D, this.zCoord + 1D, 0, 0, -.1, 10);
-                    }
-
-                    if (nbttag.hasKey("entityHealth")) {
-                        int health = nbttag.getInteger("entityHealth");
-                        entity.setEntityHealth(health);
-                    }
-
-                    if (entity instanceof EntitySlime) {
-                        EntitySlime entitySlime = (EntitySlime) entity;
-                        if (nbttag.hasKey("entitySize")) {
-                            int size = nbttag.getInteger("entitySize");
-                            entitySlime.func_85034_r(size);
-                        }
-                        world.spawnEntityInWorld(entitySlime);
-
-                    } else {
-                        if (entity instanceof EntityAgeable) {
-                            EntityAgeable entityAgeable = (EntityAgeable) entity;
-                            if (nbttag.hasKey("entityGrowingAge")) {
-                                int age = nbttag.getInteger("entityGrowingAge");
-                                entityAgeable.setGrowingAge(age);
-                            }
-                            if (entityAgeable instanceof EntitySheep) {
-                                EntitySheep entitySheep = (EntitySheep) entityAgeable;
-                                if (nbttag.hasKey("entitySheared")) {
-                                    boolean sheared = nbttag.getBoolean("entitySheared");
-                                    entitySheep.setSheared(sheared);
-                                }
-                                if (nbttag.hasKey("entityColor")) {
-                                    int color = nbttag.getInteger("entityColor");
-                                    entitySheep.setFleeceColor(color);
-                                }
-                                world.spawnEntityInWorld(entitySheep);
-
-                            } else if (entityAgeable instanceof EntityVillager) {
-                                EntityVillager entityVillager = (EntityVillager) entityAgeable;
-                                if (nbttag.hasKey("entityProfession")) {
-                                    int profession = nbttag.getInteger("entityProfession");
-                                    entityVillager.setProfession(profession);
-                                }
-                                world.spawnEntityInWorld(entityVillager);
-                            } else {
-                                world.spawnEntityInWorld(entityAgeable);
-                            }
-                        } else {
-                            world.spawnEntityInWorld(entity);
-                        }
-                    }
-                } else {
-                    return;
-                }*/
-
-
-
+					}	
+                	
+                }
             }
             //int id = EntityList.getEntityID(entity);
 
@@ -364,8 +302,8 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
             }
 
         }
-        dumpItems();
-
+        if (CompactMobsCore.doAutoOutput)
+        	dumpItems();
     }
 
     public void dumpItems() {
@@ -431,13 +369,20 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
 
     @Override
     public int getStartInventorySide(ForgeDirection side) {
-        // TODO Auto-generated method stub
+        if (side==ForgeDirection.DOWN || side==ForgeDirection.UP)
+        	return 27;
+        if (side==ForgeDirection.NORTH||side==ForgeDirection.EAST||side==ForgeDirection.WEST||side==ForgeDirection.SOUTH)
+        	return 0;
         return 0;
     }
 
     @Override
     public int getSizeInventorySide(ForgeDirection side) {
         // TODO Auto-generated method stub
-        return 27;
+    	if (side==ForgeDirection.DOWN || side==ForgeDirection.UP)
+        	return 3;
+        if (side==ForgeDirection.NORTH||side==ForgeDirection.EAST||side==ForgeDirection.WEST||side==ForgeDirection.SOUTH)
+        	return 27;
+        return 0;
     }
 }

@@ -39,7 +39,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
         if (PowerFramework.currentFramework != null) {
             provider = PowerFramework.currentFramework.createPowerProvider();
         }
-        provider.configure(50, 25, 25, 25, 1000);
+        provider.configure(50, 25, 25, 25, 25);
     }
 
     @Override
@@ -183,9 +183,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 
     @Override
     public void doWork() {
-        if (provider.useEnergy(25, 25, true) < 25) {
-            return;
-        }
+    	
         World world = worldObj;
         double radius = 3.0D;
         List list1 = world.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double) this.xCoord - radius, (double) this.yCoord - 1.0D, (double) this.zCoord - radius, (double) this.xCoord + radius, (double) this.yCoord + 1.0D, (double) this.zCoord + radius));
@@ -210,7 +208,6 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
         if (ItemStacks[0] != null && entity != null) {
             int id = EntityList.getEntityID(entity);
             
-            
             	
 
             //CompactMobsCore.instance.cmLog.info("1: " + String.valueOf(id));
@@ -229,71 +226,74 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
                 }
 
                 if (empty > 0) {
+                	if (provider.useEnergy(25, 25, true)==25)
+                	{
 
-                    ItemStack holder = new ItemStack(CompactMobsItems.fullMobHolder, 1);
-                    //FullMobHolder holder = new FullMobHolder(CompactMobsItems.fullMobHolder.shiftedIndex);
-                    NBTTagCompound nbttag = holder.stackTagCompound;
-                    if (nbttag == null) {
-                        nbttag = new NBTTagCompound();
-                    }
-                    nbttag.setInteger("entityId", id);
-                    
-                    if (entity instanceof EntityAgeable) {
-                        EntityAgeable entityAge = (EntityAgeable) entity;
-                        nbttag.setInteger("entityGrowingAge", entityAge.getGrowingAge());
-                    }
+	                    ItemStack holder = new ItemStack(CompactMobsItems.fullMobHolder, 1);
+	                    //FullMobHolder holder = new FullMobHolder(CompactMobsItems.fullMobHolder.shiftedIndex);
+	                    NBTTagCompound nbttag = holder.stackTagCompound;
+	                    if (nbttag == null) {
+	                        nbttag = new NBTTagCompound();
+	                    }
+	                    nbttag.setInteger("entityId", id);
+	                    
+	                    if (entity instanceof EntityAgeable) {
+	                        EntityAgeable entityAge = (EntityAgeable) entity;
+	                        nbttag.setInteger("entityGrowingAge", entityAge.getGrowingAge());
+	                    }
+	
+	                    if (entity instanceof EntitySheep) {
+	                        EntitySheep entitySheep = (EntitySheep) entity;
+	                        nbttag.setBoolean("entitySheared", entitySheep.getSheared());
+	                        nbttag.setInteger("entityColor", entitySheep.getFleeceColor());
+	                        
+	                    }
 
-                    if (entity instanceof EntitySheep) {
-                        EntitySheep entitySheep = (EntitySheep) entity;
-                        nbttag.setBoolean("entitySheared", entitySheep.getSheared());
-                        nbttag.setInteger("entityColor", entitySheep.getFleeceColor());
-                        
-                    }
-                 
-                    /*nbttag.setInteger("entityHealth", entity.getHealth());
-
-                    if (entity instanceof EntitySlime) {
-                        EntitySlime entitySlime = (EntitySlime) entity;
-                        nbttag.setInteger("entitySize", entitySlime.getSlimeSize());
-                    }
-                    if (entity instanceof EntityAgeable) {
-                        EntityAgeable entityAge = (EntityAgeable) entity;
-                        nbttag.setInteger("entityGrowingAge", entityAge.getGrowingAge());
-                    }
-
-                    if (entity instanceof EntitySheep) {
-                        EntitySheep entitySheep = (EntitySheep) entity;
-                        nbttag.setBoolean("entitySheared", entitySheep.getSheared());
-                        nbttag.setInteger("entityColor", entitySheep.getFleeceColor());
-                        
-                    }
-                    if (entity instanceof EntityVillager) {
-                        EntityVillager entityVillager = (EntityVillager) entity;
-                        nbttag.setInteger("entityProfession", entityVillager.getProfession());
-                        //nbttag.setCompoundTag("Offers", entityVillager.get)
-                    }*/
-                    if (CompactMobsCore.instance.useFullTagCompound) {
-                    	NBTTagCompound entityTags = new NBTTagCompound();
-                    	//entityTags=entity.;
-                    	
-                    	NBTTagCompound var2 = new NBTTagCompound();
-                        entity.writeToNBT(var2);
-                       
-                    	nbttag.setCompoundTag("entityTags", var2);
-                    	//CompactMobsCore.instance.cmLog.info(var2.toString());
-                    }
-                
-                    String name = entity.getEntityName();
-                    nbttag.setString("name", name);
-                    holder.setItemDamage(id);
-
-                    spawnParticles(world, entity.posX, entity.posY, entity.posZ);
-                    //spawnParticles(world, entity.posX, entity.posY, entity.posZ);
-
-
-                    holder.setTagCompound(nbttag);
-                    ItemStacks[var3] = holder;
-                    world.removeEntity(entity);
+	                    world.removeEntity(entity);
+	                 
+	                    /*nbttag.setInteger("entityHealth", entity.getHealth());
+	
+	                    if (entity instanceof EntitySlime) {
+	                        EntitySlime entitySlime = (EntitySlime) entity;
+	                        nbttag.setInteger("entitySize", entitySlime.getSlimeSize());
+	                    }
+	                    if (entity instanceof EntityAgeable) {
+	                        EntityAgeable entityAge = (EntityAgeable) entity;
+	                        nbttag.setInteger("entityGrowingAge", entityAge.getGrowingAge());
+	                    }
+	
+	                    if (entity instanceof EntitySheep) {
+	                        EntitySheep entitySheep = (EntitySheep) entity;
+	                        nbttag.setBoolean("entitySheared", entitySheep.getSheared());
+	                        nbttag.setInteger("entityColor", entitySheep.getFleeceColor());
+	                        
+	                    }
+	                    if (entity instanceof EntityVillager) {
+	                        EntityVillager entityVillager = (EntityVillager) entity;
+	                        nbttag.setInteger("entityProfession", entityVillager.getProfession());
+	                        //nbttag.setCompoundTag("Offers", entityVillager.get)
+	                    }*/
+	                    if (CompactMobsCore.instance.useFullTagCompound) {
+	                    	NBTTagCompound entityTags = new NBTTagCompound();
+	                    	//entityTags=entity.;
+	                    	
+	                    	NBTTagCompound var2 = new NBTTagCompound();
+	                        entity.writeToNBT(var2);
+	                       
+	                    	nbttag.setCompoundTag("entityTags", var2);
+	                    	//CompactMobsCore.instance.cmLog.info(var2.toString());
+	                    }
+	                
+	                    String name = entity.getEntityName();
+	                    nbttag.setString("name", name);
+	                    holder.setItemDamage(id);
+	
+	                    spawnParticles(world, entity.posX, entity.posY, entity.posZ);
+	                    //spawnParticles(world, entity.posX, entity.posY, entity.posZ);
+	
+	
+	                    holder.setTagCompound(nbttag);
+	                    ItemStacks[var3] = holder;
 
 
 
@@ -315,6 +315,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
                      * String.valueOf(test));
 					}
                      */
+                	}
                 }
 
                 /*
@@ -334,7 +335,8 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
                 }
             }
         }
-        dumpItems();
+        if (CompactMobsCore.doAutoOutput)
+        	dumpItems();
         //worldObj.spawnParticle("smoke", this.xCoord+1.5D, this.yCoord+.5D, this.zCoord+.5, -.1, 0, 0);
         //spawnParticles(this.worldObj, this.xCoord+1, this.yCoord, this.zCoord);
         //spawnParticles(this.worldObj, this.xCoord+1, this.yCoord, this.zCoord);
@@ -432,13 +434,20 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 
     @Override
     public int getStartInventorySide(ForgeDirection side) {
-        // TODO Auto-generated method stub
+        if (side==ForgeDirection.DOWN || side==ForgeDirection.UP)
+        	return 0;
+        if (side==ForgeDirection.NORTH||side==ForgeDirection.EAST||side==ForgeDirection.WEST||side==ForgeDirection.SOUTH)
+        	return 1;
         return 0;
     }
 
     @Override
     public int getSizeInventorySide(ForgeDirection side) {
         // TODO Auto-generated method stub
-        return 1;
+    	if (side==ForgeDirection.DOWN || side==ForgeDirection.UP)
+        	return 1;
+        if (side==ForgeDirection.NORTH||side==ForgeDirection.EAST||side==ForgeDirection.WEST||side==ForgeDirection.SOUTH)
+        	return 27;
+        return 0;
     }
 }

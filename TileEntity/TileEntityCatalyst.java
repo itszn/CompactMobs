@@ -30,13 +30,14 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
     public ItemStack[] ItemStacks;
     IPowerProvider provider;
     //protected Random rand;
+    boolean powered = false;
 
     public TileEntityCatalyst() {
         ItemStacks = new ItemStack[31];
         if (PowerFramework.currentFramework != null) {
             provider = PowerFramework.currentFramework.createPowerProvider();
         }
-        provider.configure(50, 25, 25, 25, 1000);
+        provider.configure(50, 200, 200, 200, 200);
     }
 
 
@@ -176,9 +177,16 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
 
     @Override
     public void doWork() {
-        if (provider.useEnergy(25, 25, true) < 25) {
-            return;
-        }
+    	if (!powered)
+    	{
+    		if (provider.useEnergy(25, 25, true) < 25) {
+	            return;
+	        }
+    		else
+    		{
+    			powered = true;
+    		}
+    	}
         World world = worldObj;
         //double radius = 3.0D;
         //List list1 = world.getEntitiesWithinAABB(EntityCreature.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double)this.xCoord-radius, (double)this.yCoord-1.0D, (double)this.zCoord-radius, (double)this.xCoord+radius, (double)this.yCoord+1.0D, (double)this.zCoord+radius));
@@ -232,7 +240,8 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
         	if (ItemStacks[30].getItem()==CompactMobsItems.catalystCore)
         	{
 	            NBTTagCompound nbttag = stack.getTagCompound();
-	            if (nbttag != null) {
+	            if (nbttag != null && powered) {
+	            	powered = false;
 	                int dir = world.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
 	
 	                EntityLiving entity = null;
