@@ -247,7 +247,18 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
 
                     NBTTagCompound newCompound = nbttag.getCompoundTag("entityTags");
                     int id = nbttag.getInteger("entityId");
-                    entity = (EntityLiving) EntityList.createEntityByID(id, world);
+                    //System.out.println(newCompound.getCompoundTag("ForgeData").hasKey("mobcage"));
+                    if (newCompound.getCompoundTag("ForgeData").hasKey("mobcage"))
+                    {
+                    	entity = (EntityLiving) EntityList.createEntityByName(newCompound.getCompoundTag("ForgeData").getString("name"), world);
+                    }
+                    else {
+                    	entity = (EntityLiving) EntityList.createEntityByID(id, world);
+                    }
+                    
+                      
+                    
+                    
                     //entity = (EntityLiving) EntityList.createEntityFromNBT(newCompound, world);
                     
                     //for(int j=0; j<newCompound.getTags().toArray().length;j++)

@@ -58,15 +58,21 @@ public class FullMobHolder extends Item {
         NBTTagCompound nbttag = stack.getTagCompound();
         if (nbttag != null) {
             if (nbttag.hasKey("name")) {
+            	String name = nbttag.getString("name");
+            	
+            	if (name.startsWith("entity.SoulShards.Spawned"))
+            	{
+            		name = name.split("entity.SoulShards.Spawned")[1].split(".name")[0];
+            	}
                 //String name = EntityList.getStringFromID(stack.getItemDamage());//nbttag.getString("name");
                 if (nbttag.hasKey("entityGrowingAge")) {
                     
                     if (nbttag.getInteger("entityGrowingAge") < 0) {
 
-                        return "Compact Baby " + nbttag.getString("name");
+                        return "Compact Baby " + name;
                     }
                 }
-                return "Compact " + nbttag.getString("name");
+                return "Compact " + name;
             } else {
                 if (stack.getItemDamage() > 0) {
                     return "Sort By Compact " + EntityList.getStringFromID(stack.getItemDamage());

@@ -33,6 +33,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
     public ItemStack[] ItemStacks;
     IPowerProvider provider;
     boolean drawParticle;
+    boolean compressing = false;
 
     public TileEntityCompactor() {
         ItemStacks = new ItemStack[28];
@@ -183,7 +184,9 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 
     @Override
     public void doWork() {
-    	
+    	if (this.compressing)
+    		return;
+    	this.compressing = true;
         World world = worldObj;
         double radius = 3.0D;
         List list1 = world.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double) this.xCoord - radius, (double) this.yCoord - 1.0D, (double) this.zCoord - radius, (double) this.xCoord + radius, (double) this.yCoord + 1.0D, (double) this.zCoord + radius));
@@ -191,23 +194,50 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
         EntityLiving entity = null;
         double var6 = Double.MAX_VALUE;
         Iterator entitys = list1.iterator();
+        boolean shard = false;
+        String s = "";
 
         while (entitys.hasNext()) {
 
             EntityLiving var9 = (EntityLiving) entitys.next();
-
-            if (!(var9 instanceof EntityPlayer) && !(var9 instanceof EntityDragon)) {
+            
+            if (!(var9 instanceof EntityPlayer) && !(var9 instanceof EntityDragon) && !entity.isDead) {
                 double var10 = this.getDistanceSqToEntity(var9);
 
                 if (var10 <= var6 && EntityList.getEntityID(var9)!=0) {
                     entity = var9;
                     var6 = var10;
+                    //System.out.println(EntityList.getEntityString(var9));
+                }
+                else
+                {
+                	
+                }
+                if (EntityList.getEntityID(var9)==0 && var9.getEntityData() != null)
+                {
+                	if (var9.getEntityData().hasKey("mobcage"))
+                	{
+                		s = EntityList.getEntityString(var9);
+                		
+                		if (s.startsWith("SoulShards.Spawned"))
+                		{
+                			s = s.split("SoulShards.Spawned")[1];
+                			shard = true;
+                			NBTTagCompound shardtag = var9.getEntityData();
+                			shardtag.setString("name", s);
+                			
+                			entity = var9;
+                            var6 = var10;
+                			//System.out.println(s);
+                		}
+                	}
+                	
                 }
             }
         }
         if (ItemStacks[0] != null && entity != null) {
             int id = EntityList.getEntityID(entity);
-            
+            entity.isDead=true;
             	
 
             //CompactMobsCore.instance.cmLog.info("1: " + String.valueOf(id));
@@ -250,6 +280,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 	                    }
 
 	                    world.removeEntity(entity);
+	                    
 	                 
 	                    /*nbttag.setInteger("entityHealth", entity.getHealth());
 	
@@ -293,6 +324,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 	
 	
 	                    holder.setTagCompound(nbttag);
+	                    System.out.println("Slot: "+var3);
 	                    ItemStacks[var3] = holder;
 
 
@@ -327,6 +359,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
                  * break; }
 		        }
                  */
+                
 
                 if (ItemStacks[0].stackSize > 1) {
                     ItemStacks[0] = new ItemStack(ItemStacks[0].getItem(), ItemStacks[0].stackSize - 1);
@@ -341,7 +374,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
         //spawnParticles(this.worldObj, this.xCoord+1, this.yCoord, this.zCoord);
         //spawnParticles(this.worldObj, this.xCoord+1, this.yCoord, this.zCoord);
         //this.worldObj.spawnParticle("smoke", this.xCoord+1.5D, this.yCoord+.5D, this.zCoord+.5, -.1, 0, 0);
-
+        this.compressing = false;
     }
 
     public void spawnParticles(World world, double x, double y, double z) {
