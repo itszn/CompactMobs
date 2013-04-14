@@ -106,11 +106,11 @@ public class CompactMobsCore {
         CompactMobsItems.createInstance();
         NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
-        blockCompactor = new BlockCompactor(compatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockCompactor");
-        blockDecompactor = new BlockDecompactor(decompatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockDecompactor");
-        blockBreeder = new BlockBreeder(breederId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockBreeder");
-        blockIncubator = new BlockIncubator(incubatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockIncubator");
-        blockCatalyst = new BlockCatalyst(catalystId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F).setBlockName("blockCatalyst");
+        blockCompactor = new BlockCompactor(compatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F);
+        blockDecompactor = new BlockDecompactor(decompatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F);
+        blockBreeder = new BlockBreeder(breederId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F);
+        blockIncubator = new BlockIncubator(incubatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F);
+        blockCatalyst = new BlockCatalyst(catalystId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F);
         
         GameRegistry.registerBlock(blockCompactor, "Compactor");
         LanguageRegistry.addName(blockCompactor, "Compactor");
@@ -160,10 +160,10 @@ public class CompactMobsCore {
             GameRegistry.addRecipe(new ItemStack(blockDecompactor, 1), new Object[]{"oro", "ild", "grg", 'o', ironGear, 'r', Item.redstone, 'i', Item.ingotIron, 'l', Block.blockLapis, 'd', Block.dispenser, 'g', goldGear});
             GameRegistry.addRecipe(new ItemStack(CompactMobsItems.mobHolder, 2), new Object[]{"hhh", "ibi", "sss", 'h', new ItemStack(Block.stoneSingleSlab, 1, 0), 'i', Item.ingotIron, 'b', Block.fenceIron, 's', Block.stone});
             GameRegistry.addRecipe(new ItemStack(blockBreeder, 1), new Object[]{"oho", "iwi", "gag", 'o', ironGear, 'h', CompactMobsItems.mobHolder, 'i', Item.ingotIron, 'w', Item.wheat, 'g', goldGear, 'a', new ItemStack(Item.appleGold, 1, 0)});
-            GameRegistry.addRecipe(new ItemStack(blockIncubator, 1), new Object[]{"oco", "ifi", "gbg", 'o', ironGear, 'c', Block.chest, 'i', Item.ingotIron, 'f', Block.stoneOvenIdle, 'g', goldGear, 'b', Item.blazePowder});
+            GameRegistry.addRecipe(new ItemStack(blockIncubator, 1), new Object[]{"oco", "ifi", "gbg", 'o', ironGear, 'c', Block.chest, 'i', Item.ingotIron, 'f', Block.furnaceIdle, 'g', goldGear, 'b', Item.blazePowder});
             GameRegistry.addRecipe(new ItemStack(CompactMobsItems.handCompactor,1), new Object[]{"d t", "rch", "dgr", 'd', new ItemStack(Item.dyePowder, 1, 1), 't', Block.torchRedstoneActive, 'r', Item.redstone, 'c', blockCompactor, 'h', CompactMobsItems.mobHolder, 'g', diamondGear});
             GameRegistry.addRecipe(new ItemStack(CompactMobsItems.handDecompactor,1), new Object[]{"p t", "ldr", " gr", 'p', Block.thinGlass, 't', Block.torchRedstoneActive, 'l', new ItemStack(Item.dyePowder, 1, 4), 'd', blockDecompactor, 'r', Item.redstone, 'g', diamondGear});
-            GameRegistry.addRecipe(new ItemStack(blockCatalyst,1), new Object[]{"rdr", "ixi", "gsg", 'r', Item.redstone, 'd', diamondGear, 'i', Item.ingotIron, 'x', blockBreeder.dispenser, 'g', goldGear, 's', new ItemStack(Item.swordSteel, 1, 0)});
+            GameRegistry.addRecipe(new ItemStack(blockCatalyst,1), new Object[]{"rdr", "ixi", "gsg", 'r', Item.redstone, 'd', diamondGear, 'i', Item.ingotIron, 'x', blockBreeder.dispenser, 'g', goldGear, 's', new ItemStack(Item.swordIron, 1, 0)});
             GameRegistry.addRecipe(new ItemStack(CompactMobsItems.catalystCore,1), new Object[]{"idr", "geg", "rdi", 'i', Block.fenceIron, 'd', Item.diamond, 'g', Item.gunpowder, 'e', Item.eyeOfEnder, 'r', Item.redstone});
         
        } catch (Exception ex) {

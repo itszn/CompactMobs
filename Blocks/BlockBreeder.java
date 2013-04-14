@@ -10,6 +10,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.core.Position;
@@ -20,10 +21,9 @@ import compactMobs.Utils;
 import compactMobs.TileEntity.TileEntityBreeder;
 
 public class BlockBreeder extends BlockContainer {
-
+	
     public BlockBreeder(int par1, Material par2Material) {
         super(par1, par2Material);
-        super.blockIndexInTexture = 4;
         this.setLightOpacity(10);
         this.setCreativeTab(CreativeTabs.tabRedstone);
 
@@ -44,24 +44,26 @@ public class BlockBreeder extends BlockContainer {
     public boolean isOpaqueCube() {
         return true;
     }
-
+    
+    private Icon sideTex;
+    private Icon topTex;
     @Override
-    public String getTextureFile() {
-        return DefaultProps.BLOCK_TEXTURES + "/blocks.png";
+    public void registerIcons(IconRegister par1IconRgeister) {
+    	
     }
-
+    
     @Override
-    public int getBlockTextureFromSide(int i) {
+    public Icon getBlockTextureFromSide(int i) {
         switch (i) {
             case 0:
                 //bottom
-                return 8;
+                return sideTex;//8
             case 1:
                 //top
-                return 8;
+                return sideTex;//8
             default:
                 //side
-                return 7;
+                return topTex;//7
         }
     }
 
