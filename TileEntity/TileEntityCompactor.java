@@ -27,13 +27,16 @@ import compactMobs.CompactMobsCore;
 import compactMobs.Utils;
 import compactMobs.Vect;
 import compactMobs.Items.CompactMobsItems;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityCompactor extends TileEntity implements IInventory, IPowerReceptor, ISidedInventory {
 
     public ItemStack[] ItemStacks;
     IPowerProvider provider;
     boolean drawParticle;
-    boolean compressing = false;
+    boolean compacted = false;
+    Entity lastEntity = null;
 
     public TileEntityCompactor() {
         ItemStacks = new ItemStack[28];
@@ -42,7 +45,8 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
         }
         provider.configure(50, 25, 25, 25, 25);
     }
-
+    
+    
     @Override
     public void updateEntity() {
 
@@ -51,6 +55,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 
             receptor.getPowerProvider().update(receptor);
         }
+        compacted = false;
         //worldObj.spawnParticle("smoke", this.xCoord+1.5D, this.yCoord+.5D, this.zCoord+.5, -.1, 0, 0);
         //this.worldObj.spawnParticle("smoke", this.xCoord+1.5D, this.yCoord+.5D, this.zCoord+.5, -.1, 0, 0);
 
@@ -67,6 +72,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
          * { ItemStacks[0] = null; } }
 		}
          */
+        //compact();
         return;
     }
 
@@ -181,12 +187,13 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
         // TODO Auto-generated method stub
         return provider;
     }
-
+    
+    
+    
     @Override
-    public void doWork() {
-    	if (this.compressing)
-    		return;
-    	this.compressing = true;
+	public void doWork() {
+
+    	compacted = true;
         World world = worldObj;
         double radius = 3.0D;
         List list1 = world.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double) this.xCoord - radius, (double) this.yCoord - 1.0D, (double) this.zCoord - radius, (double) this.xCoord + radius, (double) this.yCoord + 1.0D, (double) this.zCoord + radius));
@@ -201,7 +208,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 
             EntityLiving var9 = (EntityLiving) entitys.next();
             
-            if (!(var9 instanceof EntityPlayer) && !(var9 instanceof EntityDragon) && !entity.isDead) {
+            if (!(var9 instanceof EntityPlayer) && !(var9 instanceof EntityDragon) && !var9.equals(lastEntity)) {
                 double var10 = this.getDistanceSqToEntity(var9);
 
                 if (var10 <= var6 && EntityList.getEntityID(var9)!=0) {
@@ -209,11 +216,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
                     var6 = var10;
                     //System.out.println(EntityList.getEntityString(var9));
                 }
-                else
-                {
-                	
-                }
-                if (EntityList.getEntityID(var9)==0 && var9.getEntityData() != null)
+                else if (EntityList.getEntityID(var9)==0 && var9.getEntityData() != null)
                 {
                 	if (var9.getEntityData().hasKey("mobcage"))
                 	{
@@ -236,8 +239,9 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
             }
         }
         if (ItemStacks[0] != null && entity != null) {
+        	lastEntity = entity;
             int id = EntityList.getEntityID(entity);
-            entity.isDead=true;
+            //entity.isDead=true;
             	
 
             //CompactMobsCore.instance.cmLog.info("1: " + String.valueOf(id));
@@ -248,13 +252,20 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
             {
                 int empty = 0;
                 int var3;
-                for (var3 = 1; var3 < 28; ++var3) {
-                    if (ItemStacks[var3] == null) {
+                for (var3 = 1; var3 < 28; var3++) {
+                	if(ItemStacks[var3]==null)
+                	{
                         empty++;
                         break;
-                    }
+                	}
+                	else
+                	{
+                		if (ItemStacks[var3].stackSize == 0) {
+	                        empty++;
+	                        break;
+	                    }
+                	}
                 }
-
                 if (empty > 0) {
                 	if (provider.useEnergy(25, 25, true)==25)
                 	{
@@ -310,11 +321,10 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 	                    	
 	                    	NBTTagCompound var2 = new NBTTagCompound();
 	                        entity.writeToNBT(var2);
-	                       
 	                    	nbttag.setCompoundTag("entityTags", var2);
 	                    	//CompactMobsCore.instance.cmLog.info(var2.toString());
 	                    }
-	                
+	                    world.removeEntity(entity);
 	                    String name = entity.getEntityName();
 	                    nbttag.setString("name", name);
 	                    holder.setItemDamage(id);
@@ -374,7 +384,6 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
         //spawnParticles(this.worldObj, this.xCoord+1, this.yCoord, this.zCoord);
         //spawnParticles(this.worldObj, this.xCoord+1, this.yCoord, this.zCoord);
         //this.worldObj.spawnParticle("smoke", this.xCoord+1.5D, this.yCoord+.5D, this.zCoord+.5, -.1, 0, 0);
-        this.compressing = false;
     }
 
     public void spawnParticles(World world, double x, double y, double z) {
@@ -483,4 +492,11 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
         	return 27;
         return 0;
     }
+
+
+	/*@Override
+	public void doWork() {
+		// TODO Auto-generated method stub
+		
+	}*/
 }

@@ -33,5 +33,9 @@ public class ClientProxyCompactMobs extends CommonProxyCompactMobs {
     }
     
     
-    
+    @SideOnly(Side.CLIENT)
+    @Override
+    public boolean isRenderWorld(World world) {
+        return false;//world.isRemote;
+    }
 }
