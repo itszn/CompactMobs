@@ -31,7 +31,7 @@ public class TileEntityIncubator extends TileEntity implements IInventory, IPowe
         if (PowerFramework.currentFramework != null) {
             provider = PowerFramework.currentFramework.createPowerProvider();
         }
-        provider.configure(50, 25, 25, 25*5, 25*27);
+        provider.configure(50, 1, 25, 25*5, 25*27);
     }
 
     @Override
@@ -234,6 +234,7 @@ public class TileEntityIncubator extends TileEntity implements IInventory, IPowe
 
                                 if (stackNum1 >= 0) {
                                     nbttag.setBoolean("inIncubator", false);
+                                    nbttag.setBoolean("FertilityVisiable", true);
                                     ItemStacks[stackNum1] = ItemStacks[i];
                                     ItemStacks[stackNum1].setTagCompound(nbttag);
                                     ItemStacks[i] = null;
@@ -249,11 +250,7 @@ public class TileEntityIncubator extends TileEntity implements IInventory, IPowe
 
     }
 
-    @Override
-    public int powerRequest() {
-        // TODO Auto-generated method stub
-        return 25;
-    }
+
 
     public void dumpItems() {
 
@@ -328,4 +325,22 @@ public class TileEntityIncubator extends TileEntity implements IInventory, IPowe
         	return 27;
         return 0;
     }
+
+	@Override
+	public int powerRequest(ForgeDirection from) {
+		// TODO Auto-generated method stub
+		return 25;
+	}
+
+	@Override
+	public boolean isInvNameLocalized() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

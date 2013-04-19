@@ -34,7 +34,7 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
         if (PowerFramework.currentFramework != null) {
             provider = PowerFramework.currentFramework.createPowerProvider();
         }
-        provider.configure(50, 25, 25, 25, 25);
+        provider.configure(50, 1, 25, 25, 100);
     }
 
     @Override
@@ -365,11 +365,6 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
         }
     }
 
-    @Override
-    public int powerRequest() {
-        // TODO Auto-generated method stub
-        return 25;
-    }
 
     public double getDistanceSqToEntity(Entity par1Entity) {
         double var2 = this.xCoord - par1Entity.posX;
@@ -396,4 +391,22 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
         	return 27;
         return 0;
     }
+
+	@Override
+	public int powerRequest(ForgeDirection from) {
+		// TODO Auto-generated method stub
+		return 25;
+	}
+
+	@Override
+	public boolean isInvNameLocalized() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

@@ -6,10 +6,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.core.Position;
@@ -23,7 +26,6 @@ public class BlockCompactor extends BlockContainer {
 
     public BlockCompactor(int par1, Material par2Material) {
         super(par1, par2Material);
-        super.blockIndexInTexture = 2;
         this.setLightOpacity(10);
         this.setCreativeTab(CreativeTabs.tabRedstone);
 
@@ -45,23 +47,28 @@ public class BlockCompactor extends BlockContainer {
         return true;
     }
 
+    private Icon sideTex;
+    private Icon topTex;
+    private Icon bottomTex;
     @Override
-    public String getTextureFile() {
-        return DefaultProps.BLOCK_TEXTURES + "/blocks.png";
+    public void registerIcons(IconRegister register) {
+    	sideTex = register.registerIcon("compactMobs:CompactorSide");
+    	topTex = register.registerIcon("compactMobs:CompactorTop");
+    	bottomTex = register.registerIcon("compactMobs:CompactorBottom");
     }
-
+    
     @Override
-    public int getBlockTextureFromSide(int i) {
+    public Icon getIcon(int i, int j) {
         switch (i) {
             case 0:
-                //bottom
-                return 1;
-            case 1:
                 //top
-                return 2;
+                return bottomTex;//2
+            case 1:
+                //bottom
+                return topTex;//1
             default:
                 //side
-                return 0;
+                return sideTex;//0
         }
     }
 
@@ -71,11 +78,11 @@ public class BlockCompactor extends BlockContainer {
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving) {
+    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving, ItemStack stack) {
         ForgeDirection orientation = Utils.get2dOrientation(new Position(entityliving.posX, entityliving.posY, entityliving.posZ),
                 new Position(i, j, k));
 
-        world.setBlockMetadataWithNotify(i, j, k, orientation.getOpposite().ordinal());
+        world.setBlockMetadataWithNotify(i, j, k, orientation.getOpposite().ordinal(),2);
         //CompactMobsCore.instance.cmLog.info(String.valueOf(world.getBlockMetadata(i,j,k)));
     }
 

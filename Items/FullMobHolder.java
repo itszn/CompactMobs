@@ -2,6 +2,7 @@ package compactMobs.Items;
 
 import java.util.List;
 
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityList;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -86,6 +87,12 @@ public class FullMobHolder extends Item {
 
     public String getTextureFile() {
         return DefaultProps.ITEM_TEXTURES + "/items.png";
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+        this.itemIcon = par1IconRegister.registerIcon("compactMobs:ItemFullMobHolder"); 
     }
     
     

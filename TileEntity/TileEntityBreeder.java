@@ -35,7 +35,7 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
         if (PowerFramework.currentFramework != null) {
             provider = PowerFramework.currentFramework.createPowerProvider();
         }
-        provider.configure(50, 25, 25, 25, 25);
+        provider.configure(50, 1, 25, 25, 100);
     }
 
     @Override
@@ -386,12 +386,6 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
 
     }
 
-    @Override
-    public int powerRequest() {
-        // TODO Auto-generated method stub
-        return 25;
-    }
-
     public void dumpItems() {
 
         ForgeDirection[] pipes = Utils.getPipeDirections(this.worldObj, new Vect(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.WEST);
@@ -456,4 +450,22 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
         // TODO Auto-generated method stub
         return 18;
     }
+
+	@Override
+	public int powerRequest(ForgeDirection from) {
+		// TODO Auto-generated method stub
+		return 25;
+	}
+
+	@Override
+	public boolean isInvNameLocalized() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

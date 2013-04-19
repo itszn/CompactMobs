@@ -2,10 +2,13 @@ package compactMobs.Blocks;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.core.Position;
@@ -17,17 +20,16 @@ import compactMobs.TileEntity.TileEntityCatalyst;
 
 public class BlockCatalyst extends BlockContainer {
 
-	int textureFront, textureSides, textureBack, textureTop;
+	Icon textureFront, textureSides, textureBack, textureTop;
 	
     public BlockCatalyst(int par1, Material par2Material) {
         super(par1, par2Material);
-        super.blockIndexInTexture = 12;
         this.setLightOpacity(10);
         this.setCreativeTab(CreativeTabs.tabRedstone);
-        textureFront = 15; //3
-        textureSides = 12; //5
-        textureBack = 14; //6
-        textureTop = 13;
+//        textureFront = 15; //3
+//        textureSides = 12; //5
+//        textureBack = 14; //6
+//        textureTop = 13;
     }
 
     @Override
@@ -47,14 +49,15 @@ public class BlockCatalyst extends BlockContainer {
     }
 
     @Override
-    public String getTextureFile() {
-        return DefaultProps.BLOCK_TEXTURES + "/blocks.png";
+    public void registerIcons(IconRegister register) {
+    	textureFront = register.registerIcon("compactMobs:CatalystFront");
+    	textureSides = register.registerIcon("compactMobs:CatalystSides");
+    	textureBack = register.registerIcon("compactMobs:CatalystBack");
+    	textureTop = register.registerIcon("compactMobs:CatalystTop");
     }
-
-    
     
     @Override
-    public int getBlockTextureFromSideAndMetadata(int i, int j) {
+    public Icon getIcon(int i, int j) {
         if (j == 0 && i == 3) {
             return textureFront;
         }
@@ -73,11 +76,11 @@ public class BlockCatalyst extends BlockContainer {
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving) {
+    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving, ItemStack stack) {
         ForgeDirection orientation = Utils.get2dOrientation(new Position(entityliving.posX, entityliving.posY, entityliving.posZ),
                 new Position(i, j, k));
 
-        world.setBlockMetadataWithNotify(i, j, k, orientation.getOpposite().ordinal());
+        world.setBlockMetadataWithNotify(i, j, k, orientation.getOpposite().ordinal(),2);
         //CompactMobsCore.instance.cmLog.info(String.valueOf(world.getBlockMetadata(i,j,k)));
     }
 

@@ -2,6 +2,7 @@ package compactMobs.Items;
 
 import java.util.Random;
 
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -10,11 +11,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import compactMobs.CompactMobsCore;
 import compactMobs.DefaultProps;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class HandheldDecompactor extends Item{
 	public HandheldDecompactor(int par1) {
@@ -62,11 +66,19 @@ public class HandheldDecompactor extends Item{
         return DefaultProps.ITEM_TEXTURES + "/items.png";
     }
     @Override
-	public int getIconFromDamage(int itemDamage) {
+	public Icon getIconFromDamage(int itemDamage) {
 		if( itemDamage == 1 )
-			return 4;
-		return 3;
+			return loaded;
+		return unloaded;
 	}
+    private Icon loaded;
+    private Icon unloaded;
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+        this.loaded = par1IconRegister.registerIcon("compactMobs:ItemDecompactorLoaded");
+        this.unloaded = par1IconRegister.registerIcon("compactMobs:ItemDecompactorUnloaded"); 
+    }
     @Override
     public void onUpdate(ItemStack stack, World par2World, Entity eplayer, int par4, boolean par5) 
     {

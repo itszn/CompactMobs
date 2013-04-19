@@ -35,7 +35,6 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
     public ItemStack[] ItemStacks;
     IPowerProvider provider;
     boolean drawParticle;
-    boolean compacted = false;
     Entity lastEntity = null;
 
     public TileEntityCompactor() {
@@ -43,7 +42,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
         if (PowerFramework.currentFramework != null) {
             provider = PowerFramework.currentFramework.createPowerProvider();
         }
-        provider.configure(50, 25, 25, 25, 25);
+        provider.configure(50, 1, 25, 25, 100);
     }
     
     
@@ -55,7 +54,6 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 
             receptor.getPowerProvider().update(receptor);
         }
-        compacted = false;
         //worldObj.spawnParticle("smoke", this.xCoord+1.5D, this.yCoord+.5D, this.zCoord+.5, -.1, 0, 0);
         //this.worldObj.spawnParticle("smoke", this.xCoord+1.5D, this.yCoord+.5D, this.zCoord+.5, -.1, 0, 0);
 
@@ -72,7 +70,6 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
          * { ItemStacks[0] = null; } }
 		}
          */
-        //compact();
         return;
     }
 
@@ -190,13 +187,11 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
     
     
     
-    @Override
+    //@Override
 	public void doWork() {
-
-    	compacted = true;
         World world = worldObj;
         double radius = 3.0D;
-        List list1 = world.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double) this.xCoord - radius, (double) this.yCoord - 1.0D, (double) this.zCoord - radius, (double) this.xCoord + radius, (double) this.yCoord + 1.0D, (double) this.zCoord + radius));
+        List list1 = world.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getBoundingBox((double) this.xCoord - radius, (double) this.yCoord - 1.0D, (double) this.zCoord - radius, (double) this.xCoord + radius, (double) this.yCoord + 1.0D, (double) this.zCoord + radius));
 
         EntityLiving entity = null;
         double var6 = Double.MAX_VALUE;
@@ -207,8 +202,9 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
         while (entitys.hasNext()) {
 
             EntityLiving var9 = (EntityLiving) entitys.next();
+
             
-            if (!(var9 instanceof EntityPlayer) && !(var9 instanceof EntityDragon) && !var9.equals(lastEntity)) {
+            if (!(var9 instanceof EntityPlayer) && !(var9 instanceof EntityDragon) /*&& !var9.equals(lastEntity)*/) {
                 double var10 = this.getDistanceSqToEntity(var9);
 
                 if (var10 <= var6 && EntityList.getEntityID(var9)!=0) {
@@ -221,7 +217,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
                 	if (var9.getEntityData().hasKey("mobcage"))
                 	{
                 		s = EntityList.getEntityString(var9);
-                		
+                		//System.out.println(s);
                 		if (s.startsWith("SoulShards.Spawned"))
                 		{
                 			s = s.split("SoulShards.Spawned")[1];
@@ -239,7 +235,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
             }
         }
         if (ItemStacks[0] != null && entity != null) {
-        	lastEntity = entity;
+        	
             int id = EntityList.getEntityID(entity);
             //entity.isDead=true;
             	
@@ -267,7 +263,9 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
                 	}
                 }
                 if (empty > 0) {
-                	if (provider.useEnergy(25, 25, true)==25)
+                	float test = provider.useEnergy(25, 25, true);
+                	System.out.println(test);
+                	if (test==25)//provider.useEnergy(25, 25, true)==25)
                 	{
 
 	                    ItemStack holder = new ItemStack(CompactMobsItems.fullMobHolder, 1);
@@ -328,6 +326,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 	                    String name = entity.getEntityName();
 	                    nbttag.setString("name", name);
 	                    holder.setItemDamage(id);
+	                   // lastEntity = entity;
 	
 	                    spawnParticles(world, entity.posX, entity.posY, entity.posZ);
 	                    //spawnParticles(world, entity.posX, entity.posY, entity.posZ);
@@ -357,6 +356,11 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
                      * String.valueOf(test));
 					}
                      */
+	                    if (ItemStacks[0].stackSize > 1) {
+	                        ItemStacks[0] = new ItemStack(ItemStacks[0].getItem(), ItemStacks[0].stackSize - 1);
+	                    } else {
+	                        ItemStacks[0] = null;
+	                    }
                 	}
                 }
 
@@ -371,11 +375,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
                  */
                 
 
-                if (ItemStacks[0].stackSize > 1) {
-                    ItemStacks[0] = new ItemStack(ItemStacks[0].getItem(), ItemStacks[0].stackSize - 1);
-                } else {
-                    ItemStacks[0] = null;
-                }
+                
             }
         }
         if (CompactMobsCore.doAutoOutput)
@@ -413,11 +413,7 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
         //world.spawnParticle("smoke", x+.5D, y+.5D, z+.5D, xv, yv, zv);
     }
 
-    @Override
-    public int powerRequest() {
-        // TODO Auto-generated method stub
-        return 25;
-    }
+
 
     public void dumpItems() {
 
@@ -492,6 +488,30 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
         	return 27;
         return 0;
     }
+
+
+	@Override
+	public int powerRequest(ForgeDirection from) {
+		// TODO Auto-generated method stub
+		return 25;
+	}
+
+
+	@Override
+	public boolean isInvNameLocalized() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
 
 
 	/*@Override

@@ -26,11 +26,11 @@ public class CompactMobsItems {
     }
 
     public void instantiateItems() {
-        mobHolder = new MobHolder(CompactMobsCore.instance.emptyMobHolderId.getInt()).setIconIndex(0).setItemName("MobHolder");
-        fullMobHolder = new FullMobHolder(CompactMobsCore.instance.fullMobHolderId.getInt()).setIconIndex(1).setItemName("FullMobHolder");
-        handCompactor = new HandheldCompactor(CompactMobsCore.instance.handCompactorId.getInt()).setIconIndex(2).setItemName("HandheldCompactor");
-        handDecompactor = new HandheldDecompactor(CompactMobsCore.instance.handDecompactorId.getInt()).setIconIndex(3).setItemName("HandheldDecompactor");
-        catalystCore = new CatalystCore(CompactMobsCore.instance.catalystCoreId.getInt()).setIconIndex(5).setItemName("CatalystCore");
+        mobHolder = new MobHolder(CompactMobsCore.instance.emptyMobHolderId.getInt());
+        fullMobHolder = new FullMobHolder(CompactMobsCore.instance.fullMobHolderId.getInt());
+        handCompactor = new HandheldCompactor(CompactMobsCore.instance.handCompactorId.getInt());
+        handDecompactor = new HandheldDecompactor(CompactMobsCore.instance.handDecompactorId.getInt());
+        catalystCore = new CatalystCore(CompactMobsCore.instance.catalystCoreId.getInt());
     }
 
     public void nameItems() {

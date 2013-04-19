@@ -6,9 +6,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
@@ -48,31 +50,32 @@ public class BlockBreeder extends BlockContainer {
     private Icon sideTex;
     private Icon topTex;
     @Override
-    public void registerIcons(IconRegister par1IconRgeister) {
-    	
+    public void registerIcons(IconRegister register) {
+    	sideTex = register.registerIcon("compactMobs:BreederSide");
+    	topTex = register.registerIcon("compactMobs:BreederTop");
     }
     
     @Override
-    public Icon getBlockTextureFromSide(int i) {
+    public Icon getIcon(int i, int j) {
         switch (i) {
             case 0:
                 //bottom
-                return sideTex;//8
+                return topTex;//8
             case 1:
                 //top
-                return sideTex;//8
+                return topTex;//8
             default:
                 //side
-                return topTex;//7
+                return sideTex;//7
         }
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving) {
+    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving, ItemStack stack) {
         ForgeDirection orientation = Utils.get2dOrientation(new Position(entityliving.posX, entityliving.posY, entityliving.posZ),
                 new Position(i, j, k));
 
-        world.setBlockMetadataWithNotify(i, j, k, orientation.getOpposite().ordinal());
+        world.setBlockMetadataWithNotify(i, j, k, orientation.getOpposite().ordinal(), 2);
         //CompactMobsCore.instance.cmLog.info(String.valueOf(world.getBlockMetadata(i,j,k)));
     }
 

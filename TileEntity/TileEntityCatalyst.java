@@ -37,7 +37,7 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
         if (PowerFramework.currentFramework != null) {
             provider = PowerFramework.currentFramework.createPowerProvider();
         }
-        provider.configure(50, 200, 200, 200, 200);
+        provider.configure(50, 1, 200, 200, 2000);
     }
 
 
@@ -283,9 +283,13 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
 	                    	world.spawnEntityInWorld(entity);
 	                    }
 	                    else
-	                    {	                    
-	                    entity.onDeath(DamageSource.generic);
-	                    entity.onDeath(DamageSource.generic);
+	                    {
+	                    	if (!world.isRemote)
+	                    	{
+	                    		entity.handleHealthUpdate((byte) 3);
+	                    	}
+	                    	entity.onDeath(DamageSource.generic);
+	                    	entity.onDeath(DamageSource.generic);
 	                    }
 	                }
 	
@@ -372,12 +376,6 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
         }
     }
 
-    @Override
-    public int powerRequest() {
-        // TODO Auto-generated method stub
-        return 25;
-    }
-
     public double getDistanceSqToEntity(Entity par1Entity) {
         double var2 = this.xCoord - par1Entity.posX;
         double var4 = this.yCoord - par1Entity.posY;
@@ -396,5 +394,26 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
         // TODO Auto-generated method stub
         return 27;
     }
+
+
+	@Override
+	public int powerRequest(ForgeDirection from) {
+		// TODO Auto-generated method stub
+		return 25;
+	}
+
+
+	@Override
+	public boolean isInvNameLocalized() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
 

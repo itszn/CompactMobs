@@ -32,9 +32,8 @@ public class GuiIncubator extends GuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
-        int i = mc.renderEngine.getTexture(DefaultProps.GUI_TEXTURES + "/incubator_gui.png");
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        mc.renderEngine.bindTexture(i);
+        mc.renderEngine.bindTexture(DefaultProps.GUI_TEXTURES + "/incubator_gui.png");
         //int j = (width - xSize) / 2;
         //int k = (height - ySize) / 2;
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);

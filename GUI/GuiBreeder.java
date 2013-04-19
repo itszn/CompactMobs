@@ -29,14 +29,18 @@ public class GuiBreeder extends GuiContainer {
         super.drawGuiContainerForegroundLayer(par1, par2);
     }
 
+
     @Override
     protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
-        int i = mc.renderEngine.getTexture(DefaultProps.GUI_TEXTURES + "/breeder_gui.png");
+        
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        mc.renderEngine.bindTexture(i);
+        mc.renderEngine.bindTexture(DefaultProps.GUI_TEXTURES + "/breeder_gui.png");
         //int j = (width - xSize) / 2;
+        int j = (width - xSize) / 2;
+		int k = (height - ySize) / 2;
+		drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
         //int k = (height - ySize) / 2;
-        drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+        //drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
         /*
          * if(true) { float l = getBurnTimeRemainingScaled(17);
          * drawTexturedModalRect(85+j, 32+k, xSize, 0, 6, (int)l); l =
@@ -51,6 +55,5 @@ public class GuiBreeder extends GuiContainer {
      * System.out.println((float)(((float)i)/200.0)*InterclassLibrary.getInstance().tileEntityInbuenerTicks);
      * return
      * (float)(((float)i)/200.0)*InterclassLibrary.getInstance().tileEntityInbuenerTicks;
-	}
-     */
+*/
 }

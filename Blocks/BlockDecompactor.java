@@ -6,10 +6,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.core.Position;
@@ -21,17 +24,16 @@ import compactMobs.TileEntity.TileEntityDecompactor;
 
 public class BlockDecompactor extends BlockContainer {
 
-    int textureFront, textureSides, textureBack, textureTop;
+    Icon textureFront, textureSides, textureBack, textureTop;
 
     public BlockDecompactor(int par1, Material par2Material) {
         super(par1, par2Material);
-        super.blockIndexInTexture = 4;
         this.setLightOpacity(10);
         this.setCreativeTab(CreativeTabs.tabRedstone);
-        textureFront = 3; //3
-        textureSides = 5; //5
-        textureBack = 6; //6
-        textureTop = 4; //4
+//        textureFront = 3; //3
+//        textureSides = 5; //5
+//        textureBack = 6; //6
+//        textureTop = 4; //4
     }
 
     @Override
@@ -51,12 +53,15 @@ public class BlockDecompactor extends BlockContainer {
     }
 
     @Override
-    public String getTextureFile() {
-        return DefaultProps.BLOCK_TEXTURES + "/blocks.png";
+    public void registerIcons(IconRegister register) {
+    	textureFront = register.registerIcon("compactMobs:DecompactorFront");
+    	textureSides = register.registerIcon("compactMobs:DecompactorSides");
+    	textureBack = register.registerIcon("compactMobs:DecompactorBack");
+    	textureTop = register.registerIcon("compactMobs:DecompactorTop");
     }
 
     @Override
-    public int getBlockTextureFromSideAndMetadata(int i, int j) {
+    public Icon getIcon(int i, int j) {
         if (j == 0 && i == 3) {
             return textureFront;
         }
@@ -75,11 +80,11 @@ public class BlockDecompactor extends BlockContainer {
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving) {
+    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving, ItemStack stack) {
         ForgeDirection orientation = Utils.get2dOrientation(new Position(entityliving.posX, entityliving.posY, entityliving.posZ),
                 new Position(i, j, k));
 
-        world.setBlockMetadataWithNotify(i, j, k, orientation.getOpposite().ordinal());
+        world.setBlockMetadataWithNotify(i, j, k, orientation.getOpposite().ordinal(),2);
         //CompactMobsCore.instance.cmLog.info(String.valueOf(world.getBlockMetadata(i,j,k)));
     }
 

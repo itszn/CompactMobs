@@ -3,13 +3,22 @@ package compactMobs;
 import java.io.File;
 import java.util.logging.Logger;
 
+import javax.print.DocFlavor.URL;
+import javax.swing.JFileChooser;
+
+import org.bouncycastle.util.test.Test;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Property;
+import net.minecraftforge.event.ForgeSubscribe;
 
 import cpw.mods.fml.common.Mod.PostInit;
 
@@ -18,6 +27,7 @@ import compactMobs.Blocks.BlockCatalyst;
 import compactMobs.Blocks.BlockCompactor;
 import compactMobs.Blocks.BlockDecompactor;
 import compactMobs.Blocks.BlockIncubator;
+import compactMobs.GUI.GuiBreeder;
 import compactMobs.Items.CompactMobsItems;
 import compactMobs.TileEntity.TileEntityBreeder;
 import compactMobs.TileEntity.TileEntityCatalyst;
@@ -39,9 +49,11 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @NetworkMod(clientSideRequired = true, serverSideRequired = true, channels = { "CMC" }, packetHandler = PacketHandler.class)
-@Mod(modid = "CM", name = "CompactMobs", version = "1.2.4", dependencies = "required-after:BuildCraft|Transport;required-after:BuildCraft|Builders;required-after:BuildCraft|Silicon;required-after:BuildCraft|Core;")
+@Mod(modid = "CM", name = "CompactMobs", version = "1.3.1", dependencies = "required-after:BuildCraft|Transport;required-after:BuildCraft|Builders;required-after:BuildCraft|Silicon;required-after:BuildCraft|Core;")
 public class CompactMobsCore {
 
     @Instance
@@ -76,7 +88,7 @@ public class CompactMobsCore {
     @PreInit
     public void loadConfiguration(FMLPreInitializationEvent evt) {
         cmLog.setParent(FMLLog.getLogger());
-        cmLog.info("Starting CompactMobs v1.2.4");
+        cmLog.info("Starting CompactMobs v1.3.1");
         tick = false;
         
         mainConfig = new Configuration(new File(evt.getModConfigurationDirectory(), "CompactMobs.cfg"));
@@ -111,7 +123,11 @@ public class CompactMobsCore {
         blockBreeder = new BlockBreeder(breederId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F);
         blockIncubator = new BlockIncubator(incubatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F);
         blockCatalyst = new BlockCatalyst(catalystId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F);
-        
+        blockCompactor.setUnlocalizedName("Compactor");
+        blockDecompactor.setUnlocalizedName("Decompactor");
+        blockBreeder.setUnlocalizedName("Breeder");
+        blockIncubator.setUnlocalizedName("Incubator");
+        blockCatalyst.setUnlocalizedName("Catalyst");
         GameRegistry.registerBlock(blockCompactor, "Compactor");
         LanguageRegistry.addName(blockCompactor, "Compactor");
         
@@ -150,6 +166,7 @@ public class CompactMobsCore {
     	Item ironGear = Item.ingotIron;
         Item goldGear = Item.ingotGold;
         Item diamondGear = Item.diamond;
+
 
         try {
             cmLog.info("Adding Compactmob Recipes");
