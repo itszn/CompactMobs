@@ -27,6 +27,7 @@ import compactMobs.Blocks.BlockCatalyst;
 import compactMobs.Blocks.BlockCompactor;
 import compactMobs.Blocks.BlockDecompactor;
 import compactMobs.Blocks.BlockIncubator;
+import compactMobs.Blocks.BlockNamer;
 import compactMobs.GUI.GuiBreeder;
 import compactMobs.Items.CompactMobsItems;
 import compactMobs.TileEntity.TileEntityBreeder;
@@ -34,6 +35,7 @@ import compactMobs.TileEntity.TileEntityCatalyst;
 import compactMobs.TileEntity.TileEntityCompactor;
 import compactMobs.TileEntity.TileEntityDecompactor;
 import compactMobs.TileEntity.TileEntityIncubator;
+import compactMobs.TileEntity.TileEntityNamer;
 import compactMobs.network.PacketHandler;
 
 import cpw.mods.fml.common.FMLLog;
@@ -61,29 +63,19 @@ public class CompactMobsCore {
     //hardcoded id of block
     public static int BlockID = 3391;
     public static boolean useFullTagCompound = true;
-    public static Block blocks;
-    public static Block blockCompactor;
-    public static Block blockDecompactor;
-    public static Block blockBreeder;
-    public static Block blockIncubator;
-    public static Block blockCatalyst;
+    public static Block blocks, blockCompactor, blockDecompactor;
+    public static Block blockBreeder, blockIncubator, blockCatalyst, blockNamer;
     public boolean tick;
     public static Configuration mainConfig;
     public static Logger cmLog = Logger.getLogger("CompactMobs");
-    public Property compatorId;// = CompactMobsCore.mainConfig.getOrCreateBlockIdProperty("CompactorId", 3391);
-    public Property decompatorId;// = CompactMobsCore.mainConfig.getOrCreateBlockIdProperty("DecompactorId", 3392);
-    public Property breederId;// = CompactMobsCore.mainConfig.getOrCreateBlockIdProperty("BreederId", 3393);
-    public Property incubatorId;// = CompactMobsCore.mainConfig.getOrCreateBlockIdProperty("IncubatorId", 3394);
-    public Property emptyMobHolderId;// = CompactMobsCore.mainConfig.getOrCreateBlockIdProperty("EmptyMobHolderId", 3395);
-    public Property fullMobHolderId;
-    public Property handCompactorId;
-    public Property handDecompactorId;
-    public Property catalystId;
-    public Property catalystCoreId;
-    public Property autoOutput;
+    public Property compatorId, decompatorId, breederId, incubatorId, emptyMobHolderId, fullMobHolderId, handCompactorId;
+    public Property handDecompactorId, catalystId, catalystCoreId, autoOutput, screams, catalystUpgradeId, namerId;
+    public static boolean doScreams = false;
     public static boolean doAutoOutput = true;
     @SidedProxy(clientSide = "compactMobs.ClientProxyCompactMobs", serverSide = "compactMobs.CommonProxyCompactMobs")
     public static CommonProxyCompactMobs proxy;
+    
+    public static String[] sounds = new String[5];
 
     @PreInit
     public void loadConfiguration(FMLPreInitializationEvent evt) {
@@ -105,11 +97,22 @@ public class CompactMobsCore {
             handCompactorId = CompactMobsCore.mainConfig.get("item", "HandheldCompactorId", 3397);
             handDecompactorId = CompactMobsCore.mainConfig.get("item", "HandheldDecompactorId", 3398);
             catalystCoreId = CompactMobsCore.mainConfig.get("item", "CatalystCoreId", 3400);
-            
+            screams = CompactMobsCore.mainConfig.get("option", "EnableMobScreams", false, "Blood curdling screams on request by Jadedcat");
+            catalystUpgradeId = CompactMobsCore.mainConfig.get("item", "CatalystUpgradeId", 3401);
+            namerId = CompactMobsCore.mainConfig.get("block", "MobNamerId", 3402);
         } finally {
             mainConfig.save();
         }
-        	doAutoOutput = autoOutput.getBoolean(true);
+        doAutoOutput = autoOutput.getBoolean(true);
+        doScreams = screams.getBoolean(false);
+        
+    }
+    
+    @PreInit
+    public void preInit(FMLPreInitializationEvent evt)
+    {
+    	System.out.println("TESTTESTTESTTESTTESTTESTTESTTESTTESTTERST1");
+        proxy.registerSoundHandler();
     }
 
     @Init
@@ -123,11 +126,13 @@ public class CompactMobsCore {
         blockBreeder = new BlockBreeder(breederId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F);
         blockIncubator = new BlockIncubator(incubatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F);
         blockCatalyst = new BlockCatalyst(catalystId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F);
+        blockNamer = new BlockNamer(namerId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0f);
         blockCompactor.setUnlocalizedName("Compactor");
         blockDecompactor.setUnlocalizedName("Decompactor");
         blockBreeder.setUnlocalizedName("Breeder");
         blockIncubator.setUnlocalizedName("Incubator");
         blockCatalyst.setUnlocalizedName("Catalyst");
+        blockNamer.setUnlocalizedName("Mob Namer");
         GameRegistry.registerBlock(blockCompactor, "Compactor");
         LanguageRegistry.addName(blockCompactor, "Compactor");
         
@@ -143,19 +148,22 @@ public class CompactMobsCore {
         
         GameRegistry.registerBlock(blockCatalyst, "Catalyst");
         LanguageRegistry.addName(blockCatalyst, "Catalyst");
+        
+        GameRegistry.registerBlock(blockNamer, "Mob Namer");
+        LanguageRegistry.addName(blockNamer, "Mob Namer");
 
         GameRegistry.registerTileEntity(TileEntityCompactor.class, "tileEntityCompactor");
         GameRegistry.registerTileEntity(TileEntityDecompactor.class, "tileEntityDecompactor");
         GameRegistry.registerTileEntity(TileEntityBreeder.class, "tileEntityBreeder");
         GameRegistry.registerTileEntity(TileEntityIncubator.class, "tileEntityIncubator");
         GameRegistry.registerTileEntity(TileEntityCatalyst.class, "tileEntityCatalyst");
+        GameRegistry.registerTileEntity(TileEntityNamer.class, "tileEntityNamer");
 
         CompactMobsItems.getInstance().instantiateItems();
         CompactMobsItems.getInstance().nameItems();
         
         MinecraftForge.EVENT_BUS.register(new CompactMobsEventHandler());
-
-
+        
 
 
     }

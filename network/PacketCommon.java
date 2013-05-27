@@ -39,11 +39,15 @@ public class PacketCommon implements IPacketHandler {
         try {
             DataInputStream stream = new DataInputStream(new ByteArrayInputStream(packet.data));
             int ID = stream.read();
+            System.out.println("Recived Packet ID "+ID);
 
             switch (ID) {
                 case 1:
                     (new PacketParticleSpawn()).interpret(stream, new Object[]{world}, Side.SERVER);
                     break;
+                case 2:
+                	(new PacketNamerText()).interpret(stream, new Object[]{world}, Side.SERVER);
+                	break;
                 default:
                     CompactMobsCore.instance.cmLog.info("Unknown packet type recieved");
                     break;

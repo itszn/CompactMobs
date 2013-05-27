@@ -27,6 +27,7 @@ public class ContainerCatalyst extends Container {
         this.addSlotToContainer(new EmptyMobHolderSlot(tileEntity, 28, 80, 105));
         this.addSlotToContainer(new EmptyMobHolderSlot(tileEntity, 29, 98, 105));
         this.addSlotToContainer(new CatalystCoreSlot(tileEntity, 30, 23, 91));
+        this.addSlotToContainer(new CatalystUpgradeSlot(tileEntity, 31, 137, 91));
 
         for (int var3 = 0; var3 < 3; ++var3) {
             for (int var4 = 0; var4 < 9; ++var4) {

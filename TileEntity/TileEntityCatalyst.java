@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.boss.EntityWither;
+import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -23,7 +24,9 @@ import buildcraft.api.power.PowerFramework;
 import compactMobs.CompactMobsCore;
 import compactMobs.Utils;
 import compactMobs.Vect;
+import compactMobs.Items.CatalystUpgrade;
 import compactMobs.Items.CompactMobsItems;
+import cpw.mods.fml.client.FMLClientHandler;
 
 public class TileEntityCatalyst extends TileEntity implements IInventory, IPowerReceptor, ISidedInventory {
 
@@ -33,7 +36,7 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
     boolean powered = false;
 
     public TileEntityCatalyst() {
-        ItemStacks = new ItemStack[31];
+        ItemStacks = new ItemStack[32];
         if (PowerFramework.currentFramework != null) {
             provider = PowerFramework.currentFramework.createPowerProvider();
         }
@@ -177,16 +180,7 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
 
     @Override
     public void doWork() {
-    	if (!powered)
-    	{
-    		if (provider.useEnergy(25, 25, true) < 25) {
-	            return;
-	        }
-    		else
-    		{
-    			powered = true;
-    		}
-    	}
+    	
         World world = worldObj;
         //double radius = 3.0D;
         //List list1 = world.getEntitiesWithinAABB(EntityCreature.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double)this.xCoord-radius, (double)this.yCoord-1.0D, (double)this.zCoord-radius, (double)this.xCoord+radius, (double)this.yCoord+1.0D, (double)this.zCoord+radius));
@@ -240,7 +234,7 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
         	if (ItemStacks[30].getItem()==CompactMobsItems.catalystCore)
         	{
 	            NBTTagCompound nbttag = stack.getTagCompound();
-	            if (nbttag != null && powered) {
+	            if (nbttag != null && provider.useEnergy(25, 25, true) == 25) {
 	            	powered = false;
 	                int dir = world.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
 	
@@ -277,7 +271,6 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
 	                        entity.setPosition(this.xCoord + .5D, this.yCoord, this.zCoord - .5D);
 	                        CompactMobsCore.instance.proxy.spawnParticle("largesmoke", this.xCoord + .5D, this.yCoord + .5D, this.zCoord, 0, 0, -.1, 10);
 	                    }
-	                    
 	                    if (entity instanceof EntityWither)
 	                    {
 	                    	world.spawnEntityInWorld(entity);
@@ -286,10 +279,30 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
 	                    {
 	                    	if (!world.isRemote)
 	                    	{
-	                    		entity.handleHealthUpdate((byte) 3);
+	                    		System.out.println(CompactMobsCore.doScreams);
+	                    		int num = world.rand.nextInt(5);
+	                    		System.out.println(CompactMobsCore.sounds[num]);
+	                    		if (!CompactMobsCore.doScreams)
+	                    			entity.handleHealthUpdate((byte) 3);
+	                    		else
+	                    			entity.playSound(CompactMobsCore.sounds[num], .5f, 1);
+	                    		
 	                    	}
-	                    	entity.onDeath(DamageSource.generic);
-	                    	entity.onDeath(DamageSource.generic);
+	                    	boolean flag = false;
+
+	                    	if (ItemStacks[31]!=null)
+	                    		if(ItemStacks[31].getItem() == CompactMobsItems.catalystUpgrade && ItemStacks[31].getItemDamage()==0)
+	                    			flag=true;
+	                    	if (flag)
+	                    	{
+	                    		EntityWolf sudoWolf = new EntityWolf(world);
+	                    		sudoWolf.setTamed(true);
+	                    		entity.attackEntityFrom(DamageSource.causeMobDamage(sudoWolf), 0);
+	                    	}
+
+                    		entity.onDeath(DamageSource.generic);
+                    		clearEntity(entity);
+                    		entity.onDeath(DamageSource.generic);
 	                    }
 	                }
 	
@@ -321,13 +334,22 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
 	            {
 	            	ItemStacks[30]=null;
 	            }
-	
-	        }
+		
+		        
+        	}
         }
         dumpItems();
 
     }
-
+    
+    private void clearEntity(EntityLiving entity)
+    {
+    	for (int i = 0; i<5;i++)
+    	{
+    		entity.setCurrentItemOrArmor(i, null);
+    	}
+    }
+    
     public void dumpItems() {
 
         ForgeDirection[] pipes = Utils.getPipeDirections(this.worldObj, new Vect(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.WEST);

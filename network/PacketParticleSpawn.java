@@ -62,9 +62,9 @@ public class PacketParticleSpawn extends PacketCommon {
             double z2 = stream.readDouble();
             int number = stream.read();
             String type = stream.readUTF();
-
+            System.out.println("SpawnParticle");
             for (int i = 0; i < number; i++) {
-                ((World) extradata[0]).spawnParticle(type, x1, y1, z1, x2, y2, z2);
+                //((World) extradata[0]).spawnParticle(type, x1, y1, z1, x2, y2, z2);
             }
 
         } catch (Exception e) {

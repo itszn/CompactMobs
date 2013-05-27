@@ -26,6 +26,8 @@ public class GuiCatalyst extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         fontRenderer.drawString("Catalyst", 10, 10, 0x404040);
+        fontRenderer.drawString("Core", 20, 80, 0x404040);
+        fontRenderer.drawString("Upgrade", 123, 80, 0x404040);
         super.drawGuiContainerForegroundLayer(par1, par2);
     }
 

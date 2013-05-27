@@ -12,6 +12,7 @@ public class CompactMobsItems {
     public static Item handCompactor;
     public static Item handDecompactor;
     public static Item catalystCore;
+    public static Item catalystUpgrade;
 
     private CompactMobsItems() {
     }
@@ -31,6 +32,7 @@ public class CompactMobsItems {
         handCompactor = new HandheldCompactor(CompactMobsCore.instance.handCompactorId.getInt());
         handDecompactor = new HandheldDecompactor(CompactMobsCore.instance.handDecompactorId.getInt());
         catalystCore = new CatalystCore(CompactMobsCore.instance.catalystCoreId.getInt());
+        catalystUpgrade = new CatalystUpgrade(CompactMobsCore.instance.catalystUpgradeId.getInt());
     }
 
     public void nameItems() {

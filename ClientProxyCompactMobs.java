@@ -1,9 +1,14 @@
 package compactMobs;
 
+import compactMobs.TileEntity.TileEntityNamer;
+import compactMobs.network.PacketNamerText;
+import compactMobs.network.PacketParticleSpawn;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.network.packet.Packet24MobSpawn;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
@@ -37,5 +42,20 @@ public class ClientProxyCompactMobs extends CommonProxyCompactMobs {
     @Override
     public boolean isRenderWorld(World world) {
         return false;//world.isRemote;
+    }
+    
+    @Override
+    public void registerSoundHandler() {
+
+        MinecraftForge.EVENT_BUS.register(new SoundHandler());
+    }
+    
+    @Override
+    public void updateNamerText(String text, TileEntityNamer te) {
+    	int x = te.xCoord;
+    	int y = te.yCoord;
+    	int z = te.zCoord;
+    	System.out.println("Sending Packet for "+text);
+        PacketDispatcher.sendPacketToServer(PacketNamerText.buildNamerTextPacket(text, x, y, z));
     }
 }

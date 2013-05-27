@@ -10,19 +10,23 @@ import compactMobs.Containers.ContainerCatalyst;
 import compactMobs.Containers.ContainerCompactor;
 import compactMobs.Containers.ContainerDecompactor;
 import compactMobs.Containers.ContainerIncubator;
+import compactMobs.Containers.ContainerNamer;
 import compactMobs.GUI.GuiBreeder;
 import compactMobs.GUI.GuiCatalyst;
 import compactMobs.GUI.GuiCompactor;
 import compactMobs.GUI.GuiDecompactor;
 import compactMobs.GUI.GuiIncubator;
+import compactMobs.GUI.GuiNamer;
 import compactMobs.TileEntity.TileEntityBreeder;
 import compactMobs.TileEntity.TileEntityCatalyst;
 import compactMobs.TileEntity.TileEntityCompactor;
 import compactMobs.TileEntity.TileEntityDecompactor;
 import compactMobs.TileEntity.TileEntityIncubator;
+import compactMobs.TileEntity.TileEntityNamer;
 import compactMobs.network.PacketParticleSpawn;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
@@ -50,6 +54,8 @@ public class CommonProxyCompactMobs implements IGuiHandler {
 		                return new ContainerIncubator(player.inventory, (TileEntityIncubator) tileEntity);
 		            case 4:
 		            	return new ContainerCatalyst(player.inventory, (TileEntityCatalyst) tileEntity);
+		            case 6:
+		            	return new ContainerNamer(player.inventory, (TileEntityNamer) tileEntity);
 		        }
 		    }
         }
@@ -80,6 +86,8 @@ public class CommonProxyCompactMobs implements IGuiHandler {
 	                    return new GuiIncubator(player.inventory, ((TileEntityIncubator) tileEntity));
 	                case 4:
 	                	return new GuiCatalyst(player.inventory, ((TileEntityCatalyst) tileEntity));
+	                case 6:
+	                	return new GuiNamer(player.inventory, (TileEntityNamer) tileEntity);
 	            }
 	        }
         }
@@ -94,5 +102,17 @@ public class CommonProxyCompactMobs implements IGuiHandler {
         PacketDispatcher.sendPacketToAllPlayers(PacketParticleSpawn.buildParticleSpawnPacket(type, x, y, z, vx, vy, vz, number));
     }
     
+    public void registerSoundHandler() {
+    }
+    
+    public void updateNamerText(String text, TileEntityNamer te) {
+    	try {
+            te.updateText(text);
+
+        } catch (Exception e) {
+            CompactMobsCore.instance.cmLog.info("Error reading packet or changing namer text");
+            e.printStackTrace();
+        }
+    }
     
 }
