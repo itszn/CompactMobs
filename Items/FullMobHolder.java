@@ -2,6 +2,7 @@ package compactMobs.Items;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityList;
 import cpw.mods.fml.relauncher.Side;
@@ -10,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
 import compactMobs.DefaultProps;
@@ -32,7 +34,60 @@ public class FullMobHolder extends Item {
     @SuppressWarnings({ "all" })
 	// @Override (client only)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean advanced) {
-		if (itemstack.hasTagCompound() && itemstack.getTagCompound().hasKey("FertilityVisiable")) {
+		if (itemstack.hasTagCompound() && itemstack.getTagCompound().hasKey("infoVisable")) {
+			
+			if (itemstack.getTagCompound().hasKey("entityTags")) {
+				NBTTagCompound nbttag = itemstack.getTagCompound().getCompoundTag("entityTags");
+				if (nbttag != null) {
+					if (nbttag.hasKey("Health"))
+						list.add("Health: "+nbttag.getShort("Health"));
+					if (nbttag.hasKey("CustomName"))
+						if (!nbttag.getString("CustomName").equals(""))
+							list.add("Custom Name: "+nbttag.getString("CustomName"));
+					if (nbttag.hasKey("Owner"))
+						list.add((nbttag.getString("Owner").equals("")?"Wild":"Owner: "+nbttag.getString("Owner")));
+					if (nbttag.hasKey("powered"))
+						list.add("Lightning Charged");
+					
+					if (nbttag.hasKey("CatType")) {
+						int c = nbttag.getInteger("CatType");
+						String[] cats = {"Wild Ocelot","Tuxuedo","Tabby","Siamese"};
+						list.add("Cat Type: "+cats[c]);
+					}
+					if (nbttag.hasKey("Saddle")&&nbttag.getBoolean("Saddle"))
+						list.add("Saddled");
+					if (nbttag.hasKey("Sheared")&&nbttag.getBoolean("Sheared"))
+						list.add("Sheared");
+					if (nbttag.hasKey("Color")) {
+						String[] colors = {"White","Orange","Magenta","Light Blue", "Yellow","Lime","Pink","Gray","Light Gray","Cyan","Purple","Blue","Brown","Green","Red","Black"};
+						list.add("Color: "+colors[nbttag.getByte("Color")]);
+					}
+					if (nbttag.hasKey("Size")) {
+						String[] sizes = {"Small","Medium","Large"};
+						int s = nbttag.getInteger("Size");
+						list.add("Size: "+(s<3?sizes[s]:"Huge"));
+					}
+					if (nbttag.hasKey("Angry")&&nbttag.getBoolean("Angry"))
+							list.add("Hostile");
+					if (nbttag.hasKey("Anger")&&nbttag.getShort("Anger")!=0)
+						list.add("Hostile");
+					
+					if (nbttag.hasKey("Profession")) {
+						int p = nbttag.getInteger("Profession");
+						String[] jobs = {"Farmer","Librarian","Priest","Blacksmith","Butcher","Default"};
+						list.add("Profession: "+jobs[p]);
+					}
+					/*if (nbttag.hasKey("Offers")) {
+						NBTTagCompound offers = nbttag.getCompoundTag("Offers");
+						NBTTagList list2 = offers.getTagList("Recipes");
+						
+						list.add("Trades: "+list2.tagCount());
+					}*/
+				}
+				
+			}
+		}
+		if (itemstack.hasTagCompound() && itemstack.getTagCompound().hasKey("FertilityVisiable")||itemstack.getTagCompound().hasKey("infoVisable")) {
 			NBTTagCompound nbttag = itemstack.getTagCompound();
 	        if (nbttag != null) {
 	            if (nbttag.hasKey("entityGrowingAge")) {
@@ -64,6 +119,10 @@ public class FullMobHolder extends Item {
             	if (name.startsWith("entity.SoulShards.Spawned"))
             	{
             		name = name.split("entity.SoulShards.Spawned")[1].split(".name")[0];
+            	}
+            	if (name.equals("entity.Cat.name"))
+            	{
+            		name = "Cat";
             	}
                 //String name = EntityList.getStringFromID(stack.getItemDamage());//nbttag.getString("name");
                 if (nbttag.hasKey("entityGrowingAge")) {

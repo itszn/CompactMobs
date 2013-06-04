@@ -13,6 +13,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemSkull;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.Configuration;
@@ -26,16 +27,18 @@ import compactMobs.Blocks.BlockBreeder;
 import compactMobs.Blocks.BlockCatalyst;
 import compactMobs.Blocks.BlockCompactor;
 import compactMobs.Blocks.BlockDecompactor;
+import compactMobs.Blocks.BlockEquiper;
 import compactMobs.Blocks.BlockIncubator;
-import compactMobs.Blocks.BlockNamer;
+import compactMobs.Blocks.BlockExaminer;
 import compactMobs.GUI.GuiBreeder;
 import compactMobs.Items.CompactMobsItems;
 import compactMobs.TileEntity.TileEntityBreeder;
 import compactMobs.TileEntity.TileEntityCatalyst;
 import compactMobs.TileEntity.TileEntityCompactor;
 import compactMobs.TileEntity.TileEntityDecompactor;
+import compactMobs.TileEntity.TileEntityEquiper;
 import compactMobs.TileEntity.TileEntityIncubator;
-import compactMobs.TileEntity.TileEntityNamer;
+import compactMobs.TileEntity.TileEntityExaminer;
 import compactMobs.network.PacketHandler;
 
 import cpw.mods.fml.common.FMLLog;
@@ -55,7 +58,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @NetworkMod(clientSideRequired = true, serverSideRequired = true, channels = { "CMC" }, packetHandler = PacketHandler.class)
-@Mod(modid = "CM", name = "CompactMobs", version = "1.3.1", dependencies = "required-after:BuildCraft|Transport;required-after:BuildCraft|Builders;required-after:BuildCraft|Silicon;required-after:BuildCraft|Core;")
+@Mod(modid = "CM", name = "CompactMobs", version = "1.4.1", dependencies = "required-after:BuildCraft|Transport;required-after:BuildCraft|Builders;required-after:BuildCraft|Silicon;required-after:BuildCraft|Core;")
 public class CompactMobsCore {
 
     @Instance
@@ -63,15 +66,17 @@ public class CompactMobsCore {
     //hardcoded id of block
     public static int BlockID = 3391;
     public static boolean useFullTagCompound = true;
-    public static Block blocks, blockCompactor, blockDecompactor;
-    public static Block blockBreeder, blockIncubator, blockCatalyst, blockNamer;
+    public static Block blocks, blockCompactor, blockDecompactor, blockEquiper;
+    public static Block blockBreeder, blockIncubator, blockCatalyst, blockExaminer;
     public boolean tick;
     public static Configuration mainConfig;
     public static Logger cmLog = Logger.getLogger("CompactMobs");
     public Property compatorId, decompatorId, breederId, incubatorId, emptyMobHolderId, fullMobHolderId, handCompactorId;
-    public Property handDecompactorId, catalystId, catalystCoreId, autoOutput, screams, catalystUpgradeId, namerId;
+    public Property handDecompactorId, catalystId, catalystCoreId, autoOutput, screams, catalystUpgradeId, examinerId, equiperId;
+    public Property helmetAnyBlock;
     public static boolean doScreams = false;
     public static boolean doAutoOutput = true;
+    public static boolean allBlocksHead = false;
     @SidedProxy(clientSide = "compactMobs.ClientProxyCompactMobs", serverSide = "compactMobs.CommonProxyCompactMobs")
     public static CommonProxyCompactMobs proxy;
     
@@ -80,7 +85,7 @@ public class CompactMobsCore {
     @PreInit
     public void loadConfiguration(FMLPreInitializationEvent evt) {
         cmLog.setParent(FMLLog.getLogger());
-        cmLog.info("Starting CompactMobs v1.3.1");
+        cmLog.info("Starting CompactMobs v1.4.1");
         tick = false;
         
         mainConfig = new Configuration(new File(evt.getModConfigurationDirectory(), "CompactMobs.cfg"));
@@ -97,9 +102,10 @@ public class CompactMobsCore {
             handCompactorId = CompactMobsCore.mainConfig.get("item", "HandheldCompactorId", 3397);
             handDecompactorId = CompactMobsCore.mainConfig.get("item", "HandheldDecompactorId", 3398);
             catalystCoreId = CompactMobsCore.mainConfig.get("item", "CatalystCoreId", 3400);
-            screams = CompactMobsCore.mainConfig.get("option", "EnableMobScreams", false, "Blood curdling screams on request by Jadedcat");
+            screams = CompactMobsCore.mainConfig.get("options", "EnableMobScreams", false, "Blood curdling screams on request by Jadedcat");
             catalystUpgradeId = CompactMobsCore.mainConfig.get("item", "CatalystUpgradeId", 3401);
-            namerId = CompactMobsCore.mainConfig.get("block", "MobNamerId", 3402);
+            examinerId = CompactMobsCore.mainConfig.get("block", "MobExaminerId", 3402);
+            equiperId = CompactMobsCore.mainConfig.get("block", "MobEquiperId", 3403);
         } finally {
             mainConfig.save();
         }
@@ -111,7 +117,6 @@ public class CompactMobsCore {
     @PreInit
     public void preInit(FMLPreInitializationEvent evt)
     {
-    	System.out.println("TESTTESTTESTTESTTESTTESTTESTTESTTESTTERST1");
         proxy.registerSoundHandler();
     }
 
@@ -126,13 +131,15 @@ public class CompactMobsCore {
         blockBreeder = new BlockBreeder(breederId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F);
         blockIncubator = new BlockIncubator(incubatorId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F);
         blockCatalyst = new BlockCatalyst(catalystId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0F);
-        blockNamer = new BlockNamer(namerId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0f);
+        blockExaminer = new BlockExaminer(examinerId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0f);
+        blockEquiper = new BlockEquiper(equiperId.getInt(), Material.iron).setStepSound(Block.soundMetalFootstep).setHardness(3F).setResistance(1.0f);
         blockCompactor.setUnlocalizedName("Compactor");
         blockDecompactor.setUnlocalizedName("Decompactor");
         blockBreeder.setUnlocalizedName("Breeder");
         blockIncubator.setUnlocalizedName("Incubator");
         blockCatalyst.setUnlocalizedName("Catalyst");
-        blockNamer.setUnlocalizedName("Mob Namer");
+        blockExaminer.setUnlocalizedName("Mob Examiner");
+        blockEquiper.setUnlocalizedName("Mob Equiper");
         GameRegistry.registerBlock(blockCompactor, "Compactor");
         LanguageRegistry.addName(blockCompactor, "Compactor");
         
@@ -149,15 +156,19 @@ public class CompactMobsCore {
         GameRegistry.registerBlock(blockCatalyst, "Catalyst");
         LanguageRegistry.addName(blockCatalyst, "Catalyst");
         
-        GameRegistry.registerBlock(blockNamer, "Mob Namer");
-        LanguageRegistry.addName(blockNamer, "Mob Namer");
+        GameRegistry.registerBlock(blockExaminer, "Mob Examiner");
+        LanguageRegistry.addName(blockExaminer, "Mob Examiner");
+        
+        GameRegistry.registerBlock(blockEquiper, "Mob Equiper");
+        LanguageRegistry.addName(blockEquiper, "Mob Equiper");
 
         GameRegistry.registerTileEntity(TileEntityCompactor.class, "tileEntityCompactor");
         GameRegistry.registerTileEntity(TileEntityDecompactor.class, "tileEntityDecompactor");
         GameRegistry.registerTileEntity(TileEntityBreeder.class, "tileEntityBreeder");
         GameRegistry.registerTileEntity(TileEntityIncubator.class, "tileEntityIncubator");
         GameRegistry.registerTileEntity(TileEntityCatalyst.class, "tileEntityCatalyst");
-        GameRegistry.registerTileEntity(TileEntityNamer.class, "tileEntityNamer");
+        GameRegistry.registerTileEntity(TileEntityExaminer.class, "tileEntityExaminer");
+        GameRegistry.registerTileEntity(TileEntityEquiper.class, "tileEntityEquiper");
 
         CompactMobsItems.getInstance().instantiateItems();
         CompactMobsItems.getInstance().nameItems();
@@ -174,6 +185,7 @@ public class CompactMobsCore {
     	Item ironGear = Item.ingotIron;
         Item goldGear = Item.ingotGold;
         Item diamondGear = Item.diamond;
+        Item redstoneChip = Item.redstone;
 
 
         try {
@@ -181,6 +193,7 @@ public class CompactMobsCore {
             ironGear = (Item) Class.forName("buildcraft.BuildCraftCore").getField("ironGearItem").get(null);
             goldGear = (Item) Class.forName("buildcraft.BuildCraftCore").getField("goldGearItem").get(null);
             diamondGear = (Item) Class.forName("buildcraft.BuildCraftCore").getField("diamondGearItem").get(null);
+            redstoneChip = (Item)Class.forName("buildcraft.BuildCraftSilicon").getField("redstoneChipset").get(null);
             GameRegistry.addRecipe(new ItemStack(blockCompactor, 1), new Object[]{"ipi", "lol", "gpg", 'i', ironGear, 'p', Block.pistonBase, 'l', new ItemStack(Item.dyePowder, 1, 4), 'o', Block.obsidian, 'g', goldGear});
             GameRegistry.addRecipe(new ItemStack(blockDecompactor, 1), new Object[]{"oro", "ild", "grg", 'o', ironGear, 'r', Item.redstone, 'i', Item.ingotIron, 'l', Block.blockLapis, 'd', Block.dispenser, 'g', goldGear});
             GameRegistry.addRecipe(new ItemStack(CompactMobsItems.mobHolder, 2), new Object[]{"hhh", "ibi", "sss", 'h', new ItemStack(Block.stoneSingleSlab, 1, 0), 'i', Item.ingotIron, 'b', Block.fenceIron, 's', Block.stone});
@@ -190,8 +203,17 @@ public class CompactMobsCore {
             GameRegistry.addRecipe(new ItemStack(CompactMobsItems.handDecompactor,1), new Object[]{"p t", "ldr", " gr", 'p', Block.thinGlass, 't', Block.torchRedstoneActive, 'l', new ItemStack(Item.dyePowder, 1, 4), 'd', blockDecompactor, 'r', Item.redstone, 'g', diamondGear});
             GameRegistry.addRecipe(new ItemStack(blockCatalyst,1), new Object[]{"rdr", "ixi", "gsg", 'r', Item.redstone, 'd', diamondGear, 'i', Item.ingotIron, 'x', blockBreeder.dispenser, 'g', goldGear, 's', new ItemStack(Item.swordIron, 1, 0)});
             GameRegistry.addRecipe(new ItemStack(CompactMobsItems.catalystCore,1), new Object[]{"idr", "geg", "rdi", 'i', Block.fenceIron, 'd', Item.diamond, 'g', Item.gunpowder, 'e', Item.eyeOfEnder, 'r', Item.redstone});
+            GameRegistry.addRecipe(new ItemStack(blockExaminer,1), new Object[]{"r r","qsq","ibi",'r',Item.redstone,'q', Item.netherQuartz, 's', Item.sign, 'i', new ItemStack(redstoneChip,1,1), 'b', Block.blockIron});
+            GameRegistry.addRecipe(new ItemStack(blockEquiper,1), new Object[]{" f ","iei","gig",'f',Item.itemFrame,'i', Item.ingotIron, 'e', blockExaminer, 'g', new ItemStack(redstoneChip,1,2)});
+            GameRegistry.addRecipe(new ItemStack(CompactMobsItems.upgrade,1,0), new Object[]{" h ","dps"," l ",'h',Item.helmetLeather,'d', new ItemStack(redstoneChip,1,3), 's', Item.swordIron, 'l', Item.legsLeather, 'p', Item.paper});
+            GameRegistry.addRecipe(new ItemStack(CompactMobsItems.upgrade,1,1), new Object[]{" r ","tpt"," e ",'r',Item.redstone,'e', new ItemStack(redstoneChip,1,4), 't', Block.torchRedstoneActive, 'p', Item.paper});
+            for (int j = 0; j < ItemSkull.field_94587_a.length; ++j)
+            	GameRegistry.addRecipe(new ItemStack(CompactMobsItems.upgrade,1,2), new Object[]{" g ","rpr"," h ",'g',Block.grass,'r', new ItemStack(redstoneChip,1,0), 'h', new ItemStack(Item.skull,1,j), 'p', Item.paper});
+
         
-       } catch (Exception ex) {
+        
+        
+        } catch (Exception ex) {
             	cmLog.info("Generic Buildcraft Item Check Failed, Attempting Direct");
             	/*try {
             		 ironGear = BuildCraftCore.ironGearItem;

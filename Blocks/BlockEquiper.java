@@ -21,11 +21,12 @@ import compactMobs.CompactMobsCore;
 import compactMobs.DefaultProps;
 import compactMobs.Utils;
 import compactMobs.TileEntity.TileEntityBreeder;
-import compactMobs.TileEntity.TileEntityNamer;
+import compactMobs.TileEntity.TileEntityEquiper;
+import compactMobs.TileEntity.TileEntityExaminer;
 
-public class BlockNamer extends BlockContainer {
+public class BlockEquiper extends BlockContainer {
 	
-    public BlockNamer(int par1, Material par2Material) {
+    public BlockEquiper(int par1, Material par2Material) {
         super(par1, par2Material);
         this.setLightOpacity(10);
         this.setCreativeTab(CreativeTabs.tabRedstone);
@@ -39,6 +40,8 @@ public class BlockNamer extends BlockContainer {
 
     @Override
     public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
+    	TileEntityEquiper te = (TileEntityEquiper) world.getBlockTileEntity(x, y, z);
+    	te.clearBeforeBreak();
         Utils.preDestroyBlock(world, x, y, z);
         super.breakBlock(world, x, y, z, par5, par6);
     }
@@ -48,12 +51,17 @@ public class BlockNamer extends BlockContainer {
         return true;
     }
     
-    private Icon sideTex;
+    private Icon[] sideTexs = new Icon[4];
     private Icon topTex;
+    private Icon bottomTex;
+    private Icon topTexFull;
     @Override
     public void registerIcons(IconRegister register) {
-    	sideTex = register.registerIcon("compactMobs:NamerSide");
-    	topTex = register.registerIcon("compactMobs:NamerTop");
+    	for (int i=0; i<4;i++)
+    		sideTexs[i] = register.registerIcon("compactMobs:EquiperSide"+(i+1));
+    	topTex = register.registerIcon("compactMobs:EquiperTop");
+    	bottomTex=register.registerIcon("compactMobs:EquiperBottom");
+    	topTexFull=register.registerIcon("compactMobs:EquiperTopFull");
     }
     
     @Override
@@ -61,28 +69,31 @@ public class BlockNamer extends BlockContainer {
         switch (i) {
             case 0:
                 //bottom
-                return topTex;//8
+            	return bottomTex;
             case 1:
                 //top
-                return topTex;//8
+            	if (j==0)
+            		return topTex;//8
+            	else
+            		return topTexFull;
             default:
                 //side
-                return sideTex;//7
+                return sideTexs[i-2];//7
         }
     }
 
     @Override
     public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving, ItemStack stack) {
-        ForgeDirection orientation = Utils.get2dOrientation(new Position(entityliving.posX, entityliving.posY, entityliving.posZ),
+        /*ForgeDirection orientation = Utils.get2dOrientation(new Position(entityliving.posX, entityliving.posY, entityliving.posZ),
                 new Position(i, j, k));
 
-        world.setBlockMetadataWithNotify(i, j, k, orientation.getOpposite().ordinal(), 2);
+        world.setBlockMetadataWithNotify(i, j, k, orientation.getOpposite().ordinal(), 2);*/
         //CompactMobsCore.instance.cmLog.info(String.valueOf(world.getBlockMetadata(i,j,k)));
     }
 
     @Override
     public TileEntity createNewTileEntity(World var1) {
-        return new TileEntityNamer();
+        return new TileEntityEquiper();
     }
 
     /**
@@ -95,7 +106,7 @@ public class BlockNamer extends BlockContainer {
         } else if (par5EntityPlayer.isSneaking()) {
             return false;
         } else {
-            par5EntityPlayer.openGui(CompactMobsCore.instance, 6, world, par2, par3, par4);
+            par5EntityPlayer.openGui(CompactMobsCore.instance, 7, world, par2, par3, par4);
             return true;
         }
     }

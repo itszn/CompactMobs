@@ -9,20 +9,23 @@ import compactMobs.Containers.ContainerBreeder;
 import compactMobs.Containers.ContainerCatalyst;
 import compactMobs.Containers.ContainerCompactor;
 import compactMobs.Containers.ContainerDecompactor;
+import compactMobs.Containers.ContainerEquiper;
 import compactMobs.Containers.ContainerIncubator;
-import compactMobs.Containers.ContainerNamer;
+import compactMobs.Containers.ContainerExaminer;
 import compactMobs.GUI.GuiBreeder;
 import compactMobs.GUI.GuiCatalyst;
 import compactMobs.GUI.GuiCompactor;
 import compactMobs.GUI.GuiDecompactor;
+import compactMobs.GUI.GuiEquiper;
 import compactMobs.GUI.GuiIncubator;
-import compactMobs.GUI.GuiNamer;
+import compactMobs.GUI.GuiExaminer;
 import compactMobs.TileEntity.TileEntityBreeder;
 import compactMobs.TileEntity.TileEntityCatalyst;
 import compactMobs.TileEntity.TileEntityCompactor;
 import compactMobs.TileEntity.TileEntityDecompactor;
+import compactMobs.TileEntity.TileEntityEquiper;
 import compactMobs.TileEntity.TileEntityIncubator;
-import compactMobs.TileEntity.TileEntityNamer;
+import compactMobs.TileEntity.TileEntityExaminer;
 import compactMobs.network.PacketParticleSpawn;
 
 import cpw.mods.fml.client.FMLClientHandler;
@@ -55,7 +58,9 @@ public class CommonProxyCompactMobs implements IGuiHandler {
 		            case 4:
 		            	return new ContainerCatalyst(player.inventory, (TileEntityCatalyst) tileEntity);
 		            case 6:
-		            	return new ContainerNamer(player.inventory, (TileEntityNamer) tileEntity);
+		            	return new ContainerExaminer(player.inventory, (TileEntityExaminer) tileEntity);
+		            case 7:
+		            	return new ContainerEquiper(player.inventory, (TileEntityEquiper) tileEntity);
 		        }
 		    }
         }
@@ -75,6 +80,7 @@ public class CommonProxyCompactMobs implements IGuiHandler {
 	    	TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 	
 	        if (tileEntity != null) {
+	        	System.out.println(ID);
 	            switch (ID) {
 	                case 0:
 	                    return new GuiCompactor(player.inventory, ((TileEntityCompactor) tileEntity));
@@ -87,7 +93,9 @@ public class CommonProxyCompactMobs implements IGuiHandler {
 	                case 4:
 	                	return new GuiCatalyst(player.inventory, ((TileEntityCatalyst) tileEntity));
 	                case 6:
-	                	return new GuiNamer(player.inventory, (TileEntityNamer) tileEntity);
+	                	return new GuiExaminer(player.inventory, (TileEntityExaminer) tileEntity);
+	                case 7:
+	                	return new GuiEquiper(player.inventory, (TileEntityEquiper) tileEntity);
 	            }
 	        }
         }
@@ -105,14 +113,12 @@ public class CommonProxyCompactMobs implements IGuiHandler {
     public void registerSoundHandler() {
     }
     
-    public void updateNamerText(String text, TileEntityNamer te) {
-    	try {
-            te.updateText(text);
+    public void updateNamerText(String text, TileEntityExaminer te) {
 
-        } catch (Exception e) {
-            CompactMobsCore.instance.cmLog.info("Error reading packet or changing namer text");
-            e.printStackTrace();
-        }
+    }
+    
+    public void playDeathSound(EntityLiving entity,World world) {
+    	
     }
     
 }

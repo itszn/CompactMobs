@@ -24,7 +24,7 @@ import buildcraft.api.power.PowerFramework;
 import compactMobs.CompactMobsCore;
 import compactMobs.Utils;
 import compactMobs.Vect;
-import compactMobs.Items.CatalystUpgrade;
+import compactMobs.Items.Upgrade;
 import compactMobs.Items.CompactMobsItems;
 import cpw.mods.fml.client.FMLClientHandler;
 
@@ -180,7 +180,6 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
 
     @Override
     public void doWork() {
-    	
         World world = worldObj;
         //double radius = 3.0D;
         //List list1 = world.getEntitiesWithinAABB(EntityCreature.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double)this.xCoord-radius, (double)this.yCoord-1.0D, (double)this.zCoord-radius, (double)this.xCoord+radius, (double)this.yCoord+1.0D, (double)this.zCoord+radius));
@@ -277,32 +276,32 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
 	                    }
 	                    else
 	                    {
-	                    	if (!world.isRemote)
-	                    	{
-	                    		System.out.println(CompactMobsCore.doScreams);
-	                    		int num = world.rand.nextInt(5);
-	                    		System.out.println(CompactMobsCore.sounds[num]);
-	                    		if (!CompactMobsCore.doScreams)
-	                    			entity.handleHealthUpdate((byte) 3);
-	                    		else
-	                    			entity.playSound(CompactMobsCore.sounds[num], .5f, 1);
-	                    		
-	                    	}
+	                    	
 	                    	boolean flag = false;
-
-	                    	if (ItemStacks[31]!=null)
-	                    		if(ItemStacks[31].getItem() == CompactMobsItems.catalystUpgrade && ItemStacks[31].getItemDamage()==0)
-	                    			flag=true;
-	                    	if (flag)
+	                    	System.out.println("Spawning");
+	                    	if (ItemStacks[31]!=null&&ItemStacks[31].getItem() == CompactMobsItems.upgrade && ItemStacks[31].getItemDamage()==0)
 	                    	{
 	                    		EntityWolf sudoWolf = new EntityWolf(world);
 	                    		sudoWolf.setTamed(true);
 	                    		entity.attackEntityFrom(DamageSource.causeMobDamage(sudoWolf), 0);
 	                    	}
-
-                    		entity.onDeath(DamageSource.generic);
+	                    	else if (ItemStacks[31]!=null&&ItemStacks[31].getItem() == CompactMobsItems.upgrade && ItemStacks[31].getItemDamage()==1)
+	                    	{
+	                    		flag = true;
+	                    	}
+	                    	//else
+	                    	if (!world.isRemote)
+	                    	{
+	                    		CompactMobsCore.proxy.playDeathSound(entity, world);
+	                    		
+	                    	}
+	                    	entity.onDeath(DamageSource.generic);
                     		clearEntity(entity);
-                    		entity.onDeath(DamageSource.generic);
+                    		if ((flag && new Random().nextInt(3)>0) ||!flag) {
+                    			entity.onDeath(DamageSource.generic);
+	                    		if (flag && new Random().nextInt(2)==0)
+	                    			entity.onDeath(DamageSource.generic);
+                    		}
 	                    }
 	                }
 	
@@ -334,7 +333,6 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
 	            {
 	            	ItemStacks[30]=null;
 	            }
-		
 		        
         	}
         }
@@ -381,8 +379,6 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
     public void dumpToInventory(IInventory[] inventories) {
         for (int i = 27; i < 30; i++) {
             if (ItemStacks[i] != null && ItemStacks[i].stackSize > 0) {
-
-
                 for (int j = 0; j < inventories.length; j++) {
                     if (inventories[j] != null) {
                         IInventory inventory = Utils.getChest(inventories[j]);
@@ -434,7 +430,12 @@ public class TileEntityCatalyst extends TileEntity implements IInventory, IPower
 
 	@Override
 	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
-		// TODO Auto-generated method stub
+		if (itemstack.getItem() == CompactMobsItems.fullMobHolder && i<27)
+			return true;
+		if (itemstack.getItem() == CompactMobsItems.catalystCore && i==30)
+			return true;
+		if (itemstack.getItem() == CompactMobsItems.upgrade && i==31)
+			return true;
 		return false;
 	}
 }

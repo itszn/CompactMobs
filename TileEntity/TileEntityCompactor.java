@@ -470,7 +470,6 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
         return var2 * var2 + var4 * var4 + var6 * var6;
     }
 
-    @Override
     public int getStartInventorySide(ForgeDirection side) {
         if (side==ForgeDirection.DOWN || side==ForgeDirection.UP)
         	return 0;
@@ -479,7 +478,6 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
         return 0;
     }
 
-    @Override
     public int getSizeInventorySide(ForgeDirection side) {
         // TODO Auto-generated method stub
     	if (side==ForgeDirection.DOWN || side==ForgeDirection.UP)
@@ -488,6 +486,8 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
         	return 27;
         return 0;
     }
+    
+   
 
 
 	@Override
@@ -509,6 +509,37 @@ public class TileEntityCompactor extends TileEntity implements IInventory, IPowe
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+
+	/*@Override
+	
+	 @Override
+	public int[] getAccessibleSlotsFromSide(int i) {
+    	ForgeDirection side = ForgeDirection.getOrientation(i);
+    	int start = getStartInventorySide(side);
+    	int size = getSizeInventorySide(side);
+        return Utils.createSlotArray(start, size);
+	}
+	@Override
+	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
+		if (itemstack.getItem() == CompactMobsItems.mobHolder && i==0)
+			return true;
+			
+		return false;
+	}
+	@Override
+	public boolean canInsertItem(int slot, ItemStack stack, int side) {
+		isStackValidForSlot(slot, stack);
+		return false;
+	}
+	@Override
+	public boolean canExtractItem(int slot, ItemStack stack, int side) {
+		int[] slots = getAccessibleSlotsFromSide(side); 
+		for (int s : slots) 
+			if (s==slot)
+				return true;
+		return false;
+	}*/
 
 
 

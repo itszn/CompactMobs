@@ -340,7 +340,8 @@ public class TileEntityIncubator extends TileEntity implements IInventory, IPowe
 
 	@Override
 	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
-		// TODO Auto-generated method stub
+		if (itemstack.getItem() == CompactMobsItems.fullMobHolder && i<27)
+			return true;
 		return false;
 	}
 }

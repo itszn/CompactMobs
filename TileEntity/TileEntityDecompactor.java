@@ -406,7 +406,9 @@ public class TileEntityDecompactor extends TileEntity implements IInventory, IPo
 
 	@Override
 	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
-		// TODO Auto-generated method stub
+
+		if (itemstack.getItem() == CompactMobsItems.fullMobHolder && i<27)
+			return true;
 		return false;
 	}
 }

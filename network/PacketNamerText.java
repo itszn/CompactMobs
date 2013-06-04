@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import compactMobs.CompactMobsCore;
-import compactMobs.TileEntity.TileEntityNamer;
+import compactMobs.TileEntity.TileEntityExaminer;
 
 public class PacketNamerText extends PacketClient {
 
@@ -56,8 +56,8 @@ public class PacketNamerText extends PacketClient {
             int x = stream.readInt();
             int y = stream.readInt();
             int z = stream.readInt();
-            TileEntityNamer te = (TileEntityNamer) ((World) extradata[0]).getBlockTileEntity(x,y,z);
-            te.updateText(text);
+            TileEntityExaminer te = (TileEntityExaminer) ((World) extradata[0]).getBlockTileEntity(x,y,z);
+
             System.out.println("Packet Recieved for "+ text);
         } catch (Exception e) {
             CompactMobsCore.instance.cmLog.info("Error reading packet or changing namer text");

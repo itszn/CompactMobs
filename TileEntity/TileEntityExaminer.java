@@ -22,131 +22,58 @@ import compactMobs.Items.CompactMobsItems;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityNamer extends TileEntity implements IInventory, IPowerReceptor, ISidedInventory {
+public class TileEntityExaminer extends TileEntity implements IInventory, ISidedInventory {
 
     public ItemStack[] ItemStacks;
-    IPowerProvider provider;
     public String text = "";
     protected float stored;
     protected boolean use = false;
     
     //protected Random rand;
 
-    public TileEntityNamer() {
-        ItemStacks = new ItemStack[2];
-        if (PowerFramework.currentFramework != null) {
-            provider = PowerFramework.currentFramework.createPowerProvider();
-        }
-        provider.configure(50, 1, 25, 25, 1000);
+    public TileEntityExaminer() {
+        ItemStacks = new ItemStack[7];
+        
     }
 
     @Override
     public void updateEntity() {
+    	
 
-        if (this instanceof IPowerReceptor) {
-            IPowerReceptor receptor = ((IPowerReceptor) this);
-            receptor.getPowerProvider().update(receptor);
-        }
 
-        World world = worldObj;
-        if (use)
-        {
-        	if (ItemStacks[0]!=null && ItemStacks[1]==null)
-            {
-            	if (ItemStacks[0].getItem() == CompactMobsItems.fullMobHolder)
-            	{
-            		ItemStack in = ItemStacks[0].copy();
-            		NBTTagCompound nbt = new NBTTagCompound();
-            		if (in.hasTagCompound())
-            		{
-            			nbt = in.stackTagCompound;
-            		}
-            		//System.out.println("tag " +nbt.hasKey("entityTags"));
-                	
-            		if(nbt.hasKey("entityTags"))
-            		{
-
-            			//System.out.println(text);
-            			if (!text.equals(""))
-            			{
-            				NBTBase mob = (nbt.getTag("entityTags"));
-                			((NBTTagCompound) mob).setString("CustomName", text);
-                			nbt.setTag("entityTags", mob);
-                			nbt.setString("name", text);
-                			//ItemStack out = new ItemStack(in.getItem(),1, in.getItemDamage());
-                			in.setTagCompound(nbt);
-                			ItemStacks[1] = in;
-                			ItemStacks[0]=null;
-                			use = false;
-            			}
-            			
-            		}
-            		else
-            		{
-            			System.out.print("No entityTags?");
-            		}
+    	if (ItemStacks[1] != null) {
+            NBTTagCompound nbttag = ItemStacks[1].getTagCompound();
+            if (nbttag != null) {
+            	if (!nbttag.hasKey("infoVisable")||!nbttag.getBoolean("infoVisable")) {
+		                nbttag.setBoolean("infoVisable", true);
+		                ItemStacks[1].setTagCompound(nbttag);
+	                
             	}
             }
-            else
-            {
-            	//ItemStacks[1]=null;
-            }
         }
-        
-
+		
         return;
     }
     
     
     public void runNamer() {
-    	
+    	if (ItemStacks[1]!=null) {
+    		if (worldObj.getBlockMetadata(xCoord, yCoord, zCoord)!=1)
+    			worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 2);
+    	}
+    	else{
+    		if (worldObj.getBlockMetadata(xCoord, yCoord, zCoord)!=0)
+    			worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 2);
+    	}
         
     }
     
-    @SideOnly(Side.SERVER)
-    public void updateText(String s)
-    {
-    	this.text = s;
-    	System.out.println("Recived "+text);
-    	/*if (ItemStacks[0]!=null)
-        {
-        	System.out.println(ItemStacks[0].getItem() == CompactMobsItems.fullMobHolder);
-        	if (ItemStacks[0].getItem() == CompactMobsItems.fullMobHolder)
-        	{
-        		ItemStack in = ItemStacks[0].copy();
-        		NBTTagCompound nbt = new NBTTagCompound();
-        		if (in.hasTagCompound())
-        		{
-        			nbt = in.stackTagCompound;
-        		}
-        		//String text = "John";
-        		if(nbt.hasKey("entityTags"))
-        		{
-        			
-        			if (!text.equals(""))
-        			{
-        				NBTBase mob = (nbt.getTag("entityTags"));
-            			System.out.println(text);
-            			((NBTTagCompound) mob).setString("CustomName", text);
-            			nbt.setTag("entityTags", mob);
-            			nbt.setString("name", text);
-            			//ItemStack out = new ItemStack(in.getItem(),1, in.getItemDamage());
-            			in.setTagCompound(nbt);
-            			ItemStacks[1] = in;
-        			}
-        			
-        		}
-        		else
-        		{
-        			System.out.print("No entityTags?");
-        		}
-        	}
-        }
-        else
-        {
-        	ItemStacks[1]=null;
-        }*/
+    @Override
+    public void onInventoryChanged() {
+    	
     }
+    
+   
     
 
     @Override
@@ -249,18 +176,6 @@ public class TileEntityNamer extends TileEntity implements IInventory, IPowerRec
         return "Namer";
     }
 
-    @Override
-    public void setPowerProvider(IPowerProvider iprovider) {
-        // TODO Auto-generated method stub
-        provider = iprovider;
-    }
-
-    @Override
-    public IPowerProvider getPowerProvider() {
-        // TODO Auto-generated method stub
-        return provider;
-    }
-
    
 
     public double getDistanceSqToEntity(Entity par1Entity) {
@@ -270,22 +185,8 @@ public class TileEntityNamer extends TileEntity implements IInventory, IPowerRec
         return var2 * var2 + var4 * var4 + var6 * var6;
     }
 
-    @Override
-    public int getStartInventorySide(ForgeDirection side) {
-        	return 0;
-    }
 
-    @Override
-    public int getSizeInventorySide(ForgeDirection side) {
-        // TODO Auto-generated method stub
-    	return 0;
-    }
 
-	@Override
-	public int powerRequest(ForgeDirection from) {
-		// TODO Auto-generated method stub
-		return 25;
-	}
 
 	@Override
 	public boolean isInvNameLocalized() {
@@ -295,18 +196,22 @@ public class TileEntityNamer extends TileEntity implements IInventory, IPowerRec
 
 	@Override
 	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
-		// TODO Auto-generated method stub
+		if (itemstack.getItem() == CompactMobsItems.fullMobHolder && i==1)
+			return true;
 		return false;
 	}
 
+	
+
 	@Override
-	public void doWork() {
-		stored = provider.getEnergyStored();
-		if (!use)
-		{
-			provider.useEnergy(25, 25, true);
-			stored = provider.getEnergyStored();
-			use = true;
-		}
+	public int getStartInventorySide(ForgeDirection side) {
+		// TODO Auto-generated method stub
+		return 1;
+	}
+
+	@Override
+	public int getSizeInventorySide(ForgeDirection side) {
+		// TODO Auto-generated method stub
+		return 1;
 	}
 }

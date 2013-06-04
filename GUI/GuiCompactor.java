@@ -27,6 +27,7 @@ public class GuiCompactor extends GuiContainer
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         fontRenderer.drawString("Compactor", 10, 10, 0x404040);
+        //fontRenderer.drawString(te.getPowerProvider().+"/"+te.getPowerProvider().getMaxEnergyStored()+" MJ", 10, 20, 0x404040);
         super.drawGuiContainerForegroundLayer(par1, par2);
     }
 
@@ -36,6 +37,7 @@ public class GuiCompactor extends GuiContainer
 	{
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		mc.renderEngine.bindTexture(DefaultProps.GUI_TEXTURES+"/compactor_gui.png");
+		
 		//int j = (width - xSize) / 2;
 		//int k = (height - ySize) / 2;
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);

@@ -465,7 +465,11 @@ public class TileEntityBreeder extends TileEntity implements IInventory, IPowerR
 
 	@Override
 	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
-		// TODO Auto-generated method stub
+
+		if (itemstack.getItem() == CompactMobsItems.fullMobHolder && i<18)
+			return true;
+		if (itemstack.getItem() == CompactMobsItems.mobHolder && i==20)
+			return true;
 		return false;
 	}
 }

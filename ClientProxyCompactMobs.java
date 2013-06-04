@@ -1,6 +1,6 @@
 package compactMobs;
 
-import compactMobs.TileEntity.TileEntityNamer;
+import compactMobs.TileEntity.TileEntityExaminer;
 import compactMobs.network.PacketNamerText;
 import compactMobs.network.PacketParticleSpawn;
 
@@ -51,11 +51,22 @@ public class ClientProxyCompactMobs extends CommonProxyCompactMobs {
     }
     
     @Override
-    public void updateNamerText(String text, TileEntityNamer te) {
+    public void updateNamerText(String text, TileEntityExaminer te) {
     	int x = te.xCoord;
     	int y = te.yCoord;
     	int z = te.zCoord;
     	System.out.println("Sending Packet for "+text);
         PacketDispatcher.sendPacketToServer(PacketNamerText.buildNamerTextPacket(text, x, y, z));
+    }
+    
+    @Override
+    public void playDeathSound(EntityLiving entity, World world) {
+    	System.out.println(CompactMobsCore.doScreams);
+		int num = world.rand.nextInt(5);
+		System.out.println(CompactMobsCore.sounds[num]);
+		if (!CompactMobsCore.doScreams)
+			entity.handleHealthUpdate((byte) 3);
+		else
+			entity.playSound(CompactMobsCore.sounds[num], .5f, 1);
     }
 }
